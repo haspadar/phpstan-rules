@@ -48,6 +48,7 @@ final class MethodLinesRule implements Rule
     #[\Override]
     public function processNode(Node $node, Scope $scope): array
     {
+        assert($node instanceof ClassMethod);
         $lines = $this->lineCount($node, $scope);
 
         if ($lines <= $this->maxLines) {
