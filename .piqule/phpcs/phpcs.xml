@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<ruleset name="Piqule PHPCS Rules">
+    <description>Structural and semantic PHP rules</description>
+
+    <file>../../src</file>
+
+    <exclude-pattern>vendor/*</exclude-pattern>
+    <exclude-pattern>tests/*</exclude-pattern>
+
+    <arg name="extensions" value="php"/>
+    <arg name="colors"/>
+
+    <rule ref="Generic.PHP.Syntax"/>
+</ruleset>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<psalm
+        errorLevel="1"
+        xmlns="https://getpsalm.org/schema/config"
+        findUnusedCode="false"
+>
+    <projectFiles>
+        <directory name="../../src" />
+        <ignoreFiles>
+            <directory name="../../vendor" />
+        </ignoreFiles>
+    </projectFiles>
+</psalm>

@@ -1,0 +1,171 @@
+name: Piqule
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+
+  # ============================================================
+  # PR SIZE CHECK
+  # ============================================================
+  pr_size:
+    name: PR Size
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+
+    steps:
+      - uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
+        with:
+          fetch-depth: 0
+
+      - uses: maidsafe/pr_size_checker@948bfb3e96d93fbeeef4e207375163e8dae5665e
+        with:
+          max_lines_changed: 250
+
+
+  # ============================================================
+  # INFRA CHECKS
+  # ============================================================
+  infra:
+    name: ${{ matrix.check }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        check:
+          - actionlint
+          - hadolint
+          - markdownlint
+          - yamllint
+          - typos
+          - shellcheck
+          - jsonlint
+
+    steps:
+      - uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
+
+      - uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1
+        with:
+          php-version: 8.3
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@9cd4410b76a77e8054419e70095df406556617a8
+
+      - name: Build infra image
+        run: |
+          docker buildx build \
+            --cache-from type=gha \
+            --cache-to type=gha,mode=max \
+            -t piqule-infra:local \
+            --load .
+
+      - name: Run check
+        run: bin/piqule check ${{ matrix.check }}
+
+
+  # ============================================================
+  # PHP STATIC ANALYSIS
+  # ============================================================
+  php-static:
+    name: ${{ matrix.check }} (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ["8.3"]
+        check:
+          - phpcs
+          - phpstan
+          - psalm
+          - phpmd
+          - phpmetrics
+
+    steps:
+      - uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
+
+      - uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, dom, json
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      - name: Run static check
+        run: bin/piqule check ${{ matrix.check }}
+
+
+  # ============================================================
+  # PHP TESTS + COVERAGE + MUTATION
+  # ============================================================
+  php-tests:
+    name: Tests / Coverage / Mutation (PHP 8.3)
+    runs-on: ubuntu-latest
+    needs: php-static
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
+
+      - uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1
+        with:
+          php-version: 8.3
+          coverage: xdebug
+          extensions: mbstring, dom, json
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      # ------------------------------------------------------------
+      # PHPUnit (if config exists)
+      # ------------------------------------------------------------
+      - name: PHPUnit (coverage)
+        if: hashFiles('.piqule/phpunit/phpunit.xml') != ''
+        run: |
+          XDEBUG_MODE=coverage \
+          php -d memory_limit=1G \
+          vendor/bin/phpunit \
+            -c .piqule/phpunit/phpunit.xml \
+            --coverage-clover=.piqule/codecov/coverage.xml
+
+      # ------------------------------------------------------------
+      # Upload coverage to Codecov (if coverage exists)
+      # ------------------------------------------------------------
+      - name: Upload coverage
+        if: hashFiles('.piqule/codecov/coverage.xml') != ''
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: .piqule/codecov/coverage.xml
+          codecov_yml_path: .piqule/codecov/.codecov.yml
+          fail_ci_if_error: true
+
+      # ------------------------------------------------------------
+      # Infection (if config exists)
+      # ------------------------------------------------------------
+      - name: Infection
+        if: hashFiles('.piqule/infection/infection.json5') != ''
+        env:
+          INFECTION_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+        run: |
+          XDEBUG_MODE=coverage \
+          php -d memory_limit=1G \
+          vendor/bin/infection \
+            --configuration=.piqule/infection/infection.json5 \
+            --threads=max

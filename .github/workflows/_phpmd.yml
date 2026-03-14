@@ -1,0 +1,67 @@
+name: PHPMD
+
+on:
+  workflow_call:
+    inputs:
+      php-version:
+        description: PHP version to use
+        type: string
+        required: true
+      ruleset:
+        description: Path to PHPMD ruleset XML
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  phpmd:
+    name: PHPMD (PHP ${{ inputs.php-version }})
+    runs-on: ubuntu-latest
+
+    steps:
+      # ------------------------------------------------------------
+      # Checkout repository
+      # ------------------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
+
+      # ------------------------------------------------------------
+      # Setup PHP
+      # ------------------------------------------------------------
+      - name: Setup PHP
+        uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1  # v2.36.0
+        with:
+          php-version: ${{ inputs.php-version }}
+          tools: composer
+
+      # ------------------------------------------------------------
+      # Install dependencies
+      # ------------------------------------------------------------
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress
+
+      # ------------------------------------------------------------
+      # Install XML utilities
+      # ------------------------------------------------------------
+      - name: Install xmllint
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libxml2-utils
+
+      # ------------------------------------------------------------
+      # Validate PHPMD ruleset XML
+      # ------------------------------------------------------------
+      - name: Validate PHPMD ruleset
+        env:
+          PHPMD_RULESET: ${{ inputs.ruleset }}
+        run: xmllint --noout "$PHPMD_RULESET"
+
+      # ------------------------------------------------------------
+      # Run PHPMD
+      # ------------------------------------------------------------
+      - name: Run PHPMD
+        env:
+          PHPMD_RULESET: ${{ inputs.ruleset }}
+        run: vendor/bin/phpmd src text "$PHPMD_RULESET"

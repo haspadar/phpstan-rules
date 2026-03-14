@@ -1,0 +1,12 @@
+parameters:
+    level: 9
+
+    paths:
+        - ../../src
+
+    errorFormat: table
+    reportUnmatchedIgnoredErrors: true
+
+    checkUninitializedProperties: true
+    checkClassCaseSensitivity: true
+    checkDynamicProperties: true

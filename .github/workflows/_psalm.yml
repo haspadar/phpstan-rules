@@ -1,0 +1,70 @@
+name: Psalm
+
+on:
+  workflow_call:
+    inputs:
+      php-matrix:
+        description: JSON array of PHP versions to run against
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  psalm:
+    name: Psalm (PHP ${{ matrix.php-version }})
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ${{ fromJson(inputs.php-matrix) }}
+
+    steps:
+      # ------------------------------------------------------------
+      # Checkout source code
+      # ------------------------------------------------------------
+      - name: Checkout
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
+
+      # ------------------------------------------------------------
+      # Setup PHP runtime
+      # ------------------------------------------------------------
+      - name: Setup PHP
+        uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1  # v2.36.0
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+
+      # ------------------------------------------------------------
+      # Install Composer dependencies
+      # ------------------------------------------------------------
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist
+
+      # ------------------------------------------------------------
+      # Check Psalm config exists
+      # ------------------------------------------------------------
+      - name: Check Psalm config exists
+        id: psalm
+        run: |
+          if [[ -f ".piqule/psalm/psalm.xml" ]]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # ------------------------------------------------------------
+      # Run Psalm static analysis
+      # ------------------------------------------------------------
+      - name: Run Psalm
+        if: steps.psalm.outputs.run == 'true'
+        run: vendor/bin/psalm --config=.piqule/psalm/psalm.xml
+
+      # ------------------------------------------------------------
+      # Skip Psalm when config is missing
+      # ------------------------------------------------------------
+      - name: Skip Psalm
+        if: steps.psalm.outputs.run == 'false'
+        run: echo "Skipping Psalm — no .piqule/psalm/psalm.xml"

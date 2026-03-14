@@ -1,0 +1,123 @@
+name: Tests
+
+on:
+  workflow_call:
+    inputs:
+      php-version:
+        description: PHP version to use for tests
+        type: string
+        required: true
+    secrets:
+      CODECOV_TOKEN:
+        required: true
+        description: Token for uploading coverage to Codecov
+      STRYKER_DASHBOARD_API_KEY:
+        required: false
+        description: API key for Stryker Dashboard (mutation testing)
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: Tests (PHP ${{ inputs.php-version }})
+    runs-on: ubuntu-latest
+
+    steps:
+      # ------------------------------------------------------------
+      # Checkout source code
+      # ------------------------------------------------------------
+      - name: Checkout
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8  # v6.0.1
+
+      # ------------------------------------------------------------
+      # Setup PHP with Xdebug (coverage + mutation testing)
+      # ------------------------------------------------------------
+      - name: Setup PHP
+        uses: shivammathur/setup-php@44454db4f0199b8b9685a5d763dc37cbf79108e1  # v2.36.0
+        with:
+          php-version: ${{ inputs.php-version }}
+          coverage: xdebug
+          extensions: mbstring, dom, json
+
+      # ------------------------------------------------------------
+      # Install dependencies
+      # ------------------------------------------------------------
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction
+
+      # ------------------------------------------------------------
+      # Validate composer.json
+      # ------------------------------------------------------------
+      - name: Validate composer.json
+        run: composer validate --strict
+
+      # ------------------------------------------------------------
+      # Check PHPUnit config existence
+      # ------------------------------------------------------------
+      - name: Check PHPUnit config exists
+        id: phpunit
+        run: |
+          if [[ -f ".piqule/phpunit/phpunit.xml" ]]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # ------------------------------------------------------------
+      # PHPUnit with coverage
+      # ------------------------------------------------------------
+      - name: PHPUnit (coverage)
+        if: steps.phpunit.outputs.run == 'true'
+        run: |
+          XDEBUG_MODE=coverage \
+          php -d memory_limit=1G \
+          vendor/bin/phpunit \
+            -c .piqule/phpunit/phpunit.xml \
+            --coverage-clover=.piqule/codecov/coverage.xml
+
+      - name: Skip PHPUnit
+        if: steps.phpunit.outputs.run == 'false'
+        run: echo "Skipping PHPUnit — no .piqule/phpunit/phpunit.xml"
+
+      # ------------------------------------------------------------
+      # Upload coverage to Codecov
+      # ------------------------------------------------------------
+      - name: Upload coverage to Codecov
+        if: ${{ hashFiles('.piqule/codecov/coverage.xml') != '' }}
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de  # v5.5.2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: .piqule/codecov/coverage.xml
+          codecov_yml_path: .piqule/codecov/.codecov.yml
+          fail_ci_if_error: true
+
+      # ------------------------------------------------------------
+      # Check Infection config existence
+      # ------------------------------------------------------------
+      - name: Check Infection config exists
+        id: infection
+        run: |
+          if [[ -f ".piqule/infection/infection.json5" ]]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # ------------------------------------------------------------
+      # Infection (mutation testing)
+      # ------------------------------------------------------------
+      - name: Infection
+        if: steps.infection.outputs.run == 'true'
+        env:
+          INFECTION_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+        run: |
+          XDEBUG_MODE=coverage \
+          php -d memory_limit=1G \
+          vendor/bin/infection \
+            --configuration=.piqule/infection/infection.json5 \
+            --threads=max
+
+      - name: Skip Infection
+        if: steps.infection.outputs.run == 'false'
+        run: echo "Skipping Infection — no .piqule/infection/infection.json5"

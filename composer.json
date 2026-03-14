@@ -1,0 +1,43 @@
+{
+    "name": "haspadar/phpstan-rules",
+    "description": "PHPStan design rules for immutability and structure",
+    "type": "phpstan-extension",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Haspadar\\PHPStanRules\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Haspadar\\PHPStanRules\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Kanstantsinas Mesnikas",
+            "email": "haspadar@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../piqule",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
+    "require": {
+        "php": ">=8.3"
+    },
+    "require-dev": {
+        "haspadar/piqule": "dev-main"
+    },
+    "config": {
+        "allow-plugins": {
+            "infection/extension-installer": true
+        }
+    }
+}
