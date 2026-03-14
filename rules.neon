@@ -1,0 +1,5 @@
+services:
+    -
+        class: Haspadar\PHPStanRules\Rules\MethodLinesRule
+        tags:
+            - phpstan.rules.rule

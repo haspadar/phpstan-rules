@@ -11,7 +11,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use PHPStan\ShouldNotHappenException;
 
 /** @implements Rule<ClassMethod> */
 final class MethodLinesRule implements Rule
@@ -43,8 +42,6 @@ final class MethodLinesRule implements Rule
     }
 
     /**
-     * @throws ShouldNotHappenException
-     *
      * @return list<IdentifierRuleError>
      */
     #[Override]

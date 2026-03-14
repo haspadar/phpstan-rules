@@ -26,6 +26,13 @@
     "require-dev": {
         "haspadar/piqule": "dev-main"
     },
+    "extra": {
+        "phpstan": {
+            "includes": [
+                "rules.neon"
+            ]
+        }
+    },
     "config": {
         "allow-plugins": {
             "infection/extension-installer": true
