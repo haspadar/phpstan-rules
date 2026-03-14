@@ -22,11 +22,8 @@
     "minimum-stability": "stable",
     "repositories": [
         {
-            "type": "path",
-            "url": "../piqule",
-            "options": {
-                "symlink": true
-            }
+            "type": "vcs",
+            "url": "https://github.com/haspadar/piqule"
         }
     ],
     "require": {

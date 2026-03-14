@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "97758dceac73be8312a2144308fdaa31",
+    "content-hash": "a3a0b755055561896c6e31f9d0387151",
     "packages": [],
     "packages-dev": [
         {
@@ -1641,10 +1641,16 @@
         {
             "name": "haspadar/piqule",
             "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:haspadar/piqule.git",
+                "reference": "b68826c6e182c702254f69112fbf2ab0ed43fe0d"
+            },
             "dist": {
-                "type": "path",
-                "url": "../piqule",
-                "reference": "9fe5e1d52589d3a0f7d119f22f355f060af6b1e6"
+                "type": "zip",
+                "url": "https://api.github.com/repos/haspadar/piqule/zipball/b68826c6e182c702254f69112fbf2ab0ed43fe0d",
+                "reference": "b68826c6e182c702254f69112fbf2ab0ed43fe0d",
+                "shasum": ""
             },
             "require": {
                 "friendsofphp/php-cs-fixer": "^3.91",
@@ -1661,6 +1667,7 @@
             "suggest": {
                 "ext-xdebug": "Required to generate coverage reports and run Infection"
             },
+            "default-branch": true,
             "bin": [
                 "bin/piqule"
             ],
@@ -1685,10 +1692,7 @@
                 }
             ],
             "description": "Quality checks for PHP projects",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "time": "2026-03-14T22:14:01+00:00"
         },
         {
             "name": "infection/abstract-testframework-adapter",
