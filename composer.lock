@@ -1644,10 +1644,9 @@
             "dist": {
                 "type": "path",
                 "url": "../piqule",
-                "reference": "908d89eeb6520a8faa3ee617748f90b5f1f005b3"
+                "reference": "9fe5e1d52589d3a0f7d119f22f355f060af6b1e6"
             },
             "require": {
-                "ext-xdebug": "*",
                 "friendsofphp/php-cs-fixer": "^3.91",
                 "infection/infection": "^0.32.0",
                 "php": "~8.3.16 || ~8.4.3 || ~8.5.0",
@@ -1658,6 +1657,9 @@
                 "squizlabs/php_codesniffer": "^4.0",
                 "symfony/process": "^7.0",
                 "vimeo/psalm": "^6.14"
+            },
+            "suggest": {
+                "ext-xdebug": "Required to generate coverage reports and run Infection"
             },
             "bin": [
                 "bin/piqule"
