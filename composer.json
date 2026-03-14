@@ -20,12 +20,6 @@
         }
     ],
     "minimum-stability": "stable",
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/haspadar/piqule"
-        }
-    ],
     "require": {
         "php": ">=8.3"
     },

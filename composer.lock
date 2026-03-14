@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a3a0b755055561896c6e31f9d0387151",
+    "content-hash": "e9702f359e4db8613c817b7c4cf6bd32",
     "packages": [],
     "packages-dev": [
         {
@@ -1643,13 +1643,13 @@
             "version": "dev-main",
             "source": {
                 "type": "git",
-                "url": "git@github.com:haspadar/piqule.git",
-                "reference": "b68826c6e182c702254f69112fbf2ab0ed43fe0d"
+                "url": "https://github.com/haspadar/piqule.git",
+                "reference": "e8c92c4f9c2556dce557dbb963b29cf2395473fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/haspadar/piqule/zipball/b68826c6e182c702254f69112fbf2ab0ed43fe0d",
-                "reference": "b68826c6e182c702254f69112fbf2ab0ed43fe0d",
+                "url": "https://api.github.com/repos/haspadar/piqule/zipball/e8c92c4f9c2556dce557dbb963b29cf2395473fa",
+                "reference": "e8c92c4f9c2556dce557dbb963b29cf2395473fa",
                 "shasum": ""
             },
             "require": {
@@ -1677,11 +1677,7 @@
                     "Haspadar\\Piqule\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Haspadar\\Piqule\\Tests\\": "tests/"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1692,7 +1688,11 @@
                 }
             ],
             "description": "Quality checks for PHP projects",
-            "time": "2026-03-14T22:14:01+00:00"
+            "support": {
+                "issues": "https://github.com/haspadar/piqule/issues",
+                "source": "https://github.com/haspadar/piqule/tree/main"
+            },
+            "time": "2026-03-14T22:47:09+00:00"
         },
         {
             "name": "infection/abstract-testframework-adapter",
