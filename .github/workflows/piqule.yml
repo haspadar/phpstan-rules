@@ -61,7 +61,7 @@ jobs:
         run: composer install --prefer-dist --no-progress --no-interaction
 
       - name: Run check
-        run: bin/piqule check ${{ matrix.check }}
+        run: vendor/bin/piqule check ${{ matrix.check }}
 
 
   # ============================================================
@@ -96,7 +96,7 @@ jobs:
         run: composer install --prefer-dist --no-progress --no-interaction
 
       - name: Run static check
-        run: bin/piqule check ${{ matrix.check }}
+        run: vendor/bin/piqule check ${{ matrix.check }}
 
 
   # ============================================================
