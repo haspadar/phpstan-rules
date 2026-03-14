@@ -4,16 +4,24 @@ declare(strict_types=1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
+use Override;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /** @implements Rule<ClassMethod> */
 final class MethodLinesRule implements Rule
 {
+    private readonly int $maxLines;
+
+    private readonly bool $skipBlankLines;
+
+    private readonly bool $skipComments;
+
     /**
      * @param array{
      *     maxLines?: int,
@@ -28,22 +36,18 @@ final class MethodLinesRule implements Rule
         $this->skipComments = $options['skipComments'] ?? false;
     }
 
-    private readonly int $maxLines;
-
-    private readonly bool $skipBlankLines;
-
-    private readonly bool $skipComments;
-
-    #[\Override]
+    #[Override]
     public function getNodeType(): string
     {
         return ClassMethod::class;
     }
 
     /**
+     * @throws ShouldNotHappenException
+     *
      * @return list<IdentifierRuleError>
      */
-    #[\Override]
+    #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
         /** @var ClassMethod $node */
@@ -60,7 +64,7 @@ final class MethodLinesRule implements Rule
                     $node->name->toString(),
                     $lines,
                     $this->maxLines,
-                )
+                ),
             )
                 ->identifier('haspadar.methodLines')
                 ->build(),
@@ -84,9 +88,7 @@ final class MethodLinesRule implements Rule
             $node->getEndLine() - $node->getStartLine() + 1,
         );
 
-        $countableLines = $this->countableLines($methodLines, $node->getStartLine());
-
-        return count($countableLines);
+        return count($this->countableLines($methodLines));
     }
 
     private function isCountable(string $line): bool
@@ -111,21 +113,11 @@ final class MethodLinesRule implements Rule
 
     /**
      * @param list<string> $methodLines
-     * @return array<int, true>
+     *
+     * @return list<string>
      */
-    private function countableLines(array $methodLines, int $startLine): array
+    private function countableLines(array $methodLines): array
     {
-        $countableLines = [];
-
-        foreach ($methodLines as $offset => $line) {
-            if (!$this->isCountable($line)) {
-                continue;
-            }
-
-            $countableLines[$startLine + $offset] = true;
-        }
-
-        return $countableLines;
+        return array_values(array_filter($methodLines, fn(string $line) => $this->isCountable($line)));
     }
-
 }

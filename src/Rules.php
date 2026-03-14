@@ -17,7 +17,7 @@ final class Rules
     public function all(): array
     {
         return [
-            \Haspadar\PHPStanRules\Rules\MethodLinesRule::class,
+            Rules\MethodLinesRule::class,
         ];
     }
 }
