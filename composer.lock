@@ -1644,13 +1644,13 @@
             "dist": {
                 "type": "path",
                 "url": "../piqule",
-                "reference": "e78f7309cc434f68d45de38cdcab4d96283bdb6a"
+                "reference": "908d89eeb6520a8faa3ee617748f90b5f1f005b3"
             },
             "require": {
                 "ext-xdebug": "*",
                 "friendsofphp/php-cs-fixer": "^3.91",
                 "infection/infection": "^0.32.0",
-                "php": ">=8.3",
+                "php": "~8.3.16 || ~8.4.3 || ~8.5.0",
                 "phpmd/phpmd": "^2.15",
                 "phpmetrics/phpmetrics": "^2.9",
                 "phpstan/phpstan": "^2.1",
