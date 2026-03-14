@@ -10,7 +10,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use PHPStan\ShouldNotHappenException;
 
 /** @implements Rule<ClassMethod> */
 final class MethodLinesRule implements Rule
@@ -42,13 +41,12 @@ final class MethodLinesRule implements Rule
     }
 
     /**
-     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[\Override]
     public function processNode(Node $node, Scope $scope): array
     {
-        assert($node instanceof ClassMethod);
+        /** @var ClassMethod $node */
         $lines = $this->lineCount($node, $scope);
 
         if ($lines <= $this->maxLines) {
@@ -93,15 +91,7 @@ final class MethodLinesRule implements Rule
 
     private function isCountable(string $line): bool
     {
-        if ($this->shouldSkipBlankLine($line)) {
-            return false;
-        }
-
-        if ($this->shouldSkipCommentLine($line)) {
-            return false;
-        }
-
-        return true;
+        return !$this->shouldSkipBlankLine($line) && !$this->shouldSkipCommentLine($line);
     }
 
     private function shouldSkipBlankLine(string $line): bool
