@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "97758dceac73be8312a2144308fdaa31",
+    "content-hash": "e9702f359e4db8613c817b7c4cf6bd32",
     "packages": [],
     "packages-dev": [
         {
@@ -1641,16 +1641,21 @@
         {
             "name": "haspadar/piqule",
             "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/haspadar/piqule.git",
+                "reference": "a34054f9a4e92d9116921bcf9f848b3c9a3b3c46"
+            },
             "dist": {
-                "type": "path",
-                "url": "../piqule",
-                "reference": "e78f7309cc434f68d45de38cdcab4d96283bdb6a"
+                "type": "zip",
+                "url": "https://api.github.com/repos/haspadar/piqule/zipball/a34054f9a4e92d9116921bcf9f848b3c9a3b3c46",
+                "reference": "a34054f9a4e92d9116921bcf9f848b3c9a3b3c46",
+                "shasum": ""
             },
             "require": {
-                "ext-xdebug": "*",
                 "friendsofphp/php-cs-fixer": "^3.91",
                 "infection/infection": "^0.32.0",
-                "php": ">=8.3",
+                "php": "~8.3.16 || ~8.4.3 || ~8.5.0",
                 "phpmd/phpmd": "^2.15",
                 "phpmetrics/phpmetrics": "^2.9",
                 "phpstan/phpstan": "^2.1",
@@ -1659,6 +1664,10 @@
                 "symfony/process": "^7.0",
                 "vimeo/psalm": "^6.14"
             },
+            "suggest": {
+                "ext-xdebug": "Required to generate coverage reports and run Infection"
+            },
+            "default-branch": true,
             "bin": [
                 "bin/piqule"
             ],
@@ -1668,11 +1677,7 @@
                     "Haspadar\\Piqule\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Haspadar\\Piqule\\Tests\\": "tests/"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -1683,10 +1688,11 @@
                 }
             ],
             "description": "Quality checks for PHP projects",
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/haspadar/piqule/issues",
+                "source": "https://github.com/haspadar/piqule/tree/main"
+            },
+            "time": "2026-03-14T23:49:10+00:00"
         },
         {
             "name": "infection/abstract-testframework-adapter",

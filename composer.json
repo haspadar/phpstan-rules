@@ -20,20 +20,18 @@
         }
     ],
     "minimum-stability": "stable",
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../piqule",
-            "options": {
-                "symlink": true
-            }
-        }
-    ],
     "require": {
         "php": ">=8.3"
     },
     "require-dev": {
         "haspadar/piqule": "dev-main"
+    },
+    "extra": {
+        "phpstan": {
+            "includes": [
+                "rules.neon"
+            ]
+        }
     },
     "config": {
         "allow-plugins": {

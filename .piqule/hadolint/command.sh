@@ -4,8 +4,8 @@ set -euo pipefail
 CONFIG=".piqule/hadolint/.hadolint.yml"
 
 if [ ! -f "$CONFIG" ]; then
-  echo "Hadolint config not found: $CONFIG"
-  exit 1
+  echo "No hadolint config found, skipping hadolint"
+  exit 0
 fi
 
 # ============================================================
