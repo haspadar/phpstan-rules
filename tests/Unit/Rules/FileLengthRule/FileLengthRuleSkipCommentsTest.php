@@ -27,6 +27,15 @@ final class FileLengthRuleSkipCommentsTest extends RuleTestCase
     }
 
     #[Test]
+    public function skipsPlainBlockCommentBodyLines(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/FileLengthRule/LongFileWithPlainBlockComments.php'],
+            [],
+        );
+    }
+
+    #[Test]
     public function reportsErrorWhenCodeLinesExceedLimit(): void
     {
         $this->analyse(
