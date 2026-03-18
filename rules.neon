@@ -3,7 +3,3 @@ services:
         class: Haspadar\PHPStanRules\Rules\MethodLengthRule
         tags:
             - phpstan.rules.rule
-    -
-        class: Haspadar\PHPStanRules\Rules\FileLinesRule
-        tags:
-            - phpstan.rules.rule

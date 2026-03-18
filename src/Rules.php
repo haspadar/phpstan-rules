@@ -18,7 +18,6 @@ final class Rules
     {
         return [
             Rules\MethodLengthRule::class,
-            Rules\FileLinesRule::class,
         ];
     }
 }
