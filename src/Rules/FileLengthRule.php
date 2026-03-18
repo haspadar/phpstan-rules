@@ -95,34 +95,35 @@ final readonly class FileLengthRule implements Rule
         $inBlockComment = false;
 
         foreach ($allLines as $index => $line) {
-            if ($inBlockComment) {
-                if (str_contains($line, '*/')) {
-                    $inBlockComment = false;
-                }
+            [$skip, $inBlockComment] = $this->shouldSkip($line, $inBlockComment);
 
-                if ($this->skipComments) {
-                    continue;
-                }
+            if (!$skip) {
+                $result[$index] = $line;
             }
-
-            if ($this->skipComments && preg_match('(^\s*(//|#))', $line) === 1) {
-                continue;
-            }
-
-            if ($this->skipComments && preg_match('(^\s*/\*)', $line) === 1) {
-                if (!str_contains($line, '*/')) {
-                    $inBlockComment = true;
-                }
-                continue;
-            }
-
-            if ($this->shouldSkipBlankLine($line)) {
-                continue;
-            }
-
-            $result[$index] = $line;
         }
 
         return $result;
+    }
+
+    /**
+     * @return array{bool, bool}
+     */
+    private function shouldSkip(string $line, bool $inBlockComment): array
+    {
+        if ($inBlockComment) {
+            $stillInBlock = !str_contains($line, '*/');
+
+            return [$this->skipComments, $stillInBlock];
+        }
+
+        if ($this->skipComments && preg_match('(^\s*(//|#))', $line) === 1) {
+            return [true, false];
+        }
+
+        if ($this->skipComments && preg_match('(^\s*/\*)', $line) === 1) {
+            return [true, !str_contains($line, '*/')];
+        }
+
+        return [$this->shouldSkipBlankLine($line), false];
     }
 }
