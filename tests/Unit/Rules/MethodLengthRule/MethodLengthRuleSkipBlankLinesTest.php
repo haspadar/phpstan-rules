@@ -45,4 +45,5 @@ final class MethodLengthRuleSkipBlankLinesTest extends RuleTestCase
             [],
         );
     }
+
 }
