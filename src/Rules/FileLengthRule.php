@@ -79,19 +79,9 @@ final readonly class FileLengthRule implements Rule
         return count($this->countableLines($allLines));
     }
 
-    private function isCountable(string $line): bool
-    {
-        return !$this->shouldSkipBlankLine($line) && !$this->shouldSkipCommentLine($line);
-    }
-
     private function shouldSkipBlankLine(string $line): bool
     {
         return $this->skipBlankLines && trim($line) === '';
-    }
-
-    private function shouldSkipCommentLine(string $line): bool
-    {
-        return $this->skipComments && preg_match('(^\s*(//|/\*|\*|\*/|#))', $line) === 1;
     }
 
     /**
@@ -101,6 +91,38 @@ final readonly class FileLengthRule implements Rule
      */
     private function countableLines(array $allLines): array
     {
-        return array_filter($allLines, fn(string $line) => $this->isCountable($line));
+        $result = [];
+        $inBlockComment = false;
+
+        foreach ($allLines as $index => $line) {
+            if ($inBlockComment) {
+                if (str_contains($line, '*/')) {
+                    $inBlockComment = false;
+                }
+
+                if ($this->skipComments) {
+                    continue;
+                }
+            }
+
+            if ($this->skipComments && preg_match('(^\s*(//|#))', $line) === 1) {
+                continue;
+            }
+
+            if ($this->skipComments && preg_match('(^\s*/\*)', $line) === 1) {
+                if (!str_contains($line, '*/')) {
+                    $inBlockComment = true;
+                }
+                continue;
+            }
+
+            if ($this->shouldSkipBlankLine($line)) {
+                continue;
+            }
+
+            $result[$index] = $line;
+        }
+
+        return $result;
     }
 }
