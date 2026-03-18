@@ -45,4 +45,5 @@ final class FileLengthRuleSkipCommentsTest extends RuleTestCase
             ],
         );
     }
+
 }
