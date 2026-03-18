@@ -6,14 +6,14 @@ namespace Haspadar\PHPStanRules\Rules;
 
 use Override;
 use PhpParser\Node;
-use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
+use PHPStan\Node\FileNode;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
-/** @implements Rule<ClassMethod> */
-final readonly class MethodLengthRule implements Rule
+/** @implements Rule<FileNode> */
+final readonly class FileLengthRule implements Rule
 {
     private int $maxLines;
 
@@ -38,7 +38,7 @@ final readonly class MethodLengthRule implements Rule
     #[Override]
     public function getNodeType(): string
     {
-        return ClassMethod::class;
+        return FileNode::class;
     }
 
     /**
@@ -49,8 +49,7 @@ final readonly class MethodLengthRule implements Rule
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
-        /** @var ClassMethod $node */
-        $lines = $this->lineCount($node, $scope);
+        $lines = $this->lineCount($scope);
 
         if ($lines <= $this->maxLines) {
             return [];
@@ -59,34 +58,23 @@ final readonly class MethodLengthRule implements Rule
         return [
             RuleErrorBuilder::message(
                 sprintf(
-                    'Method %s() is %d lines long. Maximum allowed is %d.',
-                    $node->name->toString(),
+                    'File %s is %d lines long. Maximum allowed is %d.',
+                    basename($scope->getFile()),
                     $lines,
                     $this->maxLines,
                 ),
             )
-                ->identifier('haspadar.methodLines')
+                ->identifier('haspadar.fileLines')
                 ->build(),
         ];
     }
 
-    private function lineCount(ClassMethod $node, Scope $scope): int
+    private function lineCount(Scope $scope): int
     {
         $result = file($scope->getFile(), FILE_IGNORE_NEW_LINES);
         $allLines = $result === false ? [] : $result;
 
-        $methodLines = array_slice(
-            $allLines,
-            $node->getStartLine() - 1,
-            $node->getEndLine() - $node->getStartLine() + 1,
-        );
-
-        return count($this->countableLines($methodLines));
-    }
-
-    private function isCountable(string $line): bool
-    {
-        return !$this->shouldSkipBlankLine($line) && !$this->shouldSkipCommentLine($line);
+        return count($this->countableLines($allLines));
     }
 
     private function shouldSkipBlankLine(string $line): bool
@@ -94,18 +82,46 @@ final readonly class MethodLengthRule implements Rule
         return $this->skipBlankLines && trim($line) === '';
     }
 
-    private function shouldSkipCommentLine(string $line): bool
-    {
-        return $this->skipComments && preg_match('(^\s*(//|/\*|\*|\*/|#))', $line) === 1;
-    }
-
     /**
-     * @param list<string> $methodLines
+     * @param list<string> $allLines
      *
      * @return array<int, string>
      */
-    private function countableLines(array $methodLines): array
+    private function countableLines(array $allLines): array
     {
-        return array_filter($methodLines, fn(string $line) => $this->isCountable($line));
+        $result = [];
+        $inBlockComment = false;
+
+        foreach ($allLines as $index => $line) {
+            [$skip, $inBlockComment] = $this->shouldSkip($line, $inBlockComment);
+
+            if (!$skip) {
+                $result[$index] = $line;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return array{bool, bool}
+     */
+    private function shouldSkip(string $line, bool $inBlockComment): array
+    {
+        if ($inBlockComment) {
+            $stillInBlock = !str_contains($line, '*/');
+
+            return [$this->skipComments, $stillInBlock];
+        }
+
+        if ($this->skipComments && preg_match('(^\s*(//|#))', $line) === 1) {
+            return [true, false];
+        }
+
+        if ($this->skipComments && preg_match('(^\s*/\*)', $line) === 1) {
+            return [true, !str_contains($line, '*/')];
+        }
+
+        return [$this->shouldSkipBlankLine($line), false];
     }
 }
