@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Haspadar\PHPStanRules\Tests\Fixtures\Rules\MethodLinesRule;
+namespace Haspadar\PHPStanRules\Tests\Fixtures\Rules\MethodLengthRule;
 
 final class LongMethod
 {

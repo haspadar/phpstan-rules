@@ -3,13 +3,10 @@
 
 [default]
 binary = false
-extend-ignore-re = [
-    "vendor/.*",
-]
 
 [files]
 extend-exclude = [
-    ".git/",
     "vendor/",
-    "node_modules/",
+    "tests/",
+    ".git/",
 ]

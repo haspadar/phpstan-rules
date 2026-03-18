@@ -2,26 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Haspadar\PHPStanRules\Tests\Unit\Rules\MethodLinesRule;
+namespace Haspadar\PHPStanRules\Tests\Unit\Rules\MethodLengthRule;
 
-use Haspadar\PHPStanRules\Rules\MethodLinesRule;
+use Haspadar\PHPStanRules\Rules\MethodLengthRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPUnit\Framework\Attributes\Test;
 
-/** @extends RuleTestCase<MethodLinesRule> */
-final class MethodLinesRuleSkipCommentsTest extends RuleTestCase
+/** @extends RuleTestCase<MethodLengthRule> */
+final class MethodLengthRuleSkipCommentsTest extends RuleTestCase
 {
     protected function getRule(): Rule
     {
-        return new MethodLinesRule(['maxLines' => 20, 'skipComments' => true]);
+        return new MethodLengthRule(20, ['skipComments' => true]);
     }
 
     #[Test]
     public function passesWhenCommentLinesExceedLimit(): void
     {
         $this->analyse(
-            [__DIR__ . '/../../../Fixtures/Rules/MethodLinesRule/LongMethodWithComments.php'],
+            [__DIR__ . '/../../../Fixtures/Rules/MethodLengthRule/LongMethodWithComments.php'],
             [],
         );
     }
@@ -30,7 +30,7 @@ final class MethodLinesRuleSkipCommentsTest extends RuleTestCase
     public function reportsErrorWhenCodeLinesExceedLimit(): void
     {
         $this->analyse(
-            [__DIR__ . '/../../../Fixtures/Rules/MethodLinesRule/LongMethod.php'],
+            [__DIR__ . '/../../../Fixtures/Rules/MethodLengthRule/LongMethod.php'],
             [
                 ['Method run() is 23 lines long. Maximum allowed is 20.', 9],
             ],

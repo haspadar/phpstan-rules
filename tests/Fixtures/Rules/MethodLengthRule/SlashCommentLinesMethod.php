@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Haspadar\PHPStanRules\Tests\Fixtures\Rules\MethodLinesRule;
+namespace Haspadar\PHPStanRules\Tests\Fixtures\Rules\MethodLengthRule;
 
 final class SlashCommentLinesMethod
 {
@@ -14,6 +14,7 @@ final class SlashCommentLinesMethod
         $status = 'ready';
         // build summary
         $summary = $title . $status;
+
         return strtolower($summary);
     }
 }
