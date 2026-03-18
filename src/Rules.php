@@ -17,7 +17,8 @@ final class Rules
     public function all(): array
     {
         return [
-            Rules\MethodLinesRule::class,
+            Rules\MethodLengthRule::class,
+            Rules\FileLinesRule::class,
         ];
     }
 }
