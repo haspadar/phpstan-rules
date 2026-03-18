@@ -23,14 +23,13 @@ final readonly class MethodLinesRule implements Rule
 
     /**
      * @param array{
-     *     maxLines?: int,
      *     skipBlankLines?: bool,
      *     skipComments?: bool
      * } $options
      */
-    public function __construct(array $options = [])
+    public function __construct(int $maxLines = 100, array $options = [])
     {
-        $this->maxLines = $options['maxLines'] ?? 50;
+        $this->maxLines = $maxLines;
         $this->skipBlankLines = $options['skipBlankLines'] ?? false;
         $this->skipComments = $options['skipComments'] ?? false;
     }
