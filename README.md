@@ -10,8 +10,11 @@
 | Rule              | Constraint                           |
 |-------------------|--------------------------------------|
 | `MethodLinesRule` | Method body must not exceed 50 lines |
+| `FileLengthRule`  | File must not exceed 1000 lines      |
 
 `MethodLinesRule` accepts an options array with `maxLines`, `skipBlankLines`, and `skipComments`.
+
+`FileLengthRule` accepts `maxLines` (int, default `1000`) as first constructor argument, and an options array with `skipBlankLines` and `skipComments`.
 
 ---
 
