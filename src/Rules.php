@@ -18,6 +18,7 @@ final class Rules
     {
         return [
             Rules\MethodLinesRule::class,
+            Rules\FileLengthRule::class,
         ];
     }
 }
