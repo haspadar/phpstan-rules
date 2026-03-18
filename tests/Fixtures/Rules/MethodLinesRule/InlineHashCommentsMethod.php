@@ -12,6 +12,7 @@ final class InlineHashCommentsMethod
         $model = 'Desk'; # source model
         $route = $brand . ', ' . $model; # compose route
         $label = strtoupper($route); # make label
+
         return $label;
     }
 }

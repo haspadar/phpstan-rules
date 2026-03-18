@@ -14,7 +14,7 @@ final class MethodLinesRuleSkipCommentsTest extends RuleTestCase
 {
     protected function getRule(): Rule
     {
-        return new MethodLinesRule(['maxLines' => 20, 'skipComments' => true]);
+        return new MethodLinesRule(20, ['skipComments' => true]);
     }
 
     #[Test]

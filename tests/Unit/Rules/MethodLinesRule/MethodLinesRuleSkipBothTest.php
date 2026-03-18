@@ -14,7 +14,7 @@ final class MethodLinesRuleSkipBothTest extends RuleTestCase
 {
     protected function getRule(): Rule
     {
-        return new MethodLinesRule(['maxLines' => 20, 'skipBlankLines' => true, 'skipComments' => true]);
+        return new MethodLinesRule(20, ['skipBlankLines' => true, 'skipComments' => true]);
     }
 
     #[Test]

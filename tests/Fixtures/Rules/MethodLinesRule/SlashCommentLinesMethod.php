@@ -14,6 +14,7 @@ final class SlashCommentLinesMethod
         $status = 'ready';
         // build summary
         $summary = $title . $status;
+
         return strtolower($summary);
     }
 }

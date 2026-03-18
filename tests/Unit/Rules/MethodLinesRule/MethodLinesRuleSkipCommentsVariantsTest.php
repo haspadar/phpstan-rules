@@ -14,7 +14,7 @@ final class MethodLinesRuleSkipCommentsVariantsTest extends RuleTestCase
 {
     protected function getRule(): Rule
     {
-        return new MethodLinesRule(['maxLines' => 7, 'skipComments' => true]);
+        return new MethodLinesRule(8, ['skipComments' => true]);
     }
 
     #[Test]
@@ -23,7 +23,7 @@ final class MethodLinesRuleSkipCommentsVariantsTest extends RuleTestCase
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/MethodLinesRule/InlineSlashCommentsMethod.php'],
             [
-                ['Method run() is 8 lines long. Maximum allowed is 7.', 9],
+                ['Method run() is 9 lines long. Maximum allowed is 8.', 9],
             ],
         );
     }
@@ -34,7 +34,7 @@ final class MethodLinesRuleSkipCommentsVariantsTest extends RuleTestCase
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/MethodLinesRule/InlineHashCommentsMethod.php'],
             [
-                ['Method run() is 8 lines long. Maximum allowed is 7.', 9],
+                ['Method run() is 9 lines long. Maximum allowed is 8.', 9],
             ],
         );
     }
@@ -45,7 +45,7 @@ final class MethodLinesRuleSkipCommentsVariantsTest extends RuleTestCase
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/MethodLinesRule/InlinePhpDocCommentsMethod.php'],
             [
-                ['Method run() is 8 lines long. Maximum allowed is 7.', 9],
+                ['Method run() is 9 lines long. Maximum allowed is 8.', 9],
             ],
         );
     }

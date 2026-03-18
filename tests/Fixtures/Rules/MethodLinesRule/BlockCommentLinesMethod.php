@@ -14,6 +14,7 @@ final class BlockCommentLinesMethod
         $model = 'Desk';
         /* build label */
         $route = $brand . ', ' . $model;
+
         return strtoupper($route);
     }
 }

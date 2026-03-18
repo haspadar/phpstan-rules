@@ -12,6 +12,7 @@ final class InlineSlashCommentsMethod
         $status = 'ready'; // keep status
         $summary = $title . $status; // build summary
         $slug = strtolower($summary); // normalize slug
+
         return $slug;
     }
 }

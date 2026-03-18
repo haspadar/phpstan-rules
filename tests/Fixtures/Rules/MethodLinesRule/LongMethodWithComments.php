@@ -27,6 +27,7 @@ final class LongMethodWithComments
         $m = $l - 10;
         $n = $m + 11;
         $o = $n * 12;
+
         return (string) $o;
     }
 }

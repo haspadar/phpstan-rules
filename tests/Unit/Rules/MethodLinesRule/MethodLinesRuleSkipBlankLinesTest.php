@@ -14,7 +14,7 @@ final class MethodLinesRuleSkipBlankLinesTest extends RuleTestCase
 {
     protected function getRule(): Rule
     {
-        return new MethodLinesRule(['maxLines' => 20, 'skipBlankLines' => true]);
+        return new MethodLinesRule(20, ['skipBlankLines' => true]);
     }
 
     #[Test]
@@ -34,6 +34,15 @@ final class MethodLinesRuleSkipBlankLinesTest extends RuleTestCase
             [
                 ['Method run() is 22 lines long. Maximum allowed is 20.', 9],
             ],
+        );
+    }
+
+    #[Test]
+    public function skipsLinesContainingOnlySpaces(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/MethodLinesRule/LongMethodWithSpacedBlanks.php'],
+            [],
         );
     }
 }

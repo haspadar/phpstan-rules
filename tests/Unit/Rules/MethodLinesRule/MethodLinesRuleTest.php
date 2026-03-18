@@ -14,7 +14,7 @@ final class MethodLinesRuleTest extends RuleTestCase
 {
     protected function getRule(): Rule
     {
-        return new MethodLinesRule(['maxLines' => 20]);
+        return new MethodLinesRule(20);
     }
 
     #[Test]
@@ -52,6 +52,17 @@ final class MethodLinesRuleTest extends RuleTestCase
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/MethodLinesRule/SuppressedLongMethod.php'],
             [],
+        );
+    }
+
+    #[Test]
+    public function countsCommentLinesWhenSkipCommentsNotEnabled(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/MethodLinesRule/LongMethodWithComments.php'],
+            [
+                ['Method run() is 24 lines long. Maximum allowed is 20.', 9],
+            ],
         );
     }
 }
