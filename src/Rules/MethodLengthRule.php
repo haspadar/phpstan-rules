@@ -72,10 +72,8 @@ final readonly class MethodLengthRule implements Rule
 
     private function lineCount(ClassMethod $node, Scope $scope): int
     {
-        $allLines = file($scope->getFile(), FILE_IGNORE_NEW_LINES);
-        if (!is_array($allLines)) {
-            return $node->getEndLine() - $node->getStartLine() + 1;
-        }
+        $result = file($scope->getFile(), FILE_IGNORE_NEW_LINES);
+        $allLines = $result === false ? [] : $result;
 
         $methodLines = array_slice(
             $allLines,

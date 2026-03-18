@@ -71,10 +71,8 @@ final readonly class FileLengthRule implements Rule
 
     private function lineCount(Scope $scope): int
     {
-        $allLines = file($scope->getFile(), FILE_IGNORE_NEW_LINES);
-        if (!is_array($allLines)) {
-            return 0;
-        }
+        $result = file($scope->getFile(), FILE_IGNORE_NEW_LINES);
+        $allLines = $result === false ? [] : $result;
 
         return count($this->countableLines($allLines));
     }
