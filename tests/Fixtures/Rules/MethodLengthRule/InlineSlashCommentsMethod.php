@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Haspadar\PHPStanRules\Tests\Fixtures\Rules\MethodLinesRule;
+namespace Haspadar\PHPStanRules\Tests\Fixtures\Rules\MethodLengthRule;
 
 final class InlineSlashCommentsMethod
 {
@@ -12,6 +12,7 @@ final class InlineSlashCommentsMethod
         $status = 'ready'; // keep status
         $summary = $title . $status; // build summary
         $slug = strtolower($summary); // normalize slug
+
         return $slug;
     }
 }

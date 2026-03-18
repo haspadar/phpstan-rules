@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Haspadar\PHPStanRules\Tests\Fixtures\Rules\MethodLinesRule;
+namespace Haspadar\PHPStanRules\Tests\Fixtures\Rules\MethodLengthRule;
 
 final class InlinePhpDocCommentsMethod
 {
@@ -12,6 +12,7 @@ final class InlinePhpDocCommentsMethod
         $model = 'Desk'; /** source model */
         $route = $brand . ', ' . $model; /** compose route */
         $label = strtoupper($route); /** make label */
+
         return $label;
     }
 }

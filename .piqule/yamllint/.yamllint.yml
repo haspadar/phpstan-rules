@@ -2,9 +2,8 @@ extends: default
 
 ignore: |
   vendor/**
-  node_modules/**
-  build/**
-  var/**
+  tests/**
+  .git/**
   .piqule/**/html/**
   .piqule/**/coverage-report/**
 

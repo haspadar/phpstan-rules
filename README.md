@@ -7,11 +7,11 @@
 
 ## Rules
 
-| Rule              | Constraint                           |
-|-------------------|--------------------------------------|
-| `MethodLinesRule` | Method body must not exceed 50 lines |
+| Rule               | Constraint                            |
+|--------------------|---------------------------------------|
+| `MethodLengthRule` | Method body must not exceed 100 lines |
 
-`MethodLinesRule` accepts an options array with `maxLines`, `skipBlankLines`, and `skipComments`.
+`MethodLengthRule` accepts `maxLines` (int, default `100`) as first constructor argument, and an options array with `skipBlankLines` and `skipComments`.
 
 ---
 

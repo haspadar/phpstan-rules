@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Haspadar\PHPStanRules\Tests\Fixtures\Rules\MethodLinesRule;
+namespace Haspadar\PHPStanRules\Tests\Fixtures\Rules\MethodLengthRule;
 
-final class SuppressedLongMethod
+final class ExactMethod
 {
-    /** @phpstan-ignore haspadar.methodLines */
     public function run(): string
     {
         $a = 1;
@@ -24,10 +23,7 @@ final class SuppressedLongMethod
         $m = $l - 10;
         $n = $m + 11;
         $o = $n * 12;
-        $p = $o - 13;
-        $q = $p + 14;
-        $r = $q * 15;
 
-        return (string) $r;
+        return (string) $o;
     }
 }
