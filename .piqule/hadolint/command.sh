@@ -23,7 +23,7 @@ done < <(
       -false \
     \) \
     ! -path "./vendor/*" \
-    ! -path "./node_modules/*" \
+    ! -path "./tests/*" \
     ! -path "./.git/*" \
     -print0
 )

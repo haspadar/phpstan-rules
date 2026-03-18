@@ -23,11 +23,8 @@ done < <(
   find . \
     -type f \
     ! -path "./vendor/*" \
-    ! -path "./node_modules/*" \
+    ! -path "./tests/*" \
     ! -path "./.git/*" \
-    ! -path "./coverage/*" \
-    ! -path "./build/*" \
-    ! -path "./var/*" \
     -print0
 )
 
