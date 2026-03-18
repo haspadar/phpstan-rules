@@ -32,7 +32,7 @@ final class FileLengthRuleDefaultLimitTest extends RuleTestCase
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/FileLengthRule/LongDefaultFile.php'],
             [
-                ['File LongDefaultFile.php is 1001 lines long. Maximum allowed is 1000.', 3],
+                ['File LongDefaultFile.php is 101 lines long. Maximum allowed is 100.', 3],
             ],
         );
     }
