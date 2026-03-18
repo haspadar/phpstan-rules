@@ -13,13 +13,13 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
 /** @implements Rule<ClassMethod> */
-final class MethodLinesRule implements Rule
+final readonly class MethodLinesRule implements Rule
 {
-    private readonly int $maxLines;
+    private int $maxLines;
 
-    private readonly bool $skipBlankLines;
+    private bool $skipBlankLines;
 
-    private readonly bool $skipComments;
+    private bool $skipComments;
 
     /**
      * @param array{
@@ -35,6 +35,7 @@ final class MethodLinesRule implements Rule
         $this->skipComments = $options['skipComments'] ?? false;
     }
 
+    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -42,6 +43,8 @@ final class MethodLinesRule implements Rule
     }
 
     /**
+     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     *
      * @return list<IdentifierRuleError>
      */
     #[Override]
@@ -70,10 +73,6 @@ final class MethodLinesRule implements Rule
 
     private function lineCount(ClassMethod $node, Scope $scope): int
     {
-        if (!$this->shouldReadSourceLines()) {
-            return $node->getEndLine() - $node->getStartLine() + 1;
-        }
-
         $allLines = file($scope->getFile(), FILE_IGNORE_NEW_LINES);
         if (!is_array($allLines)) {
             return $node->getEndLine() - $node->getStartLine() + 1;
@@ -103,18 +102,13 @@ final class MethodLinesRule implements Rule
         return $this->skipComments && preg_match('(^\s*(//|/\*|\*|\*/|#))', $line) === 1;
     }
 
-    private function shouldReadSourceLines(): bool
-    {
-        return $this->skipBlankLines || $this->skipComments;
-    }
-
     /**
      * @param list<string> $methodLines
      *
-     * @return list<string>
+     * @return array<int, string>
      */
     private function countableLines(array $methodLines): array
     {
-        return array_values(array_filter($methodLines, fn(string $line) => $this->isCountable($line)));
+        return array_filter($methodLines, fn(string $line) => $this->isCountable($line));
     }
 }
