@@ -1,7 +1,9 @@
 # PHPStan Rules — design rules for immutability and structure
 
-[![CI](https://github.com/haspadar/phpstan-rules/actions/workflows/ci.yml/badge.svg)](https://github.com/haspadar/phpstan-rules/actions/workflows/ci.yml)
-[![PHP](https://img.shields.io/packagist/php-v/haspadar/phpstan-rules)](https://packagist.org/packages/haspadar/phpstan-rules)
+[![CI](https://github.com/haspadar/phpstan-rules/actions/workflows/piqule.yml/badge.svg)](https://github.com/haspadar/phpstan-rules/actions/workflows/piqule.yml)
+[![Coverage](https://codecov.io/gh/haspadar/phpstan-rules/branch/main/graph/badge.svg)](https://codecov.io/gh/haspadar/phpstan-rules)
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fhaspadar%2Fphpstan-rules%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/haspadar/phpstan-rules/main)
+[![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/haspadar/phpstan-rules?labelColor=171717&color=FF570A&label=CodeRabbit+Reviews)](https://coderabbit.ai)
 
 ---
 
