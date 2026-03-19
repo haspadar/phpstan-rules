@@ -19,6 +19,7 @@ final class Rules
         return [
             Rules\MethodLengthRule::class,
             Rules\FileLengthRule::class,
+            Rules\TooManyMethodsRule::class,
         ];
     }
 }
