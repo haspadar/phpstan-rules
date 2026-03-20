@@ -1,5 +1,21 @@
 services:
     -
-        class: Haspadar\PHPStanRules\Rules\MethodLinesRule
+        class: Haspadar\PHPStanRules\Rules\MethodLengthRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\FileLengthRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\TooManyMethodsRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\ParameterNumberRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\CyclomaticComplexityRule
         tags:
             - phpstan.rules.rule

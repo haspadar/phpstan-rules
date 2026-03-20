@@ -17,7 +17,11 @@ final class Rules
     public function all(): array
     {
         return [
-            Rules\MethodLinesRule::class,
+            Rules\MethodLengthRule::class,
+            Rules\FileLengthRule::class,
+            Rules\TooManyMethodsRule::class,
+            Rules\ParameterNumberRule::class,
+            Rules\CyclomaticComplexityRule::class,
         ];
     }
 }
