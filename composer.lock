@@ -1698,12 +1698,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/haspadar/piqule.git",
-                "reference": "ff1af07e0d7d008003a30c8cd99d3d0a48870f1a"
+                "reference": "7927b76d3f0d8eb8d66b711f08158b76cc7e43c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/haspadar/piqule/zipball/ff1af07e0d7d008003a30c8cd99d3d0a48870f1a",
-                "reference": "ff1af07e0d7d008003a30c8cd99d3d0a48870f1a",
+                "url": "https://api.github.com/repos/haspadar/piqule/zipball/7927b76d3f0d8eb8d66b711f08158b76cc7e43c1",
+                "reference": "7927b76d3f0d8eb8d66b711f08158b76cc7e43c1",
                 "shasum": ""
             },
             "require": {
@@ -1746,7 +1746,7 @@
                 "issues": "https://github.com/haspadar/piqule/issues",
                 "source": "https://github.com/haspadar/piqule/tree/main"
             },
-            "time": "2026-03-20T08:17:18+00:00"
+            "time": "2026-03-20T23:18:37+00:00"
         },
         {
             "name": "infection/abstract-testframework-adapter",
