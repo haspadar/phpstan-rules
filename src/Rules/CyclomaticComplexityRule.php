@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
+use InvalidArgumentException;
 use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
@@ -36,6 +37,12 @@ final readonly class CyclomaticComplexityRule implements Rule
     /** Constructs the rule with the given complexity limit */
     public function __construct(int $maxComplexity = 10)
     {
+        if ($maxComplexity <= 0) {
+            throw new InvalidArgumentException(
+                sprintf('maxComplexity must be a positive integer, %d given', $maxComplexity),
+            );
+        }
+
         $this->maxComplexity = $maxComplexity;
     }
 
