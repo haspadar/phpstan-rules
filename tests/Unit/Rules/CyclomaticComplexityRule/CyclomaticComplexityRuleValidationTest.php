@@ -16,6 +16,7 @@ final class CyclomaticComplexityRuleValidationTest extends TestCase
     public function throwsWhenMaxComplexityIsZero(): void
     {
         $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('maxComplexity must be a positive integer');
 
         (fn() => new CyclomaticComplexityRule(0))();
     }
@@ -24,6 +25,7 @@ final class CyclomaticComplexityRuleValidationTest extends TestCase
     public function throwsWhenMaxComplexityIsNegative(): void
     {
         $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('maxComplexity must be a positive integer');
 
         (fn() => new CyclomaticComplexityRule(-1))();
     }
