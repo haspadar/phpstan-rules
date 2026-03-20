@@ -17,7 +17,7 @@ final class CyclomaticComplexityRuleValidationTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        new CyclomaticComplexityRule(0);
+        $rule = new CyclomaticComplexityRule(0);
     }
 
     #[Test]
@@ -25,6 +25,6 @@ final class CyclomaticComplexityRuleValidationTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        new CyclomaticComplexityRule(-1);
+        $rule = new CyclomaticComplexityRule(-1);
     }
 }
