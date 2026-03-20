@@ -27,7 +27,7 @@ final readonly class FileLengthRule implements Rule
      *     skipComments?: bool
      * } $options
      */
-    public function __construct(int $maxLines = 100, array $options = [])
+    public function __construct(int $maxLines = 1000, array $options = [])
     {
         $this->maxLines = $maxLines;
         $this->skipBlankLines = $options['skipBlankLines'] ?? false;
