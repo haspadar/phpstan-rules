@@ -11,7 +11,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use PHPStan\ShouldNotHappenException;
 
 /** @implements Rule<Class_> */
 final readonly class TooManyMethodsRule implements Rule
