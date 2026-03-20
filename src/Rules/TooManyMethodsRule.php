@@ -40,8 +40,6 @@ final readonly class TooManyMethodsRule implements Rule
     /**
      * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
      *
-     * @throws ShouldNotHappenException
-     *
      * @return list<IdentifierRuleError>
      */
     #[Override]
