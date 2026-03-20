@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e9702f359e4db8613c817b7c4cf6bd32",
+    "content-hash": "2ce3215392005fe57e7e0e3304db3f7c",
     "packages": [],
     "packages-dev": [
         {
@@ -1644,12 +1644,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/haspadar/piqule.git",
-                "reference": "a34054f9a4e92d9116921bcf9f848b3c9a3b3c46"
+                "reference": "7927b76d3f0d8eb8d66b711f08158b76cc7e43c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/haspadar/piqule/zipball/a34054f9a4e92d9116921bcf9f848b3c9a3b3c46",
-                "reference": "a34054f9a4e92d9116921bcf9f848b3c9a3b3c46",
+                "url": "https://api.github.com/repos/haspadar/piqule/zipball/7927b76d3f0d8eb8d66b711f08158b76cc7e43c1",
+                "reference": "7927b76d3f0d8eb8d66b711f08158b76cc7e43c1",
                 "shasum": ""
             },
             "require": {
@@ -1692,7 +1692,7 @@
                 "issues": "https://github.com/haspadar/piqule/issues",
                 "source": "https://github.com/haspadar/piqule/tree/main"
             },
-            "time": "2026-03-14T23:49:10+00:00"
+            "time": "2026-03-20T23:18:37+00:00"
         },
         {
             "name": "infection/abstract-testframework-adapter",
