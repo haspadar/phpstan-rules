@@ -21,6 +21,7 @@ final class Rules
             Rules\FileLengthRule::class,
             Rules\TooManyMethodsRule::class,
             Rules\ParameterNumberRule::class,
+            Rules\CyclomaticComplexityRule::class,
         ];
     }
 }

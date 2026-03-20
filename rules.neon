@@ -15,3 +15,7 @@ services:
         class: Haspadar\PHPStanRules\Rules\ParameterNumberRule
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\CyclomaticComplexityRule
+        tags:
+            - phpstan.rules.rule
