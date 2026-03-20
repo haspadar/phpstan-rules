@@ -83,43 +83,44 @@ final readonly class CyclomaticComplexityRule implements Rule
     private function complexity(ClassMethod $node): int
     {
         $finder = new NodeFinder();
-
-        $branchingNodes = [
-            If_::class,
-            ElseIf_::class,
-            While_::class,
-            Do_::class,
-            For_::class,
-            Foreach_::class,
-            Catch_::class,
-            BooleanAnd::class,
-            BooleanOr::class,
-            LogicalAnd::class,
-            LogicalOr::class,
-            Ternary::class,
-            Coalesce::class,
-        ];
-
         $count = 1;
 
-        foreach ($branchingNodes as $class) {
-            $count += count($finder->findInstanceOf($node->stmts ?? [], $class));
-        }
-
-        foreach ($finder->findInstanceOf($node->stmts ?? [], Case_::class) as $case) {
-            /** @var Case_ $case */
-            if ($case->cond !== null) {
-                $count++;
+        foreach ($finder->find($node->stmts ?? [], $this->isBranchingNode(...)) as $candidate) {
+            if ($candidate instanceof Case_ && $candidate->cond === null) {
+                continue;
             }
-        }
 
-        foreach ($finder->findInstanceOf($node->stmts ?? [], MatchArm::class) as $arm) {
-            /** @var MatchArm $arm */
-            if ($arm->conds !== null) {
-                $count++;
+            if ($candidate instanceof MatchArm && $candidate->conds === null) {
+                continue;
             }
+
+            $count++;
         }
 
         return $count;
+    }
+
+    /**
+     * Returns true for nodes that contribute to cyclomatic complexity
+     *
+     * @SuppressWarnings("CyclomaticComplexity")
+     */
+    private function isBranchingNode(Node $node): bool
+    {
+        return $node instanceof If_
+            || $node instanceof ElseIf_
+            || $node instanceof While_
+            || $node instanceof Do_
+            || $node instanceof For_
+            || $node instanceof Foreach_
+            || $node instanceof Catch_
+            || $node instanceof BooleanAnd
+            || $node instanceof BooleanOr
+            || $node instanceof LogicalAnd
+            || $node instanceof LogicalOr
+            || $node instanceof Ternary
+            || $node instanceof Coalesce
+            || $node instanceof Case_
+            || $node instanceof MatchArm;
     }
 }
