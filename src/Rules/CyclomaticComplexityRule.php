@@ -107,12 +107,14 @@ final readonly class CyclomaticComplexityRule implements Rule
         return $count;
     }
 
-    /**
-     * Returns true for nodes that contribute to cyclomatic complexity
-     *
-     * @SuppressWarnings("CyclomaticComplexity")
-     */
+    /** Returns true for nodes that contribute to cyclomatic complexity */
     private function isBranchingNode(Node $node): bool
+    {
+        return $this->isControlFlowNode($node) || $this->isLogicalOrConditionalNode($node);
+    }
+
+    /** Returns true for control flow statement nodes */
+    private function isControlFlowNode(Node $node): bool
     {
         return $node instanceof If_
             || $node instanceof ElseIf_
@@ -121,13 +123,18 @@ final readonly class CyclomaticComplexityRule implements Rule
             || $node instanceof For_
             || $node instanceof Foreach_
             || $node instanceof Catch_
-            || $node instanceof BooleanAnd
+            || $node instanceof Case_
+            || $node instanceof MatchArm;
+    }
+
+    /** Returns true for logical and conditional expression nodes */
+    private function isLogicalOrConditionalNode(Node $node): bool
+    {
+        return $node instanceof BooleanAnd
             || $node instanceof BooleanOr
             || $node instanceof LogicalAnd
             || $node instanceof LogicalOr
             || $node instanceof Ternary
-            || $node instanceof Coalesce
-            || $node instanceof Case_
-            || $node instanceof MatchArm;
+            || $node instanceof Coalesce;
     }
 }
