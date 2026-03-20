@@ -35,4 +35,5 @@ if [ -n "$SEED" ]; then
   ARGS+=(--random-order-seed="$SEED")
 fi
 
-"$BIN" "${ARGS[@]}"
+PHP_OPTIONS="-d memory_limit=512M"
+php "$PHP_OPTIONS" "$BIN" "${ARGS[@]}"

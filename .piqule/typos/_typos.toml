@@ -6,7 +6,5 @@ binary = false
 
 [files]
 extend-exclude = [
-    "vendor/",
-    "tests/",
-    ".git/",
+    "docs/vendors/",
 ]
