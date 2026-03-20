@@ -56,8 +56,8 @@ final readonly class ParameterNumberRule implements Rule
             return [];
         }
 
-        $classReflection = $scope->getClassReflection();
-        $className = $classReflection !== null ? $classReflection->getName() : 'unknown';
+        $reflection = $scope->getClassReflection();
+        $className = $reflection !== null ? $reflection->getName() : 'unknown';
 
         return [
             RuleErrorBuilder::message(
