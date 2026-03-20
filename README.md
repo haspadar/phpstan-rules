@@ -1,4 +1,4 @@
-# PHPStan Rules — design rules for immutability and structure
+# Opinionated PHPStan Rules
 
 [![CI](https://github.com/haspadar/phpstan-rules/actions/workflows/ci.yml/badge.svg)](https://github.com/haspadar/phpstan-rules/actions/workflows/ci.yml)
 [![PHP](https://img.shields.io/packagist/php-v/haspadar/phpstan-rules)](https://packagist.org/packages/haspadar/phpstan-rules)
