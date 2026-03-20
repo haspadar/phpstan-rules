@@ -11,3 +11,7 @@ services:
         class: Haspadar\PHPStanRules\Rules\TooManyMethodsRule
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\ParameterNumberRule
+        tags:
+            - phpstan.rules.rule

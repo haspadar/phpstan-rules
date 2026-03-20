@@ -20,6 +20,7 @@ final class Rules
             Rules\MethodLengthRule::class,
             Rules\FileLengthRule::class,
             Rules\TooManyMethodsRule::class,
+            Rules\ParameterNumberRule::class,
         ];
     }
 }
