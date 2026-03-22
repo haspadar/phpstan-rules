@@ -17,6 +17,14 @@ use PhpParser\NodeFinder;
  */
 final class MethodBodyTypeCollector
 {
+    private NodeFinder $finder;
+
+    /** Initializes the shared NodeFinder instance */
+    public function __construct()
+    {
+        $this->finder = new NodeFinder();
+    }
+
     /**
      * Returns all type names found in the method body statements
      *
@@ -28,11 +36,10 @@ final class MethodBodyTypeCollector
             return [];
         }
 
-        $finder = new NodeFinder();
         $names = [];
 
         /** @var list<New_> $newNodes */
-        $newNodes = $finder->findInstanceOf($method->stmts, New_::class);
+        $newNodes = $this->finder->findInstanceOf($method->stmts, New_::class);
 
         foreach ($newNodes as $new) {
             if ($new->class instanceof Name) {
@@ -41,7 +48,7 @@ final class MethodBodyTypeCollector
         }
 
         /** @var list<StaticCall> $staticCalls */
-        $staticCalls = $finder->findInstanceOf($method->stmts, StaticCall::class);
+        $staticCalls = $this->finder->findInstanceOf($method->stmts, StaticCall::class);
 
         foreach ($staticCalls as $call) {
             if ($call->class instanceof Name) {
@@ -50,7 +57,7 @@ final class MethodBodyTypeCollector
         }
 
         /** @var list<Catch_> $catches */
-        $catches = $finder->findInstanceOf($method->stmts, Catch_::class);
+        $catches = $this->finder->findInstanceOf($method->stmts, Catch_::class);
 
         foreach ($catches as $catch) {
             foreach ($catch->types as $type) {

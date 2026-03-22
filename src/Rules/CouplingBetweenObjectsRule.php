@@ -101,7 +101,7 @@ final readonly class CouplingBetweenObjectsRule implements Rule
             $this->collectMethodTypes($node),
         );
 
-        return $this->deduplicate($names);
+        return $this->filterAndDeduplicate($names);
     }
 
     /**
@@ -172,13 +172,13 @@ final readonly class CouplingBetweenObjectsRule implements Rule
     }
 
     /**
-     * Removes duplicates, scalars, and excluded class names; returns a deduplicated list
+     * Filters out scalar types and excluded classes, then deduplicates the result
      *
      * @param list<string> $names
      *
      * @return list<string>
      */
-    private function deduplicate(array $names): array
+    private function filterAndDeduplicate(array $names): array
     {
         $excluded = array_map('strtolower', $this->excludedClasses);
         $unique = [];
