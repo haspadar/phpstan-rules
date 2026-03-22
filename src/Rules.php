@@ -22,6 +22,7 @@ final class Rules
             Rules\TooManyMethodsRule::class,
             Rules\ParameterNumberRule::class,
             Rules\CyclomaticComplexityRule::class,
+            Rules\CouplingBetweenObjectsRule::class,
         ];
     }
 }

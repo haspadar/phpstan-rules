@@ -19,3 +19,7 @@ services:
         class: Haspadar\PHPStanRules\Rules\CyclomaticComplexityRule
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\CouplingBetweenObjectsRule
+        tags:
+            - phpstan.rules.rule

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Haspadar\PHPStanRules\Tests\Unit;
 
 use Haspadar\PHPStanRules\Rules;
+use Haspadar\PHPStanRules\Rules\CouplingBetweenObjectsRule;
 use Haspadar\PHPStanRules\Rules\CyclomaticComplexityRule;
 use Haspadar\PHPStanRules\Rules\FileLengthRule;
 use Haspadar\PHPStanRules\Rules\MethodLengthRule;
@@ -19,7 +20,7 @@ final class RulesTest extends TestCase
     public function returnsAllRegisteredRules(): void
     {
         self::assertSame(
-            [MethodLengthRule::class, FileLengthRule::class, TooManyMethodsRule::class, ParameterNumberRule::class, CyclomaticComplexityRule::class],
+            [MethodLengthRule::class, FileLengthRule::class, TooManyMethodsRule::class, ParameterNumberRule::class, CyclomaticComplexityRule::class, CouplingBetweenObjectsRule::class],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',
         );
