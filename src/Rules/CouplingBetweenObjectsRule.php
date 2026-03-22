@@ -33,7 +33,7 @@ final readonly class CouplingBetweenObjectsRule implements Rule
     private CouplingBetweenObjectsRule\MethodBodyTypeCollector $bodyCollector;
 
     /** @var list<string> */
-    private const SCALAR_TYPES = ['self', 'parent', 'static', 'void', 'null', 'bool', 'int', 'float', 'string', 'array', 'object', 'callable', 'iterable', 'never', 'mixed'];
+    private const SCALAR_TYPES = ['self', 'parent', 'static', 'void', 'null', 'bool', 'int', 'float', 'string', 'array', 'object', 'callable', 'iterable', 'never', 'mixed', 'true', 'false'];
 
     /**
      * @param int $maximum maximum number of unique dependent types allowed per class
