@@ -54,4 +54,13 @@ final class CouplingBetweenObjectsRuleTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function countsCatchTypeAsADependency(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/CouplingBetweenObjectsRule/ClassWithCatchDependency.php'],
+            [],
+        );
+    }
 }
