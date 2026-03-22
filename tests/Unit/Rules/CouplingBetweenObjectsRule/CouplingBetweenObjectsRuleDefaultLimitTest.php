@@ -18,16 +18,7 @@ final class CouplingBetweenObjectsRuleDefaultLimitTest extends RuleTestCase
     }
 
     #[Test]
-    public function passesWhenClassIsExactlyAtDefaultLimit(): void
-    {
-        $this->analyse(
-            [__DIR__ . '/../../../Fixtures/Rules/CouplingBetweenObjectsRule/ExactDefaultDependencies.php'],
-            [],
-        );
-    }
-
-    #[Test]
-    public function reportsErrorWhenClassExceedsDefaultLimit(): void
+    public function reportsErrorOnlyForClassExceedingDefaultLimit(): void
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/CouplingBetweenObjectsRule/TooManyDefaultDependencies.php'],
