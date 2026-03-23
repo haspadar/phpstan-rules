@@ -20,8 +20,9 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
 /**
- * Counts boolean operators (&&, ||, and, or, xor) per expression in a class method
- * and reports an error when the total exceeds the configured limit.
+ * Finds the maximum number of boolean operators (&&, ||, and, or, xor) in any single
+ * expression within a class method and reports an error when it exceeds the configured limit.
+ * Each expression is evaluated independently — operators across separate expressions are not summed.
  * Bitwise operators & and | are excluded — their intent cannot be determined without type analysis.
  *
  * @implements Rule<ClassMethod>
@@ -64,9 +65,9 @@ final readonly class BooleanExpressionComplexityRule implements Rule
     public function processNode(Node $node, Scope $scope): array
     {
         /** @var ClassMethod $node */
-        $count = $this->countOperators($node);
+        $max = $this->maxOperatorsInSingleExpression($node);
 
-        if ($count <= $this->maxOperators) {
+        if ($max <= $this->maxOperators) {
             return [];
         }
 
@@ -79,7 +80,7 @@ final readonly class BooleanExpressionComplexityRule implements Rule
                     'Method %s::%s() has boolean expression complexity of %d. Maximum allowed is %d.',
                     $className,
                     $node->name->toString(),
-                    $count,
+                    $max,
                     $this->maxOperators,
                 ),
             )
@@ -88,12 +89,38 @@ final readonly class BooleanExpressionComplexityRule implements Rule
         ];
     }
 
-    /** Counts boolean operators in all expressions within the method body */
-    private function countOperators(ClassMethod $node): int
+    /**
+     * Returns the maximum number of boolean operators found in any single expression
+     * within the method body; each root boolean operator is counted independently so that
+     * operators across separate statements are never summed together.
+     * A root operator is one that is not contained inside another boolean operator.
+     */
+    private function maxOperatorsInSingleExpression(ClassMethod $node): int
     {
         $finder = new NodeFinder();
+        $stmts = $node->stmts ?? [];
+        $allOperators = $finder->find($stmts, $this->isBooleanOperator(...));
+        $max = 0;
 
-        return count($finder->find($node->stmts ?? [], $this->isBooleanOperator(...)));
+        foreach ($allOperators as $candidate) {
+            foreach ($allOperators as $other) {
+                if ($other === $candidate) {
+                    continue;
+                }
+
+                if ($finder->find([$other], static fn(Node $n): bool => $n === $candidate) !== []) {
+                    continue 2;
+                }
+            }
+
+            $count = count($finder->find([$candidate], $this->isBooleanOperator(...)));
+
+            if ($count > $max) {
+                $max = $count;
+            }
+        }
+
+        return $max;
     }
 
     /** Returns true for nodes that are boolean operators */
