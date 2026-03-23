@@ -12,6 +12,6 @@ return new OverrideConfig(new DefaultConfig(), [
     'phpunit.php_options' => '-d memory_limit=512M',
     'phpunit.testsuites.integration' => [],
     'phpmetrics.complexity.max_weighted_methods_per_class' => 40,
-    'sonar.exclusions' => ['tests/**'],
+    'sonar.exclusions' => ['../../tests/**'],
     'sonar.tests' => [],
 ]);
