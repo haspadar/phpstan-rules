@@ -23,6 +23,7 @@ final class Rules
             Rules\ParameterNumberRule::class,
             Rules\CyclomaticComplexityRule::class,
             Rules\CouplingBetweenObjectsRule::class,
+            Rules\BooleanExpressionComplexityRule::class,
         ];
     }
 }

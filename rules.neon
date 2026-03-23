@@ -23,3 +23,7 @@ services:
         class: Haspadar\PHPStanRules\Rules\CouplingBetweenObjectsRule
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\BooleanExpressionComplexityRule
+        tags:
+            - phpstan.rules.rule
