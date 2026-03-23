@@ -73,8 +73,7 @@ final readonly class CouplingBetweenObjectsRule implements Rule
             return [];
         }
 
-        assert($node->name !== null);
-        $className = $node->name->toString();
+        $className = $node->name !== null ? $node->name->toString() : throw new ShouldNotHappenException();
 
         return [
             RuleErrorBuilder::message(
