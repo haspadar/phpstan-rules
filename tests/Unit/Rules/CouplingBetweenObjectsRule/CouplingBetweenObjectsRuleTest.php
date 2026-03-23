@@ -64,4 +64,13 @@ final class CouplingBetweenObjectsRuleTest extends RuleTestCase
         );
     }
 
+    #[Test]
+    public function skipsAnonymousClass(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/CouplingBetweenObjectsRule/AnonymousClassWithManyDependencies.php'],
+            [],
+        );
+    }
+
 }

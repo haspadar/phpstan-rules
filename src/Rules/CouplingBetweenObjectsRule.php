@@ -12,7 +12,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use PHPStan\ShouldNotHappenException;
 
 /**
  * Counts unique types a class depends on directly: property types, method parameter types,
@@ -59,21 +58,23 @@ final readonly class CouplingBetweenObjectsRule implements Rule
     /**
      * @inheritDoc
      *
-     * @throws ShouldNotHappenException
-     *
      * @return list<IdentifierRuleError>
      */
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
         /** @var Class_ $node */
+        if ($node->name === null) {
+            return [];
+        }
+
         $count = count($this->collectTypes($node));
 
         if ($count <= $this->maximum) {
             return [];
         }
 
-        $className = $node->name !== null ? $node->name->toString() : throw new ShouldNotHappenException();
+        $className = $node->name->toString();
 
         return [
             RuleErrorBuilder::message(
