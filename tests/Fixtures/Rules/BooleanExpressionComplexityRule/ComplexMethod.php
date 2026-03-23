@@ -6,8 +6,10 @@ namespace Haspadar\PHPStanRules\Tests\Fixtures\Rules\BooleanExpressionComplexity
 
 final class ComplexMethod
 {
-    public function run(bool $a, bool $b, bool $c, bool $d, bool $e): bool
+    public function run(bool $a, bool $b, bool $c, bool $d, bool $e, bool $f): bool
     {
-        return $a && $b || $c && $d || $e;
+        $x = $a && $b;
+
+        return $x || $c && $d || $e && $f;
     }
 }
