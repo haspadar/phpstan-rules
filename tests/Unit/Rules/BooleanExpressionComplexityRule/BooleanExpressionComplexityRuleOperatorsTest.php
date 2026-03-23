@@ -39,4 +39,13 @@ final class BooleanExpressionComplexityRuleOperatorsTest extends RuleTestCase
             ],
         );
     }
+
+    #[Test]
+    public function passesWhenOperatorsAreInsideNestedClosure(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/BooleanExpressionComplexityRule/MethodWithNestedScope.php'],
+            [],
+        );
+    }
 }
