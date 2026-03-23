@@ -64,17 +64,14 @@ final readonly class CouplingBetweenObjectsRule implements Rule
     public function processNode(Node $node, Scope $scope): array
     {
         /** @var Class_ $node */
-        if ($node->name === null) {
-            return [];
-        }
-
         $count = count($this->collectTypes($node));
 
         if ($count <= $this->maximum) {
             return [];
         }
 
-        $className = $node->name->toString();
+        /** @psalm-suppress PossiblyNullReference -- PHPStan assigns names to anonymous classes before processNode */
+        $className = $node->name->toString(); // @phpstan-ignore method.nonObject
 
         return [
             RuleErrorBuilder::message(
