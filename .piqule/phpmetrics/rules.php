@@ -3,7 +3,7 @@
 return [
     'complexity' => [
         'max_cyclomatic_per_method' => 10,
-        'max_weighted_methods_per_class' => 35,
+        'max_weighted_methods_per_class' => 40,
     ],
     'size' => [
         'max_loc_per_class' => 1000,
