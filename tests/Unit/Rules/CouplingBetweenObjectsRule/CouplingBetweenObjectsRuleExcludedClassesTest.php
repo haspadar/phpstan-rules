@@ -31,4 +31,5 @@ final class CouplingBetweenObjectsRuleExcludedClassesTest extends RuleTestCase
             [],
         );
     }
+
 }
