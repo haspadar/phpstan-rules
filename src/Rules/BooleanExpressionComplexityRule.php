@@ -1,0 +1,219 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Haspadar\PHPStanRules\Rules;
+
+use InvalidArgumentException;
+use Override;
+use PhpParser\Node;
+use PhpParser\Node\Expr\ArrowFunction;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
+use PhpParser\Node\Expr\BinaryOp\LogicalAnd;
+use PhpParser\Node\Expr\BinaryOp\LogicalOr;
+use PhpParser\Node\Expr\BinaryOp\LogicalXor;
+use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
+use PHPStan\Rules\IdentifierRuleError;
+use PHPStan\Rules\Rule;
+use PHPStan\Rules\RuleErrorBuilder;
+
+/**
+ * Finds the maximum number of boolean operators (&&, ||, and, or, xor) in any single
+ * expression within a class method and reports an error when it exceeds the configured limit.
+ * Each expression is evaluated independently — operators across separate expressions are not summed.
+ * Nested scopes (closures, arrow functions, anonymous classes) are excluded from the count.
+ * Bitwise operators & and | are excluded — their intent cannot be determined without type analysis.
+ *
+ * @implements Rule<ClassMethod>
+ */
+final readonly class BooleanExpressionComplexityRule implements Rule
+{
+    private int $maxOperators;
+
+    /**
+     * Constructs the rule with the given boolean operator limit
+     *
+     * @throws InvalidArgumentException when maxOperators is not a positive integer
+     */
+    public function __construct(int $maxOperators = 3)
+    {
+        if ($maxOperators <= 0) {
+            throw new InvalidArgumentException(
+                sprintf('maxOperators must be a positive integer, %d given', $maxOperators),
+            );
+        }
+
+        $this->maxOperators = $maxOperators;
+    }
+
+    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
+    #[Override]
+    public function getNodeType(): string
+    {
+        return ClassMethod::class;
+    }
+
+    /**
+     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     *
+     * @throws \PHPStan\ShouldNotHappenException
+     *
+     * @return list<IdentifierRuleError>
+     */
+    #[Override]
+    public function processNode(Node $node, Scope $scope): array
+    {
+        /** @var ClassMethod $node */
+        $max = $this->maxOperatorsInSingleExpression($node);
+
+        if ($max <= $this->maxOperators) {
+            return [];
+        }
+
+        $reflection = $scope->getClassReflection();
+        $className = $reflection !== null ? $reflection->getName() : 'unknown';
+
+        return [
+            RuleErrorBuilder::message(
+                sprintf(
+                    'Method %s::%s() has boolean expression complexity of %d. Maximum allowed is %d.',
+                    $className,
+                    $node->name->toString(),
+                    $max,
+                    $this->maxOperators,
+                ),
+            )
+                ->identifier('haspadar.booleanComplexity')
+                ->build(),
+        ];
+    }
+
+    /**
+     * Returns the maximum number of boolean operators found in any single expression
+     * within the method body; each root boolean operator is counted independently so that
+     * operators across separate statements are never summed together.
+     * Nested scopes (closures, arrow functions, anonymous classes) are not traversed.
+     * A root operator is one that is not contained inside another boolean operator.
+     */
+    private function maxOperatorsInSingleExpression(ClassMethod $node): int
+    {
+        $allOperators = $this->collectOperators($node->stmts ?? []);
+        $max = 0;
+
+        foreach ($allOperators as $candidate) {
+            foreach ($allOperators as $other) {
+                if ($other !== $candidate && $this->containsNode([$other], $candidate)) {
+                    continue 2;
+                }
+            }
+
+            $count = count($this->collectOperators([$candidate]));
+
+            if ($count > $max) {
+                $max = $count;
+            }
+        }
+
+        return $max;
+    }
+
+    /**
+     * Collects all boolean operators from the given nodes without entering nested scope boundaries
+     *
+     * @param array<Node> $nodes
+     *
+     * @return list<Node>
+     */
+    private function collectOperators(array $nodes): array
+    {
+        $result = [];
+
+        foreach ($nodes as $node) {
+            if ($this->isScopeBoundary($node)) {
+                continue;
+            }
+
+            if ($this->isBooleanOperator($node)) {
+                $result[] = $node;
+            }
+
+            $result = array_merge($result, $this->collectOperators($this->childNodes($node)));
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns true if $target node is found anywhere inside $nodes without crossing scope boundaries
+     *
+     * @param array<Node> $nodes
+     */
+    private function containsNode(array $nodes, Node $target): bool
+    {
+        foreach ($nodes as $node) {
+            if ($this->isScopeBoundary($node)) {
+                continue;
+            }
+
+            if ($node === $target) {
+                return true;
+            }
+
+            if ($this->containsNode($this->childNodes($node), $target)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns all direct child nodes of a node
+     *
+     * @return list<Node>
+     */
+    private function childNodes(Node $node): array
+    {
+        $children = [];
+
+        foreach ($node->getSubNodeNames() as $name) {
+            /** @var mixed $child */
+            $child = $node->$name;
+
+            if ($child instanceof Node) {
+                $children[] = $child;
+            } elseif (is_array($child)) {
+                /** @psalm-suppress MixedAssignment */
+                foreach ($child as $item) {
+                    if ($item instanceof Node) {
+                        $children[] = $item;
+                    }
+                }
+            }
+        }
+
+        return $children;
+    }
+
+    /** Returns true for nodes that introduce a new scope boundary */
+    private function isScopeBoundary(Node $node): bool
+    {
+        return $node instanceof Closure
+            || $node instanceof ArrowFunction
+            || $node instanceof Class_;
+    }
+
+    /** Returns true for nodes that are boolean operators */
+    private function isBooleanOperator(Node $node): bool
+    {
+        return $node instanceof BooleanAnd
+            || $node instanceof BooleanOr
+            || $node instanceof LogicalAnd
+            || $node instanceof LogicalOr
+            || $node instanceof LogicalXor;
+    }
+}
