@@ -48,4 +48,13 @@ final class BooleanExpressionComplexityRuleOperatorsTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function passesWhenOperatorsAreInsideArrowFunction(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/BooleanExpressionComplexityRule/MethodWithArrowFunction.php'],
+            [],
+        );
+    }
 }
