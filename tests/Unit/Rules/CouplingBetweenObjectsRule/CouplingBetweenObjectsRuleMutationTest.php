@@ -82,4 +82,15 @@ final class CouplingBetweenObjectsRuleMutationTest extends RuleTestCase
             ],
         );
     }
+
+    #[Test]
+    public function skipsAbstractMethodBody(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/CouplingBetweenObjectsRule/ClassWithAbstractMethod.php'],
+            [
+                ['Class ClassWithAbstractMethod has a coupling between objects value of 6. Maximum allowed is 0.', 7],
+            ],
+        );
+    }
 }

@@ -73,7 +73,8 @@ final readonly class CouplingBetweenObjectsRule implements Rule
             return [];
         }
 
-        $className = $node->name !== null ? $node->name->toString() : 'anonymous';
+        assert($node->name !== null);
+        $className = $node->name->toString();
 
         return [
             RuleErrorBuilder::message(
