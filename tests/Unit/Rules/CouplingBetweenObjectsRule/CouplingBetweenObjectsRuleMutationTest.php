@@ -93,4 +93,15 @@ final class CouplingBetweenObjectsRuleMutationTest extends RuleTestCase
             ],
         );
     }
+
+    #[Test]
+    public function countsUnionAndIntersectionTypesIndependently(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/CouplingBetweenObjectsRule/ClassWithNullableAndUnionTypes.php'],
+            [
+                ['Class ClassWithNullableAndUnionTypes has a coupling between objects value of 5. Maximum allowed is 0.', 7],
+            ],
+        );
+    }
 }
