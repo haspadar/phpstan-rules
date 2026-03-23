@@ -11,4 +11,5 @@ return new OverrideConfig(new DefaultConfig(), [
     'typos.exclude' => ['docs/'],
     'phpunit.php_options' => '-d memory_limit=512M',
     'phpmetrics.complexity.max_weighted_methods_per_class' => 35,
+    'sonar.cpd.exclusions' => ['tests/Fixtures/**'],
 ]);
