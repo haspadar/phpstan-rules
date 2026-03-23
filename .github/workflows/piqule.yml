@@ -53,7 +53,7 @@ jobs:
     steps:
       - uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
 
-      - uses: shivammathur/setup-php@a33066c0017f7fe81bdb8e24512c418a6f7eb08a
+      - uses: shivammathur/setup-php@ea13793c1315cfad792110b0dcc4260bc683b5d4
         with:
           php-version: 8.3
 
@@ -87,7 +87,7 @@ jobs:
     steps:
       - uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
 
-      - uses: shivammathur/setup-php@a33066c0017f7fe81bdb8e24512c418a6f7eb08a
+      - uses: shivammathur/setup-php@ea13793c1315cfad792110b0dcc4260bc683b5d4
         with:
           php-version: ${{ matrix.php }}
           extensions: mbstring, dom, json
@@ -112,7 +112,7 @@ jobs:
     steps:
       - uses: actions/checkout@0c366fd6a839edf440554fa01a7085ccba70ac98
 
-      - uses: shivammathur/setup-php@a33066c0017f7fe81bdb8e24512c418a6f7eb08a
+      - uses: shivammathur/setup-php@ea13793c1315cfad792110b0dcc4260bc683b5d4
         with:
           php-version: 8.3
           coverage: xdebug
@@ -138,7 +138,7 @@ jobs:
       # ------------------------------------------------------------
       - name: Upload coverage
         if: hashFiles('.piqule/codecov/coverage.xml') != ''
-        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de
+        uses: codecov/codecov-action@1af58845a975a7985b0beb0cbe6fbbb71a41dbad
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: .piqule/codecov/coverage.xml
