@@ -24,6 +24,7 @@ final class Rules
             Rules\CyclomaticComplexityRule::class,
             Rules\CouplingBetweenObjectsRule::class,
             Rules\BooleanExpressionComplexityRule::class,
+            Rules\StatementCountRule::class,
         ];
     }
 }
