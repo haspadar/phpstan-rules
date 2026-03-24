@@ -14,7 +14,7 @@ final class StatementCountRuleValidationTest extends TestCase
     #[Test]
     public function throwsWhenMaxStatementsIsZero(): void
     {
-        $this->expectException(InvalidArgumentException::class, 'Expected exception for zero maxStatements');
+        $this->expectException(InvalidArgumentException::class);
 
         new StatementCountRule(0);
     }
@@ -22,7 +22,7 @@ final class StatementCountRuleValidationTest extends TestCase
     #[Test]
     public function throwsWhenMaxStatementsIsNegative(): void
     {
-        $this->expectException(InvalidArgumentException::class, 'Expected exception for negative maxStatements');
+        $this->expectException(InvalidArgumentException::class);
 
         new StatementCountRule(-1);
     }
