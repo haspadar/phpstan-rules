@@ -16,6 +16,7 @@
 | `TooManyMethodsRule`              | Class must not have more than 20 methods                                 |
 | `ParameterNumberRule`             | Method must not have more than 3 parameters                              |
 | `BooleanExpressionComplexityRule` | Method must not have more than 3 boolean operators in a single expression |
+| `StatementCountRule`              | Method must not have more than 30 executable statements                  |
 
 `MethodLengthRule` accepts `maxLines` (int, default `100`) as first constructor argument, and an options array with `skipBlankLines` and `skipComments`.
 
@@ -26,6 +27,8 @@
 `ParameterNumberRule` accepts `maxParameters` (int, default `3`) as first constructor argument, and an options array with `ignoreOverridden` (bool, default `true`). When `ignoreOverridden` is `true`, methods with the `#[Override]` attribute are skipped.
 
 `BooleanExpressionComplexityRule` accepts `maxOperators` (int, default `3`) as first constructor argument. Counts `&&`, `||`, `and`, `or`, `xor` operators in a single expression. Nested scopes (closures, arrow functions, anonymous classes) are excluded.
+
+`StatementCountRule` accepts `maxStatements` (int, default `30`) as first constructor argument. Counts all executable statements recursively. Nested scopes (closures, arrow functions, anonymous classes, nested functions, property hooks) are excluded.
 
 ---
 
