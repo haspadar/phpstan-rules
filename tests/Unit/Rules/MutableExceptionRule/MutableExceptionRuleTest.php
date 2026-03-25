@@ -66,4 +66,22 @@ final class MutableExceptionRuleTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function reportsErrorForEachMutablePropertyWhenMultipleExist(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/MutableExceptionRule/MultipleMutableException.php'],
+            [
+                [
+                    'Exception property $resource must be readonly to prevent mutation after construction.',
+                    9,
+                ],
+                [
+                    'Exception property $context must be readonly to prevent mutation after construction.',
+                    11,
+                ],
+            ],
+        );
+    }
 }
