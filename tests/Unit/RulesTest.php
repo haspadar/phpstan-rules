@@ -25,7 +25,19 @@ final class RulesTest extends TestCase
     public function returnsAllRegisteredRules(): void
     {
         self::assertSame(
-            [MethodLengthRule::class, FileLengthRule::class, TooManyMethodsRule::class, ParameterNumberRule::class, CyclomaticComplexityRule::class, CouplingBetweenObjectsRule::class, BooleanExpressionComplexityRule::class, StatementCountRule::class, FinalClassRule::class, MutableExceptionRule::class, ReturnCountRule::class],
+            [
+                MethodLengthRule::class,
+                FileLengthRule::class,
+                TooManyMethodsRule::class,
+                ParameterNumberRule::class,
+                CyclomaticComplexityRule::class,
+                CouplingBetweenObjectsRule::class,
+                BooleanExpressionComplexityRule::class,
+                StatementCountRule::class,
+                FinalClassRule::class,
+                MutableExceptionRule::class,
+                ReturnCountRule::class,
+            ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',
         );
