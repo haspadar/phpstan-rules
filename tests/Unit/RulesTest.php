@@ -12,6 +12,7 @@ use Haspadar\PHPStanRules\Rules\FileLengthRule;
 use Haspadar\PHPStanRules\Rules\FinalClassRule;
 use Haspadar\PHPStanRules\Rules\MethodLengthRule;
 use Haspadar\PHPStanRules\Rules\ParameterNumberRule;
+use Haspadar\PHPStanRules\Rules\MutableExceptionRule;
 use Haspadar\PHPStanRules\Rules\StatementCountRule;
 use Haspadar\PHPStanRules\Rules\TooManyMethodsRule;
 use PHPUnit\Framework\Attributes\Test;
@@ -23,7 +24,7 @@ final class RulesTest extends TestCase
     public function returnsAllRegisteredRules(): void
     {
         self::assertSame(
-            [MethodLengthRule::class, FileLengthRule::class, TooManyMethodsRule::class, ParameterNumberRule::class, CyclomaticComplexityRule::class, CouplingBetweenObjectsRule::class, BooleanExpressionComplexityRule::class, StatementCountRule::class, FinalClassRule::class],
+            [MethodLengthRule::class, FileLengthRule::class, TooManyMethodsRule::class, ParameterNumberRule::class, CyclomaticComplexityRule::class, CouplingBetweenObjectsRule::class, BooleanExpressionComplexityRule::class, StatementCountRule::class, FinalClassRule::class, MutableExceptionRule::class],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',
         );
