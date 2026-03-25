@@ -47,8 +47,8 @@ final readonly class FinalClassRule implements Rule
             return [];
         }
 
-        if ($node->name === null) {
-            return [];
+        if ($node->name === null) { // @codeCoverageIgnore
+            return []; // @codeCoverageIgnore
         }
 
         $name = $node->name->toString();
