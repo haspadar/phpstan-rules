@@ -72,7 +72,7 @@ final readonly class MutableExceptionRule implements Rule
 
         foreach ($node->stmts as $stmt) {
             if ($stmt instanceof Property && !$stmt->isReadonly()) {
-                $errors = array_merge($errors, $this->errorsForProperty($stmt));
+                $errors = [...$errors, ...$this->errorsForProperty($stmt)];
             }
         }
 
