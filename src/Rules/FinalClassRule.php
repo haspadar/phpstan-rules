@@ -47,7 +47,11 @@ final readonly class FinalClassRule implements Rule
             return [];
         }
 
-        $name = $node->name !== null ? $node->name->toString() : 'unknown';
+        if ($node->name === null) {
+            return [];
+        }
+
+        $name = $node->name->toString();
 
         return [
             RuleErrorBuilder::message(
