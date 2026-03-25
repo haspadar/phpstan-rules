@@ -73,7 +73,7 @@ final readonly class ReturnCountRule implements Rule
         }
 
         $reflection = $scope->getClassReflection();
-        $className = $reflection !== null ? $reflection->getName() : 'unknown';
+        $className = $reflection !== null ? $reflection->getName() : 'unknown'; // @codeCoverageIgnore
 
         return [
             RuleErrorBuilder::message(

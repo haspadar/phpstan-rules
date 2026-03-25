@@ -66,4 +66,13 @@ final class ReturnCountRuleTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function passesWhenMethodIsAbstract(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/ReturnCountRule/AbstractMethodClass.php'],
+            [],
+        );
+    }
 }
