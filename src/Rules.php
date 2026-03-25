@@ -26,6 +26,7 @@ final class Rules
             Rules\BooleanExpressionComplexityRule::class,
             Rules\StatementCountRule::class,
             Rules\FinalClassRule::class,
+            Rules\MutableExceptionRule::class,
         ];
     }
 }
