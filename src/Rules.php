@@ -25,6 +25,7 @@ final class Rules
             Rules\CouplingBetweenObjectsRule::class,
             Rules\BooleanExpressionComplexityRule::class,
             Rules\StatementCountRule::class,
+            Rules\FinalClassRule::class,
         ];
     }
 }
