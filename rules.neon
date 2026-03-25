@@ -31,3 +31,7 @@ services:
         class: Haspadar\PHPStanRules\Rules\StatementCountRule
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\FinalClassRule
+        tags:
+            - phpstan.rules.rule
