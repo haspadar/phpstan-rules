@@ -27,6 +27,7 @@ final class Rules
             Rules\StatementCountRule::class,
             Rules\FinalClassRule::class,
             Rules\MutableExceptionRule::class,
+            Rules\ReturnCountRule::class,
         ];
     }
 }
