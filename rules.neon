@@ -43,3 +43,7 @@ services:
         class: Haspadar\PHPStanRules\Rules\ReturnCountRule
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\ProtectedMethodInFinalClassRule
+        tags:
+            - phpstan.rules.rule

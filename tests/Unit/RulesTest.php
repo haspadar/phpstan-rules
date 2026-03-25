@@ -13,6 +13,7 @@ use Haspadar\PHPStanRules\Rules\FinalClassRule;
 use Haspadar\PHPStanRules\Rules\MethodLengthRule;
 use Haspadar\PHPStanRules\Rules\ParameterNumberRule;
 use Haspadar\PHPStanRules\Rules\MutableExceptionRule;
+use Haspadar\PHPStanRules\Rules\ProtectedMethodInFinalClassRule;
 use Haspadar\PHPStanRules\Rules\ReturnCountRule;
 use Haspadar\PHPStanRules\Rules\StatementCountRule;
 use Haspadar\PHPStanRules\Rules\TooManyMethodsRule;
@@ -37,6 +38,7 @@ final class RulesTest extends TestCase
                 FinalClassRule::class,
                 MutableExceptionRule::class,
                 ReturnCountRule::class,
+                ProtectedMethodInFinalClassRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',
