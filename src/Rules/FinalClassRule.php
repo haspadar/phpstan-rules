@@ -39,16 +39,8 @@ final readonly class FinalClassRule implements Rule
     public function processNode(Node $node, Scope $scope): array
     {
         /** @var Class_ $node */
-        if ($node->isAbstract() || $node->isAnonymous()) {
+        if ($node->isAbstract() || $node->isAnonymous() || $node->isFinal() || $node->name === null) { // @codeCoverageIgnore
             return [];
-        }
-
-        if ($node->isFinal()) {
-            return [];
-        }
-
-        if ($node->name === null) { // @codeCoverageIgnore
-            return []; // @codeCoverageIgnore
         }
 
         $name = $node->name->toString();
