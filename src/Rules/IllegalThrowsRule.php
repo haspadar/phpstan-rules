@@ -14,10 +14,10 @@ use PHPStan\Rules\RuleErrorBuilder;
 
 /**
  * Detects methods whose @throws PHPDoc tags declare overly broad exception types.
- * Scans PHPDoc text with a regex to find @throws lines, extracts the short class
- * name (last segment after backslash), and reports any name found in the configured
- * illegal list. Methods marked with #[Override] are skipped by default because they
- * do not control the parent's declared contract.
+ * Scans PHPDoc text with a regex to find @throws lines, parses union and intersection
+ * types, and compares each fully-qualified name against the configured illegal list.
+ * Methods marked with #[Override] are skipped by default because they do not control
+ * the parent's declared contract.
  *
  * @implements Rule<ClassMethod>
  */
@@ -29,14 +29,17 @@ final readonly class IllegalThrowsRule implements Rule
     private bool $ignoreOverriddenMethods;
 
     /**
-     * @param list<string> $illegalClassNames Short class names (without leading backslash) that are forbidden in @throws
+     * @param list<string> $illegalClassNames Class names (with or without leading backslash) that are forbidden in @throws
      * @param array{ignoreOverriddenMethods?: bool} $options
      */
     public function __construct(
         array $illegalClassNames = ['Error', 'RuntimeException', 'Throwable'],
         array $options = [],
     ) {
-        $this->illegalClassNames = $illegalClassNames;
+        $this->illegalClassNames = array_map(
+            static fn (string $name): string => ltrim($name, '\\'),
+            $illegalClassNames,
+        );
         $this->ignoreOverriddenMethods = $options['ignoreOverriddenMethods'] ?? true;
     }
 
@@ -70,10 +73,16 @@ final readonly class IllegalThrowsRule implements Rule
 
         $errors = [];
 
-        foreach ($this->parseThrowsTags($docComment->getText(), $docComment->getStartLine()) as $shortName => $line) {
-            if (!in_array($shortName, $this->illegalClassNames, true)) {
+        foreach ($this->parseThrowsTags($docComment->getText(), $docComment->getStartLine()) as $throwTag) {
+            $typeName = $throwTag['typeName'];
+            $line = $throwTag['line'];
+
+            if (!in_array($typeName, $this->illegalClassNames, true)) {
                 continue;
             }
+
+            $parts = explode('\\', $typeName);
+            $shortName = $parts[count($parts) - 1];
 
             $errors[] = RuleErrorBuilder::message(
                 sprintf('Throwing %s is not allowed.', $shortName),
@@ -103,9 +112,11 @@ final readonly class IllegalThrowsRule implements Rule
     }
 
     /**
-     * Scans PHPDoc text for @throws lines and returns a map of short class name → absolute line number
+     * Scans PHPDoc text for @throws lines and returns every declared type with its absolute line number
      *
-     * @return array<string, int>
+     * Handles union types (A|B), leading backslashes, and repeated @throws tags independently.
+     *
+     * @return list<array{typeName: string, line: int}>
      */
     private function parseThrowsTags(string $docComment, int $docStartLine): array
     {
@@ -113,19 +124,24 @@ final readonly class IllegalThrowsRule implements Rule
         $result = [];
 
         foreach ($lines as $offset => $line) {
-            if (preg_match('/@throws\s+([\\\\\w]+)/', $line, $matches) !== 1) {
+            if (preg_match('/@throws\s+(\S+)/', $line, $matches) !== 1) {
                 continue;
             }
 
-            $typeName = ltrim($matches[1], '\\');
-            $parts = explode('\\', $typeName);
-            $shortName = $parts[count($parts) - 1];
+            $rawTypes = $matches[1];
 
-            if ($shortName === '') {
-                continue;
+            foreach (preg_split('/[|&]/', $rawTypes) ?: [] as $rawType) {
+                $typeName = ltrim(trim($rawType), '\\?');
+
+                if ($typeName === '') {
+                    continue;
+                }
+
+                $result[] = [
+                    'typeName' => $typeName,
+                    'line' => $docStartLine + $offset,
+                ];
             }
-
-            $result[$shortName] = $docStartLine + $offset;
         }
 
         return $result;
