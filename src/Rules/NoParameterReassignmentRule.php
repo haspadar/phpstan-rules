@@ -96,7 +96,7 @@ final readonly class NoParameterReassignmentRule implements Rule
         /** @var list<Assign> $assigns */
         $assigns = (new NodeFinder())->find(
             $node->stmts ?? [],
-            static fn (Node $n): bool => $n instanceof Assign
+            static fn(Node $n): bool => $n instanceof Assign
                 && !self::isInsideScopeBoundary($n, $node),
         );
 
@@ -114,8 +114,8 @@ final readonly class NoParameterReassignmentRule implements Rule
     {
         $parents = (new NodeFinder())->find(
             $method->stmts ?? [],
-            static fn (Node $n): bool => ($n instanceof Closure || $n instanceof ArrowFunction)
-                && (new NodeFinder())->findFirst([$n], static fn (Node $inner): bool => $inner === $target) !== null,
+            static fn(Node $n): bool => ($n instanceof Closure || $n instanceof ArrowFunction)
+                && (new NodeFinder())->findFirst([$n], static fn(Node $inner): bool => $inner === $target) !== null,
         );
 
         return $parents !== [];
