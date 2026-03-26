@@ -63,3 +63,7 @@ services:
         class: Haspadar\PHPStanRules\Rules\IllegalCatchRule
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\IllegalThrowsRule
+        tags:
+            - phpstan.rules.rule

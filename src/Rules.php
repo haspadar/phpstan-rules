@@ -33,6 +33,7 @@ final class Rules
             Rules\ConstructorInitializationRule::class,
             Rules\NoParameterReassignmentRule::class,
             Rules\IllegalCatchRule::class,
+            Rules\IllegalThrowsRule::class,
         ];
     }
 }
