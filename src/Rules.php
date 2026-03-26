@@ -32,6 +32,7 @@ final class Rules
             Rules\ProhibitPublicStaticMethodsRule::class,
             Rules\ConstructorInitializationRule::class,
             Rules\NoParameterReassignmentRule::class,
+            Rules\IllegalCatchRule::class,
         ];
     }
 }
