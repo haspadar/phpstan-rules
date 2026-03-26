@@ -28,6 +28,7 @@ final class Rules
             Rules\FinalClassRule::class,
             Rules\MutableExceptionRule::class,
             Rules\ReturnCountRule::class,
+            Rules\ProtectedMethodInFinalClassRule::class,
         ];
     }
 }
