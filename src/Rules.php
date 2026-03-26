@@ -29,6 +29,7 @@ final class Rules
             Rules\MutableExceptionRule::class,
             Rules\ReturnCountRule::class,
             Rules\ProtectedMethodInFinalClassRule::class,
+            Rules\ProhibitPublicStaticMethodsRule::class,
         ];
     }
 }
