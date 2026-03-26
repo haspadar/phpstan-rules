@@ -30,6 +30,7 @@ final class Rules
             Rules\ReturnCountRule::class,
             Rules\ProtectedMethodInFinalClassRule::class,
             Rules\ProhibitPublicStaticMethodsRule::class,
+            Rules\ConstructorInitializationRule::class,
         ];
     }
 }

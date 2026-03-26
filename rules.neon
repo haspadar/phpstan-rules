@@ -51,3 +51,7 @@ services:
         class: Haspadar\PHPStanRules\Rules\ProhibitPublicStaticMethodsRule
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\ConstructorInitializationRule
+        tags:
+            - phpstan.rules.rule
