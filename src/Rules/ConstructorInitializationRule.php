@@ -52,19 +52,15 @@ final readonly class ConstructorInitializationRule implements Rule
             return [];
         }
 
-        if ($node->stmts === null) {
-            return [];
-        }
-
         $errors = [];
 
-        foreach ($node->stmts as $stmt) {
+        foreach ($node->stmts ?? [] as $stmt) {
             if ($this->isAllowedStatement($stmt)) {
                 continue;
             }
 
             $reflection = $scope->getClassReflection();
-            $className = $reflection !== null ? $reflection->getName() : 'anonymous'; // @codeCoverageIgnore
+            $className = $reflection !== null ? $reflection->getName() : 'anonymous';
 
             $errors[] = RuleErrorBuilder::message(
                 sprintf(
@@ -98,23 +94,11 @@ final readonly class ConstructorInitializationRule implements Rule
      */
     private function isThisPropertyAssignment(Expression $stmt): bool
     {
-        if (!$stmt->expr instanceof Assign) {
-            return false;
-        }
-
-        $assign = $stmt->expr;
-
-        if (!$assign->var instanceof PropertyFetch) {
-            return false;
-        }
-
-        $propertyFetch = $assign->var;
-
-        if (!$propertyFetch->var instanceof Variable || $propertyFetch->var->name !== 'this') {
-            return false;
-        }
-
-        return $this->isAllowedValue($assign->expr);
+        return $stmt->expr instanceof Assign
+            && $stmt->expr->var instanceof PropertyFetch
+            && $stmt->expr->var->var instanceof Variable
+            && $stmt->expr->var->var->name === 'this'
+            && $this->isAllowedValue($stmt->expr->expr);
     }
 
     /**
@@ -137,21 +121,10 @@ final readonly class ConstructorInitializationRule implements Rule
      */
     private function isParentConstructorCall(Expression $stmt): bool
     {
-        if (!$stmt->expr instanceof StaticCall) {
-            return false;
-        }
-
-        $call = $stmt->expr;
-
-        if (!$call->class instanceof Name) {
-            return false; // @codeCoverageIgnore
-        }
-
-        if ($call->class->toString() !== 'parent') {
-            return false;
-        }
-
-        return $call->name instanceof Node\Identifier
-            && $call->name->toString() === '__construct';
+        return $stmt->expr instanceof StaticCall
+            && $stmt->expr->class instanceof Name
+            && $stmt->expr->class->toString() === 'parent'
+            && $stmt->expr->name instanceof Node\Identifier
+            && $stmt->expr->name->toString() === '__construct';
     }
 }
