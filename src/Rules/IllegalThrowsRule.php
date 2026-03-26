@@ -37,7 +37,7 @@ final readonly class IllegalThrowsRule implements Rule
         array $options = [],
     ) {
         $this->illegalClassNames = array_map(
-            static fn (string $name): string => ltrim($name, '\\'),
+            static fn(string $name): string => ltrim($name, '\\'),
             $illegalClassNames,
         );
         $this->ignoreOverriddenMethods = $options['ignoreOverriddenMethods'] ?? true;
