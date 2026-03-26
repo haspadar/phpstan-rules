@@ -31,6 +31,7 @@ final class Rules
             Rules\ProtectedMethodInFinalClassRule::class,
             Rules\ProhibitPublicStaticMethodsRule::class,
             Rules\ConstructorInitializationRule::class,
+            Rules\NoParameterReassignmentRule::class,
         ];
     }
 }
