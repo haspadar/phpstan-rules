@@ -91,6 +91,29 @@ final class NoParameterReassignmentRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function reportsErrorForReassignmentInsideIfBlock(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NoParameterReassignmentRule/ClassWithReassignmentInIf.php'],
+            [
+                [
+                    'Parameter $name must not be reassigned in method process() of Haspadar\PHPStanRules\Tests\Fixtures\Rules\NoParameterReassignmentRule\ClassWithReassignmentInIf.',
+                    12,
+                ],
+            ],
+        );
+    }
+
+    #[Test]
+    public function passesWhenReassignmentIsInsideClosure(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NoParameterReassignmentRule/ClassWithReassignmentInClosure.php'],
+            [],
+        );
+    }
+
+    #[Test]
     public function passesWhenConstructorUsesPropertyPromotion(): void
     {
         $this->analyse(
