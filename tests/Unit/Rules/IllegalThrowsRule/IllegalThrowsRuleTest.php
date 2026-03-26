@@ -49,6 +49,15 @@ final class IllegalThrowsRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function passesWhenMethodHasNoPhpDoc(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/IllegalThrowsRule/ClassWithNoThrowsAnnotation.php'],
+            [],
+        );
+    }
+
+    #[Test]
     public function passesWhenErrorIsSuppressed(): void
     {
         $this->analyse(
