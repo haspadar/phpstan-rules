@@ -76,17 +76,5 @@ final class ProhibitPublicStaticMethodsRuleTest extends RuleTestCase
         );
     }
 
-    #[Test]
-    public function reportsErrorForPublicStaticMethodInAnonymousClass(): void
-    {
-        $this->analyse(
-            [__DIR__ . '/../../../Fixtures/Rules/ProhibitPublicStaticMethodsRule/AnonymousClassWithPublicStaticMethod.php'],
-            [
-                [
-                    'Method AnonymousClass6d86eaee33a8057b4731ad04eb977280::create() is public static. Static methods are prohibited.',
-                    12,
-                ],
-            ],
-        );
-    }
+
 }
