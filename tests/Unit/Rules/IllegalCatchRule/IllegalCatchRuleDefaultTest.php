@@ -25,7 +25,6 @@ final class IllegalCatchRuleDefaultTest extends RuleTestCase
             [
                 ['Catching Exception is not allowed.', 13],
             ],
-            'Default list must include Exception',
         );
     }
 
@@ -37,7 +36,6 @@ final class IllegalCatchRuleDefaultTest extends RuleTestCase
             [
                 ['Catching Throwable is not allowed.', 13],
             ],
-            'Default list must include Throwable',
         );
     }
 
@@ -50,7 +48,6 @@ final class IllegalCatchRuleDefaultTest extends RuleTestCase
                 ['Catching RuntimeException is not allowed.', 13],
                 ['Catching Error is not allowed.', 19],
             ],
-            'Each broad catch in the method should produce its own error',
         );
     }
 }

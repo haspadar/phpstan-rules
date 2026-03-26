@@ -25,7 +25,6 @@ final class IllegalCatchRuleCustomNamesTest extends RuleTestCase
             [
                 ['Catching DatabaseException is not allowed.', 13],
             ],
-            'Custom illegal class name should trigger violation',
         );
     }
 
@@ -35,7 +34,6 @@ final class IllegalCatchRuleCustomNamesTest extends RuleTestCase
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/IllegalCatchRule/ClassWithBroadExceptionCatch.php'],
             [],
-            'Exception should pass when not in custom illegal list',
         );
     }
 }

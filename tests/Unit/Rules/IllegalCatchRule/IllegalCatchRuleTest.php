@@ -23,7 +23,6 @@ final class IllegalCatchRuleTest extends RuleTestCase
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/IllegalCatchRule/ClassWithCleanCatch.php'],
             [],
-            'Specific exception type should pass',
         );
     }
 
@@ -35,7 +34,6 @@ final class IllegalCatchRuleTest extends RuleTestCase
             [
                 ['Catching Exception is not allowed.', 13],
             ],
-            'Catching broad Exception should be reported',
         );
     }
 
@@ -47,7 +45,6 @@ final class IllegalCatchRuleTest extends RuleTestCase
             [
                 ['Catching Exception is not allowed.', 13],
             ],
-            'Only the illegal type in a multi-type catch should be reported',
         );
     }
 
@@ -57,7 +54,6 @@ final class IllegalCatchRuleTest extends RuleTestCase
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/IllegalCatchRule/SuppressedClassWithBroadCatch.php'],
             [],
-            'Suppressed violation should not be reported',
         );
     }
 }
