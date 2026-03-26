@@ -105,6 +105,20 @@ final class ConstructorInitializationRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function reportsErrorForSelfCallInConstructor(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/ConstructorInitializationRule/ClassWithSelfCallInConstructor.php'],
+            [
+                [
+                    'Constructor of Haspadar\PHPStanRules\Tests\Fixtures\Rules\ConstructorInitializationRule\ClassWithSelfCallInConstructor must only initialize properties. Found: Stmt_Expression.',
+                    14,
+                ],
+            ],
+        );
+    }
+
+    #[Test]
     public function reportsErrorForNonConstructorParentCallInConstructor(): void
     {
         $this->analyse(

@@ -144,7 +144,7 @@ final readonly class ConstructorInitializationRule implements Rule
         $call = $stmt->expr;
 
         if (!$call->class instanceof Name) {
-            return false;
+            return false; // @codeCoverageIgnore
         }
 
         if ($call->class->toString() !== 'parent') {
