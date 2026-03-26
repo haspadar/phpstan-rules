@@ -65,4 +65,24 @@ final class IllegalThrowsRuleTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function reportsIllegalTypeInUnionThrows(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/IllegalThrowsRule/ClassWithUnionThrows.php'],
+            [
+                ['Throwing RuntimeException is not allowed.', 10],
+            ],
+        );
+    }
+
+    #[Test]
+    public function passesWhenTrailingUnionSeparatorProducesEmptyToken(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/IllegalThrowsRule/ClassWithTrailingUnionThrows.php'],
+            [],
+        );
+    }
 }

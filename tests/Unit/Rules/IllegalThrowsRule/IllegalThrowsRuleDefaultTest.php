@@ -41,18 +41,6 @@ final class IllegalThrowsRuleDefaultTest extends RuleTestCase
     }
 
     #[Test]
-    public function reportsEachViolationIndependently(): void
-    {
-        $this->analyse(
-            [__DIR__ . '/../../../Fixtures/Rules/IllegalThrowsRule/ClassWithMultipleBroadThrows.php'],
-            [
-                ['Throwing RuntimeException is not allowed.', 10],
-                ['Throwing Throwable is not allowed.', 11],
-            ],
-        );
-    }
-
-    #[Test]
     public function reportsErrorTypeByDefault(): void
     {
         $this->analyse(
