@@ -47,3 +47,7 @@ services:
         class: Haspadar\PHPStanRules\Rules\ProtectedMethodInFinalClassRule
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\ProhibitPublicStaticMethodsRule
+        tags:
+            - phpstan.rules.rule
