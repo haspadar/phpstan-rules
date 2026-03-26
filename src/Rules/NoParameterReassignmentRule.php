@@ -66,13 +66,11 @@ final readonly class NoParameterReassignmentRule implements Rule
         $methodName = $node->name->toString();
 
         foreach ($this->findWriteExpressions($node) as $expr) {
-            $var = $this->extractVariable($expr);
-
-            if (!$var instanceof Variable) {
+            if (!$expr->var instanceof Variable) {
                 continue;
             }
 
-            $varName = $var->name;
+            $varName = $expr->var->name;
 
             if (!is_string($varName) || !in_array($varName, $paramNames, true)) {
                 continue;
@@ -101,11 +99,11 @@ final readonly class NoParameterReassignmentRule implements Rule
      *
      * @param ClassMethod $node
      *
-     * @return list<Node>
+     * @return list<Assign|AssignOp|AssignRef|PreInc|PostInc|PreDec|PostDec>
      */
     private function findWriteExpressions(ClassMethod $node): array
     {
-        /** @var list<Node> */
+        /** @var list<Assign|AssignOp|AssignRef|PreInc|PostInc|PreDec|PostDec> */
         return (new NodeFinder())->find(
             $node->stmts ?? [],
             static fn(Node $n): bool => ($n instanceof Assign
@@ -117,27 +115,6 @@ final readonly class NoParameterReassignmentRule implements Rule
                 || $n instanceof PostDec)
                 && !self::isInsideScopeBoundary($n, $node),
         );
-    }
-
-    /**
-     * Extracts the target Variable node from a write expression, if present.
-     *
-     * @param Node $expr
-     */
-    private function extractVariable(Node $expr): ?Variable
-    {
-        if ($expr instanceof Assign
-            || $expr instanceof AssignOp
-            || $expr instanceof AssignRef
-            || $expr instanceof PreInc
-            || $expr instanceof PostInc
-            || $expr instanceof PreDec
-            || $expr instanceof PostDec
-        ) {
-            return $expr->var instanceof Variable ? $expr->var : null;
-        }
-
-        return null;
     }
 
     /**
