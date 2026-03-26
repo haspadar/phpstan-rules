@@ -8,23 +8,16 @@ use Override;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
-use PHPStan\PhpDocParser\Lexer\Lexer;
-use PHPStan\PhpDocParser\Parser\ConstExprParser;
-use PHPStan\PhpDocParser\Parser\PhpDocParser;
-use PHPStan\PhpDocParser\Parser\TokenIterator;
-use PHPStan\PhpDocParser\Parser\TypeParser;
-use PHPStan\PhpDocParser\ParserConfig;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
 /**
  * Detects methods whose @throws PHPDoc tags declare overly broad exception types.
- * Reads @throws tags from PHPDoc using PHPStan's phpdoc-parser, extracts the short
- * class name (last segment after backslash), and reports any name found in the
- * configured illegal list. Methods marked with #[Override] are skipped by default
- * because they do not control the parent's declared contract.
+ * Scans PHPDoc text with a regex to find @throws lines, extracts the short class
+ * name (last segment after backslash), and reports any name found in the configured
+ * illegal list. Methods marked with #[Override] are skipped by default because they
+ * do not control the parent's declared contract.
  *
  * @implements Rule<ClassMethod>
  */
@@ -110,31 +103,21 @@ final readonly class IllegalThrowsRule implements Rule
     }
 
     /**
-     * Parses @throws tags from a PHPDoc string and returns a map of short class name → absolute line number
+     * Scans PHPDoc text for @throws lines and returns a map of short class name → absolute line number
      *
      * @return array<string, int>
      */
     private function parseThrowsTags(string $docComment, int $docStartLine): array
     {
-        $config = new ParserConfig(['lines' => true]);
-        $lexer = new Lexer($config);
-        $constExprParser = new ConstExprParser($config);
-        $typeParser = new TypeParser($config, $constExprParser);
-        $phpDocParser = new PhpDocParser($config, $typeParser, $constExprParser);
-
-        $tokens = new TokenIterator($lexer->tokenize($docComment));
-        $phpDocNode = $phpDocParser->parse($tokens);
-
+        $lines = explode("\n", $docComment);
         $result = [];
 
-        foreach ($phpDocNode->getTagsByName('@throws') as $tag) {
-            $value = $tag->value;
-
-            if (!$value instanceof ThrowsTagValueNode) {
+        foreach ($lines as $offset => $line) {
+            if (preg_match('/@throws\s+([\\\\\w]+)/', $line, $matches) !== 1) {
                 continue;
             }
 
-            $typeName = ltrim((string) $value->type, '\\');
+            $typeName = ltrim($matches[1], '\\');
             $parts = explode('\\', $typeName);
             $shortName = $parts[count($parts) - 1];
 
@@ -142,9 +125,7 @@ final readonly class IllegalThrowsRule implements Rule
                 continue;
             }
 
-            /** @var mixed $tagRelativeLine */
-            $tagRelativeLine = $tag->getAttribute('startLine');
-            $result[$shortName] = is_int($tagRelativeLine) ? $docStartLine + $tagRelativeLine - 1 : $docStartLine;
+            $result[$shortName] = $docStartLine + $offset;
         }
 
         return $result;
