@@ -8,9 +8,17 @@ use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\AssignOp;
+use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\PostDec;
+use PhpParser\Node\Expr\PostInc;
+use PhpParser\Node\Expr\PreDec;
+use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeFinder;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
@@ -19,10 +27,11 @@ use PHPStan\Rules\RuleErrorBuilder;
 
 /**
  * Detects reassignment of method or constructor parameters.
- * A parameter must not be assigned a new value within the method body.
- * Assignments inside closures and arrow functions are excluded as they
- * introduce a new scope. Use a local variable instead to preserve the
- * original parameter value and make the transformation explicit.
+ * A parameter must not be reassigned within the method body via simple
+ * assignment, compound assignment (+=, .=, etc.), assignment by reference,
+ * or increment/decrement operators. Assignments inside closures, arrow
+ * functions, nested functions, and anonymous classes are excluded as they
+ * introduce a new variable scope.
  *
  * @implements Rule<ClassMethod>
  */
@@ -56,12 +65,14 @@ final readonly class NoParameterReassignmentRule implements Rule
         $className = $scope->getClassReflection()?->getName() ?? 'anonymous';
         $methodName = $node->name->toString();
 
-        foreach ($this->findAssignments($node) as $assign) {
-            if (!$assign->var instanceof Variable) {
+        foreach ($this->findWriteExpressions($node) as $expr) {
+            $var = $this->extractVariable($expr);
+
+            if (!$var instanceof Variable) {
                 continue;
             }
 
-            $varName = $assign->var->name;
+            $varName = $var->name;
 
             if (!is_string($varName) || !in_array($varName, $paramNames, true)) {
                 continue;
@@ -76,7 +87,7 @@ final readonly class NoParameterReassignmentRule implements Rule
                 ),
             )
                 ->identifier('haspadar.noParameterReassignment')
-                ->line($assign->getLine())
+                ->line($expr->getStartLine())
                 ->build();
         }
 
@@ -84,28 +95,55 @@ final readonly class NoParameterReassignmentRule implements Rule
     }
 
     /**
-     * Finds all Assign nodes within the method body, excluding those inside
-     * closures and arrow functions which introduce a new variable scope.
+     * Finds all write-expression nodes within the method body, excluding those
+     * inside closures, arrow functions, nested functions, and anonymous classes
+     * which introduce a new variable scope.
      *
      * @param ClassMethod $node
      *
-     * @return list<Assign>
+     * @return list<Node>
      */
-    private function findAssignments(ClassMethod $node): array
+    private function findWriteExpressions(ClassMethod $node): array
     {
-        /** @var list<Assign> $assigns */
-        $assigns = (new NodeFinder())->find(
+        /** @var list<Node> */
+        return (new NodeFinder())->find(
             $node->stmts ?? [],
-            static fn(Node $n): bool => $n instanceof Assign
+            static fn(Node $n): bool => ($n instanceof Assign
+                || $n instanceof AssignOp
+                || $n instanceof AssignRef
+                || $n instanceof PreInc
+                || $n instanceof PostInc
+                || $n instanceof PreDec
+                || $n instanceof PostDec)
                 && !self::isInsideScopeBoundary($n, $node),
         );
-
-        return $assigns;
     }
 
     /**
-     * Returns true if the node is nested inside a closure or arrow function
-     * within the given method, meaning it belongs to a different variable scope.
+     * Extracts the target Variable node from a write expression, if present.
+     *
+     * @param Node $expr
+     */
+    private function extractVariable(Node $expr): ?Variable
+    {
+        if ($expr instanceof Assign
+            || $expr instanceof AssignOp
+            || $expr instanceof AssignRef
+            || $expr instanceof PreInc
+            || $expr instanceof PostInc
+            || $expr instanceof PreDec
+            || $expr instanceof PostDec
+        ) {
+            return $expr->var instanceof Variable ? $expr->var : null;
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns true if the node is nested inside a closure, arrow function,
+     * nested function declaration, or anonymous class within the given method,
+     * meaning it belongs to a different variable scope.
      *
      * @param Node $target
      * @param ClassMethod $method
@@ -114,7 +152,10 @@ final readonly class NoParameterReassignmentRule implements Rule
     {
         $parents = (new NodeFinder())->find(
             $method->stmts ?? [],
-            static fn(Node $n): bool => ($n instanceof Closure || $n instanceof ArrowFunction)
+            static fn(Node $n): bool => ($n instanceof Closure
+                || $n instanceof ArrowFunction
+                || $n instanceof Function_
+                || $n instanceof Class_)
                 && (new NodeFinder())->findFirst([$n], static fn(Node $inner): bool => $inner === $target) !== null,
         );
 
