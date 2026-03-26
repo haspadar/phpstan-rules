@@ -55,3 +55,7 @@ services:
         class: Haspadar\PHPStanRules\Rules\ConstructorInitializationRule
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\NoParameterReassignmentRule
+        tags:
+            - phpstan.rules.rule

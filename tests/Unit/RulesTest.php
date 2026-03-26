@@ -15,6 +15,7 @@ use Haspadar\PHPStanRules\Rules\ParameterNumberRule;
 use Haspadar\PHPStanRules\Rules\MutableExceptionRule;
 use Haspadar\PHPStanRules\Rules\ProtectedMethodInFinalClassRule;
 use Haspadar\PHPStanRules\Rules\ConstructorInitializationRule;
+use Haspadar\PHPStanRules\Rules\NoParameterReassignmentRule;
 use Haspadar\PHPStanRules\Rules\ProhibitPublicStaticMethodsRule;
 use Haspadar\PHPStanRules\Rules\ReturnCountRule;
 use Haspadar\PHPStanRules\Rules\StatementCountRule;
@@ -43,6 +44,7 @@ final class RulesTest extends TestCase
                 ProtectedMethodInFinalClassRule::class,
                 ProhibitPublicStaticMethodsRule::class,
                 ConstructorInitializationRule::class,
+                NoParameterReassignmentRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',
