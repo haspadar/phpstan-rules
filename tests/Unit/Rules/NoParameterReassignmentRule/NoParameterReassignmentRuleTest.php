@@ -130,4 +130,59 @@ final class NoParameterReassignmentRuleTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function passesWhenMethodHasNoParameters(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NoParameterReassignmentRule/ClassWithNoParameters.php'],
+            [],
+        );
+    }
+
+    #[Test]
+    public function reportsErrorForCompoundAssignment(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NoParameterReassignmentRule/ClassWithCompoundAssignment.php'],
+            [
+                [
+                    'Parameter $count must not be reassigned in method process() of Haspadar\PHPStanRules\Tests\Fixtures\Rules\NoParameterReassignmentRule\ClassWithCompoundAssignment.',
+                    11,
+                ],
+            ],
+        );
+    }
+
+    #[Test]
+    public function reportsErrorForIncrementOperator(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NoParameterReassignmentRule/ClassWithIncrementParameter.php'],
+            [
+                [
+                    'Parameter $count must not be reassigned in method process() of Haspadar\PHPStanRules\Tests\Fixtures\Rules\NoParameterReassignmentRule\ClassWithIncrementParameter.',
+                    11,
+                ],
+            ],
+        );
+    }
+
+    #[Test]
+    public function passesWhenReassignmentIsInsideNestedFunction(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NoParameterReassignmentRule/ClassWithReassignmentInNestedFunction.php'],
+            [],
+        );
+    }
+
+    #[Test]
+    public function passesWhenReassignmentIsInsideAnonymousClass(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NoParameterReassignmentRule/ClassWithReassignmentInAnonymousClass.php'],
+            [],
+        );
+    }
 }
