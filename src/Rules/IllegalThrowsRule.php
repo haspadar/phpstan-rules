@@ -37,13 +37,14 @@ final readonly class IllegalThrowsRule implements Rule
 
     /**
      * @param list<string> $illegalClassNames Short class names (without leading backslash) that are forbidden in @throws
+     * @param array{ignoreOverriddenMethods?: bool} $options
      */
     public function __construct(
         array $illegalClassNames = ['Error', 'RuntimeException', 'Throwable'],
-        bool $ignoreOverriddenMethods = true,
+        array $options = [],
     ) {
         $this->illegalClassNames = $illegalClassNames;
-        $this->ignoreOverriddenMethods = $ignoreOverriddenMethods;
+        $this->ignoreOverriddenMethods = $options['ignoreOverriddenMethods'] ?? true;
     }
 
     /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */

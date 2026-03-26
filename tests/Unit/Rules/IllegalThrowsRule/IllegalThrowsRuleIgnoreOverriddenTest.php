@@ -14,7 +14,7 @@ final class IllegalThrowsRuleIgnoreOverriddenTest extends RuleTestCase
 {
     protected function getRule(): Rule
     {
-        return new IllegalThrowsRule(ignoreOverriddenMethods: false);
+        return new IllegalThrowsRule(options: ['ignoreOverriddenMethods' => false]);
     }
 
     #[Test]
