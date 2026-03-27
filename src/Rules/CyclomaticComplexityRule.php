@@ -34,7 +34,11 @@ final readonly class CyclomaticComplexityRule implements Rule
 {
     private int $maxComplexity;
 
-    /** Constructs the rule with the given complexity limit */
+    /**
+     * Constructs the rule with the given complexity limit
+     *
+     * @throws InvalidArgumentException
+     */
     public function __construct(int $maxComplexity = 10)
     {
         if ($maxComplexity <= 0) {
