@@ -131,8 +131,9 @@ final readonly class IllegalThrowsRule implements Rule
             }
 
             $rawTypes = $matches[1];
+            $splitTypes = preg_split('/[|&]/', $rawTypes);
 
-            foreach (preg_split('/[|&]/', $rawTypes) ?: [] as $rawType) {
+            foreach ($splitTypes !== false ? $splitTypes : [] as $rawType) {
                 $typeName = ltrim(trim($rawType), '\\?');
 
                 if ($typeName === '') {

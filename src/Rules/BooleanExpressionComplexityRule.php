@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
+use Haspadar\PHPStanRules\NodeHelper\ChildNodes;
 use InvalidArgumentException;
 use Override;
 use PhpParser\Node;
@@ -141,7 +142,7 @@ final readonly class BooleanExpressionComplexityRule implements Rule
                 $result[] = $node;
             }
 
-            $result = array_merge($result, $this->collectOperators($this->childNodes($node)));
+            $result = array_merge($result, $this->collectOperators(ChildNodes::of($node)));
         }
 
         return $result;
@@ -163,40 +164,12 @@ final readonly class BooleanExpressionComplexityRule implements Rule
                 return true;
             }
 
-            if ($this->containsNode($this->childNodes($node), $target)) {
+            if ($this->containsNode(ChildNodes::of($node), $target)) {
                 return true;
             }
         }
 
         return false;
-    }
-
-    /**
-     * Returns all direct child nodes of a node
-     *
-     * @return list<Node>
-     */
-    private function childNodes(Node $node): array
-    {
-        $children = [];
-
-        foreach ($node->getSubNodeNames() as $name) {
-            /** @var mixed $child */
-            $child = $node->$name;
-
-            if ($child instanceof Node) {
-                $children[] = $child;
-            } elseif (is_array($child)) {
-                /** @psalm-suppress MixedAssignment */
-                foreach ($child as $item) {
-                    if ($item instanceof Node) {
-                        $children[] = $item;
-                    }
-                }
-            }
-        }
-
-        return $children;
     }
 
     /** Returns true for nodes that introduce a new scope boundary */

@@ -115,10 +115,13 @@ final readonly class InnerAssignmentRule implements Rule
     {
         $result = [];
 
-        /** @var list<While_|Do_|For_> $loops */
-        $loops = (new NodeFinder())->findInstanceOf($method->stmts ?? [], While_::class);
-        $loops = array_merge($loops, (new NodeFinder())->findInstanceOf($method->stmts ?? [], Do_::class));
-        $loops = array_merge($loops, (new NodeFinder())->findInstanceOf($method->stmts ?? [], For_::class));
+        /** @var list<While_> $whileLoops */
+        $whileLoops = (new NodeFinder())->findInstanceOf($method->stmts ?? [], While_::class);
+        /** @var list<Do_> $doLoops */
+        $doLoops = (new NodeFinder())->findInstanceOf($method->stmts ?? [], Do_::class);
+        /** @var list<For_> $forLoops */
+        $forLoops = (new NodeFinder())->findInstanceOf($method->stmts ?? [], For_::class);
+        $loops = array_merge($whileLoops, $doLoops, $forLoops);
 
         foreach ($loops as $loop) {
             $condNodes = match (true) {

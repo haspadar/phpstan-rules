@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
+use Haspadar\PHPStanRules\NodeHelper\ChildNodes;
 use InvalidArgumentException;
 use Override;
 use PhpParser\Node;
@@ -106,7 +107,7 @@ final readonly class StatementCountRule implements Rule
                 $count++;
             }
 
-            $count += $this->countStatements($this->childStmts($stmt));
+            $count += $this->countStatements(ChildNodes::of($stmt));
         }
 
         return $count;
@@ -135,33 +136,5 @@ final readonly class StatementCountRule implements Rule
             && !$node instanceof Stmt\Declare_
             && !$node instanceof Stmt\Else_
             && !$node instanceof Stmt\Block;
-    }
-
-    /**
-     * Returns direct child statement lists of a node
-     *
-     * @return array<Node>
-     */
-    private function childStmts(Node $node): array
-    {
-        $children = [];
-
-        foreach ($node->getSubNodeNames() as $name) {
-            /** @var mixed $child */
-            $child = $node->$name;
-
-            if ($child instanceof Node) {
-                $children[] = $child;
-            } elseif (is_array($child)) {
-                /** @psalm-suppress MixedAssignment */
-                foreach ($child as $item) {
-                    if ($item instanceof Node) {
-                        $children[] = $item;
-                    }
-                }
-            }
-        }
-
-        return $children;
     }
 }
