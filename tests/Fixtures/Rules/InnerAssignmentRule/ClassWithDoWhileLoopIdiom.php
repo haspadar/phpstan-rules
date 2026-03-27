@@ -10,9 +10,10 @@ final class ClassWithDoWhileLoopIdiom
     public function readLines(mixed $handle): string
     {
         $output = '';
+        $line = '';
 
         do {
-            $output .= (string) $line;
+            $output .= $line;
         } while (($line = fgets($handle)) !== false);
 
         return $output;
