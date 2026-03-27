@@ -195,6 +195,7 @@ final readonly class ModifiedControlVariableRule implements Rule
             }
 
             foreach ($node->getSubNodeNames() as $name) {
+                /** @var mixed $sub */
                 $sub = $node->{$name};
 
                 if ($sub instanceof Node) {
