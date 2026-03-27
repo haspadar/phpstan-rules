@@ -15,9 +15,11 @@ use PHPStan\Rules\RuleErrorBuilder;
 /**
  * Detects methods whose @throws PHPDoc tags declare overly broad exception types.
  * Scans PHPDoc text with a regex to find @throws lines, parses union and intersection
- * types, and compares each fully-qualified name against the configured illegal list.
- * Methods marked with #[Override] are skipped by default because they do not control
- * the parent's declared contract.
+ * types, and compares each name against the configured illegal list. Names are matched
+ * as written in the PHPDoc (with leading backslashes stripped) without namespace or
+ * import resolution, so illegalClassNames should list unqualified short names (e.g.
+ * "RuntimeException", not "\RuntimeException"). Methods marked with #[Override] are
+ * skipped by default because they do not control the parent's declared contract.
  *
  * @implements Rule<ClassMethod>
  */
