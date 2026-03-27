@@ -51,6 +51,17 @@ final class ModifiedControlVariableRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function reportsErrorWhenForPreDecInBody(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/ModifiedControlVariableRule/ClassWithForPreDecInBody.php'],
+            [
+                ['For loop control variable $i must not be modified inside the loop body.', 12],
+            ],
+        );
+    }
+
+    #[Test]
     public function suppressesErrorWhenPhpstanIgnorePresent(): void
     {
         $this->analyse(

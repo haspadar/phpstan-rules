@@ -52,4 +52,22 @@ final class ModifiedControlVariableRulePassesTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function passesWhenOtherVarModifiedInForLoop(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/ModifiedControlVariableRule/ClassWithOtherVarModifiedInForLoop.php'],
+            [],
+        );
+    }
+
+    #[Test]
+    public function passesWhenClosureInsideForModifiesSameNamedVar(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/ModifiedControlVariableRule/ClassWithClosureInForLoop.php'],
+            [],
+        );
+    }
 }

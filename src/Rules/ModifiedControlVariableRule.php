@@ -6,9 +6,11 @@ namespace Haspadar\PHPStanRules\Rules;
 
 use Override;
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\AssignRef;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\PostDec;
 use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\PreDec;
@@ -142,7 +144,7 @@ final readonly class ModifiedControlVariableRule implements Rule
         $errors = [];
 
         /** @var list<Assign|AssignOp|AssignRef|PreInc|PostInc|PreDec|PostDec> $modifications */
-        $modifications = (new NodeFinder())->find($stmts, $this->isModificationNode(...));
+        $modifications = $this->collectModificationsSkippingNestedScopes($stmts);
 
         foreach ($modifications as $mod) {
             $varNode = $this->extractVarNode($mod);
@@ -171,6 +173,43 @@ final readonly class ModifiedControlVariableRule implements Rule
     }
 
     /**
+     * Collects modification nodes from statements without descending into
+     * nested scopes (closures and arrow functions)
+     *
+     * @param array<Node> $nodes
+     *
+     * @return list<Assign|AssignOp|AssignRef|PreInc|PostInc|PreDec|PostDec>
+     */
+    private function collectModificationsSkippingNestedScopes(array $nodes): array
+    {
+        $result = [];
+
+        foreach ($nodes as $node) {
+            if ($node instanceof Closure || $node instanceof ArrowFunction) {
+                continue;
+            }
+
+            if ($this->isModificationNode($node)) {
+                /** @var Assign|AssignOp|AssignRef|PreInc|PostInc|PreDec|PostDec $node */
+                $result[] = $node;
+            }
+
+            foreach ($node->getSubNodeNames() as $name) {
+                $sub = $node->{$name};
+
+                if ($sub instanceof Node) {
+                    $result = array_merge($result, $this->collectModificationsSkippingNestedScopes([$sub]));
+                } elseif (is_array($sub)) {
+                    $filtered = array_filter($sub, static fn(mixed $item): bool => $item instanceof Node);
+                    $result = array_merge($result, $this->collectModificationsSkippingNestedScopes(array_values($filtered)));
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Returns true if the node is any kind of variable modification expression
      */
     private function isModificationNode(Node $node): bool
@@ -191,14 +230,6 @@ final readonly class ModifiedControlVariableRule implements Rule
      */
     private function extractVarNode(Assign|AssignOp|AssignRef|PreInc|PostInc|PreDec|PostDec $mod): Node\Expr
     {
-        return match (true) {
-            $mod instanceof Assign => $mod->var,
-            $mod instanceof AssignOp => $mod->var,
-            $mod instanceof AssignRef => $mod->var,
-            $mod instanceof PreInc => $mod->var,
-            $mod instanceof PostInc => $mod->var,
-            $mod instanceof PreDec => $mod->var,
-            $mod instanceof PostDec => $mod->var,
-        };
+        return $mod->var;
     }
 }
