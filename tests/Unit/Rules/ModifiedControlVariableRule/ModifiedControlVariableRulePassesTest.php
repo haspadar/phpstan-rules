@@ -43,4 +43,13 @@ final class ModifiedControlVariableRulePassesTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function passesWhenArrayElementModifiedInForLoop(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/ModifiedControlVariableRule/ClassWithNonVariableModification.php'],
+            [],
+        );
+    }
 }
