@@ -34,4 +34,13 @@ final class InnerAssignmentRuleLoopIdiomTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function passesForLoopIdiom(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/InnerAssignmentRule/ClassWithForLoopIdiom.php'],
+            [],
+        );
+    }
 }
