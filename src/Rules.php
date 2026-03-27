@@ -34,6 +34,7 @@ final class Rules
             Rules\NoParameterReassignmentRule::class,
             Rules\IllegalCatchRule::class,
             Rules\IllegalThrowsRule::class,
+            Rules\InnerAssignmentRule::class,
         ];
     }
 }

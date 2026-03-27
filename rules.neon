@@ -67,3 +67,7 @@ services:
         class: Haspadar\PHPStanRules\Rules\IllegalThrowsRule
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\InnerAssignmentRule
+        tags:
+            - phpstan.rules.rule

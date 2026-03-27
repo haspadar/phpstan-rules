@@ -17,6 +17,7 @@ use Haspadar\PHPStanRules\Rules\ProtectedMethodInFinalClassRule;
 use Haspadar\PHPStanRules\Rules\ConstructorInitializationRule;
 use Haspadar\PHPStanRules\Rules\IllegalCatchRule;
 use Haspadar\PHPStanRules\Rules\IllegalThrowsRule;
+use Haspadar\PHPStanRules\Rules\InnerAssignmentRule;
 use Haspadar\PHPStanRules\Rules\NoParameterReassignmentRule;
 use Haspadar\PHPStanRules\Rules\ProhibitPublicStaticMethodsRule;
 use Haspadar\PHPStanRules\Rules\ReturnCountRule;
@@ -49,6 +50,7 @@ final class RulesTest extends TestCase
                 NoParameterReassignmentRule::class,
                 IllegalCatchRule::class,
                 IllegalThrowsRule::class,
+                InnerAssignmentRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',
