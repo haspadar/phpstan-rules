@@ -27,4 +27,15 @@ final class ModifiedControlVariableRuleForeachTest extends RuleTestCase
             ],
         );
     }
+
+    #[Test]
+    public function reportsErrorWhenForeachKeyModified(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/ModifiedControlVariableRule/ClassWithForeachKeyModification.php'],
+            [
+                ['Foreach loop control variable $key must not be modified inside the loop body.', 13],
+            ],
+        );
+    }
 }

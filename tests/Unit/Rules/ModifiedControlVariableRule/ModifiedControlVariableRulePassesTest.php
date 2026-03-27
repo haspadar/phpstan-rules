@@ -25,4 +25,13 @@ final class ModifiedControlVariableRulePassesTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function passesWhenForHasNoInitVariable(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/ModifiedControlVariableRule/ClassWithEmptyForInit.php'],
+            [],
+        );
+    }
 }
