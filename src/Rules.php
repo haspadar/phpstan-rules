@@ -35,6 +35,7 @@ final class Rules
             Rules\IllegalCatchRule::class,
             Rules\IllegalThrowsRule::class,
             Rules\InnerAssignmentRule::class,
+            Rules\ModifiedControlVariableRule::class,
         ];
     }
 }
