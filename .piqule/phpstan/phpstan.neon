@@ -10,3 +10,9 @@ parameters:
     checkUninitializedProperties: true
     checkClassCaseSensitivity: true
     checkDynamicProperties: true
+
+    exceptions:
+        check:
+            missingCheckedExceptionInThrows: true
+        checkedExceptionClasses:
+            - \Throwable

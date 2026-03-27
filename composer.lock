@@ -8,11 +8,11 @@
     "packages": [
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.42",
+            "version": "2.1.44",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/1279e1ce86ba768f0780c9d889852b4e02ff40d0",
-                "reference": "1279e1ce86ba768f0780c9d889852b4e02ff40d0",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/4a88c083c668b2c364a425c9b3171b2d9ea5d218",
+                "reference": "4a88c083c668b2c364a425c9b3171b2d9ea5d218",
                 "shasum": ""
             },
             "require": {
@@ -57,7 +57,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-03-17T14:58:32+00:00"
+            "time": "2026-03-25T17:34:21+00:00"
         }
     ],
     "packages-dev": [
@@ -1698,12 +1698,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/haspadar/piqule.git",
-                "reference": "8599939676ba675a022f7e201c4487d249c2e784"
+                "reference": "3eb74e819bc1a67e4a6b26fe17a28714d4707094"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/haspadar/piqule/zipball/8599939676ba675a022f7e201c4487d249c2e784",
-                "reference": "8599939676ba675a022f7e201c4487d249c2e784",
+                "url": "https://api.github.com/repos/haspadar/piqule/zipball/3eb74e819bc1a67e4a6b26fe17a28714d4707094",
+                "reference": "3eb74e819bc1a67e4a6b26fe17a28714d4707094",
                 "shasum": ""
             },
             "require": {
@@ -1746,7 +1746,7 @@
                 "issues": "https://github.com/haspadar/piqule/issues",
                 "source": "https://github.com/haspadar/piqule/tree/main"
             },
-            "time": "2026-03-23T07:28:43+00:00"
+            "time": "2026-03-27T05:05:39+00:00"
         },
         {
             "name": "infection/abstract-testframework-adapter",
