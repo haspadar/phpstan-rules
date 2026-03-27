@@ -34,4 +34,13 @@ final class ModifiedControlVariableRulePassesTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function passesWhenForHasNoInitAssignment(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/ModifiedControlVariableRule/ClassWithForNoInitAssign.php'],
+            [],
+        );
+    }
 }
