@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
+use Haspadar\PHPStanRules\NodeHelper\ChildNodes;
 use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
@@ -194,17 +195,7 @@ final readonly class ModifiedControlVariableRule implements Rule
                 $result[] = $node;
             }
 
-            foreach ($node->getSubNodeNames() as $name) {
-                /** @var mixed $sub */
-                $sub = $node->{$name};
-
-                if ($sub instanceof Node) {
-                    $result = array_merge($result, $this->collectModificationsSkippingNestedScopes([$sub]));
-                } elseif (is_array($sub)) {
-                    $filtered = array_filter($sub, static fn(mixed $item): bool => $item instanceof Node);
-                    $result = array_merge($result, $this->collectModificationsSkippingNestedScopes(array_values($filtered)));
-                }
-            }
+            $result = array_merge($result, $this->collectModificationsSkippingNestedScopes(ChildNodes::of($node)));
         }
 
         return $result;
