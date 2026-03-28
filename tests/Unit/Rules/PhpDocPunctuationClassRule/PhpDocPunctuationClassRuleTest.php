@@ -74,6 +74,15 @@ final class PhpDocPunctuationClassRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function passesWhenPhpDocIsEmpty(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/PhpDocPunctuationClassRule/ClassWithEmptyPhpDoc.php'],
+            [],
+        );
+    }
+
+    #[Test]
     public function suppressesErrorWhenPhpstanIgnorePresent(): void
     {
         $this->analyse(
