@@ -1,0 +1,86 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Haspadar\PHPStanRules\Rules;
+
+use Haspadar\PHPStanRules\PhpDoc\SummaryExtractor;
+use Override;
+use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
+use PHPStan\Rules\IdentifierRuleError;
+use PHPStan\Rules\Rule;
+use PHPStan\Rules\RuleErrorBuilder;
+
+/**
+ * Checks that the PHPDoc summary line of every class method ends with
+ * a period, question mark, or exclamation mark. Methods without a PHPDoc
+ * block are skipped. Blocks containing only tags (no summary) are skipped.
+ *
+ * @implements Rule<ClassMethod>
+ */
+final readonly class PhpDocPunctuationMethodRule implements Rule
+{
+    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
+    #[Override]
+    public function getNodeType(): string
+    {
+        return ClassMethod::class;
+    }
+
+    /**
+     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     *
+     * @throws \PHPStan\ShouldNotHappenException
+     *
+     * @return list<IdentifierRuleError>
+     */
+    #[Override]
+    public function processNode(Node $node, Scope $scope): array
+    {
+        $reflection = $scope->getClassReflection();
+
+        if ($reflection === null || !$reflection->isClass()) {
+            return [];
+        }
+
+        /** @var ClassMethod $node */
+        $docComment = $node->getDocComment();
+
+        if ($docComment === null) {
+            return [];
+        }
+
+        $summary = SummaryExtractor::extract($docComment->getText());
+
+        if ($summary === null) {
+            return [];
+        }
+
+        if ($this->endsWithPunctuation($summary)) {
+            return [];
+        }
+
+        return [
+            RuleErrorBuilder::message(
+                sprintf(
+                    'PHPDoc summary for %s() must end with a period, question mark, or exclamation mark.',
+                    $node->name->toString(),
+                ),
+            )
+                ->identifier('haspadar.phpdocPunctuation')
+                ->build(),
+        ];
+    }
+
+    /**
+     * Returns true if the string ends with `.`, `?`, or `!`
+     */
+    private function endsWithPunctuation(string $text): bool
+    {
+        return str_ends_with($text, '.')
+            || str_ends_with($text, '?')
+            || str_ends_with($text, '!');
+    }
+}

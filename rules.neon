@@ -75,3 +75,11 @@ services:
         class: Haspadar\PHPStanRules\Rules\ModifiedControlVariableRule
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\PhpDocPunctuationClassRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\PhpDocPunctuationMethodRule
+        tags:
+            - phpstan.rules.rule

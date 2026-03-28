@@ -36,6 +36,8 @@ final class Rules
             Rules\IllegalThrowsRule::class,
             Rules\InnerAssignmentRule::class,
             Rules\ModifiedControlVariableRule::class,
+            Rules\PhpDocPunctuationClassRule::class,
+            Rules\PhpDocPunctuationMethodRule::class,
         ];
     }
 }

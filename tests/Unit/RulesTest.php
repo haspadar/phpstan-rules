@@ -20,6 +20,8 @@ use Haspadar\PHPStanRules\Rules\IllegalThrowsRule;
 use Haspadar\PHPStanRules\Rules\InnerAssignmentRule;
 use Haspadar\PHPStanRules\Rules\ModifiedControlVariableRule;
 use Haspadar\PHPStanRules\Rules\NoParameterReassignmentRule;
+use Haspadar\PHPStanRules\Rules\PhpDocPunctuationClassRule;
+use Haspadar\PHPStanRules\Rules\PhpDocPunctuationMethodRule;
 use Haspadar\PHPStanRules\Rules\ProhibitPublicStaticMethodsRule;
 use Haspadar\PHPStanRules\Rules\ReturnCountRule;
 use Haspadar\PHPStanRules\Rules\StatementCountRule;
@@ -53,6 +55,8 @@ final class RulesTest extends TestCase
                 IllegalThrowsRule::class,
                 InnerAssignmentRule::class,
                 ModifiedControlVariableRule::class,
+                PhpDocPunctuationClassRule::class,
+                PhpDocPunctuationMethodRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',
