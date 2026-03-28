@@ -14,7 +14,7 @@ final class SummaryExtractor
 {
     /**
      * Returns the trimmed summary line from the given PHPDoc text,
-     * or null if no summary is present (tags-only or empty block)
+     * or null if no summary is present (tags-only or empty block).
      */
     public static function extract(string $docText): ?string
     {
