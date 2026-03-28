@@ -63,4 +63,22 @@ final class PhpDocPunctuationMethodRuleTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function passesWhenMethodIsInInterface(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/PhpDocPunctuationMethodRule/InterfaceWithInvalidMethodSummary.php'],
+            [],
+        );
+    }
+
+    #[Test]
+    public function passesWhenMethodIsInTrait(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/PhpDocPunctuationMethodRule/TraitWithInvalidMethodSummary.php'],
+            [],
+        );
+    }
 }
