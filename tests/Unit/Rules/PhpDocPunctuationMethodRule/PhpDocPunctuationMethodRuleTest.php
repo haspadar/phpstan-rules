@@ -81,4 +81,15 @@ final class PhpDocPunctuationMethodRuleTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function reportsErrorWhenMethodSummaryStartsWithLowercase(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/PhpDocPunctuationMethodRule/ClassWithLowercaseMethodSummary.php'],
+            [
+                ['PHPDoc summary for save() must start with a capital letter.', 10],
+            ],
+        );
+    }
 }

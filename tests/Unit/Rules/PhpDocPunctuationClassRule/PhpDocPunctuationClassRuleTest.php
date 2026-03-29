@@ -90,4 +90,15 @@ final class PhpDocPunctuationClassRuleTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function reportsErrorWhenSummaryStartsWithLowercase(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/PhpDocPunctuationClassRule/ClassWithLowercaseSummary.php'],
+            [
+                ['PHPDoc summary for ClassWithLowercaseSummary must start with a capital letter.', 8],
+            ],
+        );
+    }
 }
