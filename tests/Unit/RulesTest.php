@@ -22,6 +22,8 @@ use Haspadar\PHPStanRules\Rules\ModifiedControlVariableRule;
 use Haspadar\PHPStanRules\Rules\NoParameterReassignmentRule;
 use Haspadar\PHPStanRules\Rules\PhpDocPunctuationClassRule;
 use Haspadar\PHPStanRules\Rules\PhpDocPunctuationMethodRule;
+use Haspadar\PHPStanRules\Rules\PhpDocEmptyClassRule;
+use Haspadar\PHPStanRules\Rules\PhpDocEmptyMethodRule;
 use Haspadar\PHPStanRules\Rules\ProhibitPublicStaticMethodsRule;
 use Haspadar\PHPStanRules\Rules\ReturnCountRule;
 use Haspadar\PHPStanRules\Rules\StatementCountRule;
@@ -57,6 +59,8 @@ final class RulesTest extends TestCase
                 ModifiedControlVariableRule::class,
                 PhpDocPunctuationClassRule::class,
                 PhpDocPunctuationMethodRule::class,
+                PhpDocEmptyClassRule::class,
+                PhpDocEmptyMethodRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',
