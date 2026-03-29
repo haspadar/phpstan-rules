@@ -38,6 +38,8 @@ final class Rules
             Rules\ModifiedControlVariableRule::class,
             Rules\PhpDocPunctuationClassRule::class,
             Rules\PhpDocPunctuationMethodRule::class,
+            Rules\PhpDocEmptyClassRule::class,
+            Rules\PhpDocEmptyMethodRule::class,
         ];
     }
 }
