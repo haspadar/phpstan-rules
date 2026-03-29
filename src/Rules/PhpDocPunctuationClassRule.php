@@ -23,11 +23,14 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final readonly class PhpDocPunctuationClassRule implements Rule
 {
+    private bool $checkCapitalization;
+
     /**
-     * @param bool $checkCapitalization Whether to require the summary to start with a capital letter
+     * @param array{checkCapitalization?: bool} $options
      */
-    public function __construct(private bool $checkCapitalization = true)
+    public function __construct(array $options = [])
     {
+        $this->checkCapitalization = $options['checkCapitalization'] ?? true;
     }
 
     /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
