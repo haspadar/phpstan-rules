@@ -15,13 +15,21 @@ use PHPStan\Rules\RuleErrorBuilder;
 
 /**
  * Checks that the PHPDoc summary line of every class declaration ends with
- * a period, question mark, or exclamation mark. Classes without a PHPDoc
- * block are skipped. Blocks containing only tags (no summary) are skipped.
+ * a period, question mark, or exclamation mark, and optionally starts with
+ * a capital letter. Classes without a PHPDoc block are skipped. Blocks
+ * containing only tags (no summary) are skipped.
  *
  * @implements Rule<Class_>
  */
 final readonly class PhpDocPunctuationClassRule implements Rule
 {
+    /**
+     * @param bool $checkCapitalization Whether to require the summary to start with a capital letter
+     */
+    public function __construct(private bool $checkCapitalization = true)
+    {
+    }
+
     /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
@@ -43,22 +51,33 @@ final readonly class PhpDocPunctuationClassRule implements Rule
         $docComment = $node->getDocComment();
         $summary = $docComment !== null ? SummaryExtractor::extract($docComment->getText()) : null;
 
-        if ($summary === null || $this->endsWithPunctuation($summary)) {
+        if ($summary === null) {
             return [];
         }
 
         $className = $node->name !== null ? $node->name->toString() : 'anonymous class';
+        $errors = [];
 
-        return [
-            RuleErrorBuilder::message(
+        if (!$this->endsWithPunctuation($summary)) {
+            $errors[] = RuleErrorBuilder::message(
                 sprintf(
                     'PHPDoc summary for %s must end with a period, question mark, or exclamation mark.',
                     $className,
                 ),
             )
                 ->identifier('haspadar.phpdocPunctuation')
-                ->build(),
-        ];
+                ->build();
+        }
+
+        if ($this->checkCapitalization && !$this->startsWithCapital($summary)) {
+            $errors[] = RuleErrorBuilder::message(
+                sprintf('PHPDoc summary for %s must start with a capital letter.', $className),
+            )
+                ->identifier('haspadar.phpdocStyle')
+                ->build();
+        }
+
+        return $errors;
     }
 
     /**
@@ -69,5 +88,13 @@ final readonly class PhpDocPunctuationClassRule implements Rule
         return str_ends_with($text, '.')
             || str_ends_with($text, '?')
             || str_ends_with($text, '!');
+    }
+
+    /**
+     * Returns true if the string starts with an uppercase letter
+     */
+    private function startsWithCapital(string $text): bool
+    {
+        return $text !== '' && mb_strtoupper(mb_substr($text, 0, 1)) === mb_substr($text, 0, 1) && ctype_alpha($text[0]);
     }
 }
