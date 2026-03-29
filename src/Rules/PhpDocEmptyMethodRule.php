@@ -48,14 +48,9 @@ final readonly class PhpDocEmptyMethodRule implements Rule
 
         /** @var ClassMethod $node */
         $docComment = $node->getDocComment();
+        $summary = $docComment !== null ? SummaryExtractor::extract($docComment->getText()) : null;
 
-        if ($docComment === null) {
-            return [];
-        }
-
-        $summary = SummaryExtractor::extract($docComment->getText());
-
-        if ($summary !== null) {
+        if ($summary !== null || $docComment === null) {
             return [];
         }
 
