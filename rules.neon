@@ -83,3 +83,11 @@ services:
         class: Haspadar\PHPStanRules\Rules\PhpDocPunctuationMethodRule
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\PhpDocEmptyClassRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\PhpDocEmptyMethodRule
+        tags:
+            - phpstan.rules.rule
