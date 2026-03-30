@@ -81,4 +81,65 @@ final class AtclauseOrderRuleTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function reportsErrorWhenExactlyTwoTagsAreInWrongOrder(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/AtclauseOrderRule/ClassWithExactlyTwoTagsWrongOrder.php'],
+            [
+                ['PHPDoc tag @return must come before @throws in save().', 16],
+            ],
+        );
+    }
+
+    #[Test]
+    public function passesWhenAllTagsAreIrrelevantToOrder(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/AtclauseOrderRule/ClassWithIrrelevantTagsOnly.php'],
+            [],
+        );
+    }
+
+    #[Test]
+    public function passesWhenOnlyOneRelevantTagPresent(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/AtclauseOrderRule/ClassWithParamOnly.php'],
+            [],
+        );
+    }
+
+    #[Test]
+    public function passesWhenDuplicateParamTagsArePresent(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/AtclauseOrderRule/ClassWithDuplicateParam.php'],
+            [],
+        );
+    }
+
+    #[Test]
+    public function reportsErrorWhenIrrelevantTagAppearsBeforeViolation(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/AtclauseOrderRule/ClassWithIrrelevantTagBetweenRelevant.php'],
+            [
+                ['PHPDoc tag @return must come before @throws in save().', 18],
+            ],
+        );
+    }
+
+    #[Test]
+    public function reportsAllViolationsWhenMultipleTagsAreOutOfOrder(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/AtclauseOrderRule/ClassWithMultipleViolations.php'],
+            [
+                ['PHPDoc tag @return must come before @throws in save().', 18],
+                ['PHPDoc tag @param must come before @throws in save().', 18],
+            ],
+        );
+    }
 }
