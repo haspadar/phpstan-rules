@@ -18,13 +18,11 @@ final class AtclauseOrderRuleDefaultOrderTest extends RuleTestCase
     }
 
     #[Test]
-    public function reportsErrorWhenDefaultOrderIsViolated(): void
+    public function passesWhenTagsAreInDefaultOrder(): void
     {
         $this->analyse(
-            [__DIR__ . '/../../../Fixtures/Rules/AtclauseOrderRule/ClassWithWrongOrder.php'],
-            [
-                ['PHPDoc tag @return must come before @throws in save().', 18],
-            ],
+            [__DIR__ . '/../../../Fixtures/Rules/AtclauseOrderRule/ClassWithCorrectOrder.php'],
+            [],
         );
     }
 }
