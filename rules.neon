@@ -91,3 +91,7 @@ services:
         class: Haspadar\PHPStanRules\Rules\PhpDocEmptyMethodRule
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\AtclauseOrderRule
+        tags:
+            - phpstan.rules.rule
