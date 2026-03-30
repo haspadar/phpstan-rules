@@ -46,6 +46,9 @@ parameters:
                 - '@param'
                 - '@return'
                 - '@throws'
+        phpDocMissingMethod:
+            checkPublicOnly: true
+            skipOverridden: true
 
 parametersSchema:
     haspadar: structure([
@@ -98,6 +101,10 @@ parametersSchema:
         ]),
         atclauseOrder: structure([
             tagOrder: listOf(string()),
+        ]),
+        phpDocMissingMethod: structure([
+            checkPublicOnly: bool(),
+            skipOverridden: bool(),
         ]),
     ])
 
@@ -241,5 +248,13 @@ services:
         arguments:
             options:
                 tagOrder: %haspadar.atclauseOrder.tagOrder%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\PhpDocMissingMethodRule
+        arguments:
+            options:
+                checkPublicOnly: %haspadar.phpDocMissingMethod.checkPublicOnly%
+                skipOverridden: %haspadar.phpDocMissingMethod.skipOverridden%
         tags:
             - phpstan.rules.rule
