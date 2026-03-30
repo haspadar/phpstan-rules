@@ -1,34 +1,165 @@
+parameters:
+    haspadar:
+        methodLength:
+            maxLines: 100
+            skipBlankLines: false
+            skipComments: false
+        fileLength:
+            maxLines: 1000
+            skipBlankLines: false
+            skipComments: false
+        tooManyMethods:
+            maxMethods: 20
+            onlyPublic: false
+        parameterNumber:
+            maxParameters: 3
+            ignoreOverridden: true
+        couplingBetweenObjects:
+            maximum: 15
+            excludedClasses: []
+        booleanExpressionComplexity:
+            maxOperators: 3
+        cyclomaticComplexity:
+            maxComplexity: 10
+        returnCount:
+            max: 1
+        statementCount:
+            maxStatements: 30
+        illegalCatch:
+            illegalClassNames:
+                - Exception
+                - Throwable
+                - RuntimeException
+                - Error
+        illegalThrows:
+            illegalClassNames:
+                - Error
+                - RuntimeException
+                - Throwable
+            ignoreOverriddenMethods: true
+        phpDocPunctuationClass:
+            checkCapitalization: true
+        phpDocPunctuationMethod:
+            checkCapitalization: true
+        atclauseOrder:
+            tagOrder:
+                - '@param'
+                - '@return'
+                - '@throws'
+
+parametersSchema:
+    haspadar: structure([
+        methodLength: structure([
+            maxLines: int(),
+            skipBlankLines: bool(),
+            skipComments: bool(),
+        ]),
+        fileLength: structure([
+            maxLines: int(),
+            skipBlankLines: bool(),
+            skipComments: bool(),
+        ]),
+        tooManyMethods: structure([
+            maxMethods: int(),
+            onlyPublic: bool(),
+        ]),
+        parameterNumber: structure([
+            maxParameters: int(),
+            ignoreOverridden: bool(),
+        ]),
+        couplingBetweenObjects: structure([
+            maximum: int(),
+            excludedClasses: listOf(string()),
+        ]),
+        booleanExpressionComplexity: structure([
+            maxOperators: int(),
+        ]),
+        cyclomaticComplexity: structure([
+            maxComplexity: int(),
+        ]),
+        returnCount: structure([
+            max: int(),
+        ]),
+        statementCount: structure([
+            maxStatements: int(),
+        ]),
+        illegalCatch: structure([
+            illegalClassNames: listOf(string()),
+        ]),
+        illegalThrows: structure([
+            illegalClassNames: listOf(string()),
+            ignoreOverriddenMethods: bool(),
+        ]),
+        phpDocPunctuationClass: structure([
+            checkCapitalization: bool(),
+        ]),
+        phpDocPunctuationMethod: structure([
+            checkCapitalization: bool(),
+        ]),
+        atclauseOrder: structure([
+            tagOrder: listOf(string()),
+        ]),
+    ])
+
 services:
     -
         class: Haspadar\PHPStanRules\Rules\MethodLengthRule
+        arguments:
+            maxLines: %haspadar.methodLength.maxLines%
+            options:
+                skipBlankLines: %haspadar.methodLength.skipBlankLines%
+                skipComments: %haspadar.methodLength.skipComments%
         tags:
             - phpstan.rules.rule
     -
         class: Haspadar\PHPStanRules\Rules\FileLengthRule
+        arguments:
+            maxLines: %haspadar.fileLength.maxLines%
+            options:
+                skipBlankLines: %haspadar.fileLength.skipBlankLines%
+                skipComments: %haspadar.fileLength.skipComments%
         tags:
             - phpstan.rules.rule
     -
         class: Haspadar\PHPStanRules\Rules\TooManyMethodsRule
+        arguments:
+            maxMethods: %haspadar.tooManyMethods.maxMethods%
+            options:
+                onlyPublic: %haspadar.tooManyMethods.onlyPublic%
         tags:
             - phpstan.rules.rule
     -
         class: Haspadar\PHPStanRules\Rules\ParameterNumberRule
+        arguments:
+            maxParameters: %haspadar.parameterNumber.maxParameters%
+            options:
+                ignoreOverridden: %haspadar.parameterNumber.ignoreOverridden%
         tags:
             - phpstan.rules.rule
     -
         class: Haspadar\PHPStanRules\Rules\CyclomaticComplexityRule
+        arguments:
+            maxComplexity: %haspadar.cyclomaticComplexity.maxComplexity%
         tags:
             - phpstan.rules.rule
     -
         class: Haspadar\PHPStanRules\Rules\CouplingBetweenObjectsRule
+        arguments:
+            maximum: %haspadar.couplingBetweenObjects.maximum%
+            options:
+                excludedClasses: %haspadar.couplingBetweenObjects.excludedClasses%
         tags:
             - phpstan.rules.rule
     -
         class: Haspadar\PHPStanRules\Rules\BooleanExpressionComplexityRule
+        arguments:
+            maxOperators: %haspadar.booleanExpressionComplexity.maxOperators%
         tags:
             - phpstan.rules.rule
     -
         class: Haspadar\PHPStanRules\Rules\StatementCountRule
+        arguments:
+            maxStatements: %haspadar.statementCount.maxStatements%
         tags:
             - phpstan.rules.rule
     -
@@ -41,6 +172,8 @@ services:
             - phpstan.rules.rule
     -
         class: Haspadar\PHPStanRules\Rules\ReturnCountRule
+        arguments:
+            max: %haspadar.returnCount.max%
         tags:
             - phpstan.rules.rule
     -
@@ -61,10 +194,16 @@ services:
             - phpstan.rules.rule
     -
         class: Haspadar\PHPStanRules\Rules\IllegalCatchRule
+        arguments:
+            illegalClassNames: %haspadar.illegalCatch.illegalClassNames%
         tags:
             - phpstan.rules.rule
     -
         class: Haspadar\PHPStanRules\Rules\IllegalThrowsRule
+        arguments:
+            illegalClassNames: %haspadar.illegalThrows.illegalClassNames%
+            options:
+                ignoreOverriddenMethods: %haspadar.illegalThrows.ignoreOverriddenMethods%
         tags:
             - phpstan.rules.rule
     -
@@ -77,10 +216,16 @@ services:
             - phpstan.rules.rule
     -
         class: Haspadar\PHPStanRules\Rules\PhpDocPunctuationClassRule
+        arguments:
+            options:
+                checkCapitalization: %haspadar.phpDocPunctuationClass.checkCapitalization%
         tags:
             - phpstan.rules.rule
     -
         class: Haspadar\PHPStanRules\Rules\PhpDocPunctuationMethodRule
+        arguments:
+            options:
+                checkCapitalization: %haspadar.phpDocPunctuationMethod.checkCapitalization%
         tags:
             - phpstan.rules.rule
     -
@@ -93,5 +238,8 @@ services:
             - phpstan.rules.rule
     -
         class: Haspadar\PHPStanRules\Rules\AtclauseOrderRule
+        arguments:
+            options:
+                tagOrder: %haspadar.atclauseOrder.tagOrder%
         tags:
             - phpstan.rules.rule
