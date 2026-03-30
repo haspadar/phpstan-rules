@@ -112,7 +112,7 @@ final readonly class AtclauseOrderRule implements Rule
                     ->build();
             }
 
-            if ($index !== false && $index > $lastIndex) {
+            if ($index !== false && $index >= $lastIndex) {
                 $lastIndex = $index;
                 $lastTag = $tag;
             }
