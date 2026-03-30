@@ -55,19 +55,13 @@ final readonly class PhpDocMissingMethodRule implements Rule
         $reflection = $scope->getClassReflection();
 
         /** @var ClassMethod $node */
-        if ($reflection === null || !$reflection->isClass()) {
-            return [];
-        }
-
-        if ($this->checkPublicOnly && !$node->isPublic()) {
-            return [];
-        }
-
-        if ($this->skipOverridden && $this->hasOverrideAttribute($node)) {
-            return [];
-        }
-
-        if ($node->getDocComment() !== null) {
+        if (
+            $reflection === null
+            || !$reflection->isClass()
+            || ($this->checkPublicOnly && !$node->isPublic())
+            || ($this->skipOverridden && $this->hasOverrideAttribute($node))
+            || $node->getDocComment() !== null
+        ) {
             return [];
         }
 
