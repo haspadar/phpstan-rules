@@ -47,6 +47,15 @@ final class PhpDocMissingPropertyRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function passesWhenProtectedPropertyMissingPhpDoc(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/PhpDocMissingPropertyRule/ClassWithProtectedProperty.php'],
+            [],
+        );
+    }
+
+    #[Test]
     public function passesWhenPromotedPropertyUsed(): void
     {
         $this->analyse(
