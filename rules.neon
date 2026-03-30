@@ -49,6 +49,8 @@ parameters:
         phpDocMissingMethod:
             checkPublicOnly: true
             skipOverridden: true
+        phpDocMissingProperty:
+            checkPublicOnly: true
 
 parametersSchema:
     haspadar: structure([
@@ -105,6 +107,9 @@ parametersSchema:
         phpDocMissingMethod: structure([
             checkPublicOnly: bool(),
             skipOverridden: bool(),
+        ]),
+        phpDocMissingProperty: structure([
+            checkPublicOnly: bool(),
         ]),
     ])
 
@@ -256,5 +261,12 @@ services:
             options:
                 checkPublicOnly: %haspadar.phpDocMissingMethod.checkPublicOnly%
                 skipOverridden: %haspadar.phpDocMissingMethod.skipOverridden%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\PhpDocMissingPropertyRule
+        arguments:
+            options:
+                checkPublicOnly: %haspadar.phpDocMissingProperty.checkPublicOnly%
         tags:
             - phpstan.rules.rule
