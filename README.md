@@ -77,7 +77,7 @@
 
 `IllegalThrowsRule` accepts `illegalClassNames` (string[], default `['Exception', 'Throwable', 'RuntimeException', 'Error']`) as first constructor argument. Names are matched against unresolved short names as written in PHPDoc.
 
-`AtclauseOrderRule` accepts an options array with `tagOrder` (string[], default `['@param', '@return', '@throws']`). Only tags listed in `tagOrder` are checked; their relative order in the PHPDoc block must match the configured order. Tags not in the list are ignored.
+`AtclauseOrderRule` accepts an options array with `tagOrder` (string[], default `['@param', '@return', '@throws']`). Only tags listed in `tagOrder` are checked; their relative order in the PHPDoc block must match the configured order. Tags not in the list are ignored. Diagnostic identifier: `haspadar.atclauseOrder`.
 
 ---
 
