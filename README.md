@@ -50,6 +50,7 @@
 | `PhpDocPunctuationClassRule`  | PHPDoc summary of every class must end with `.`, `?`, or `!`                            |
 | `PhpDocPunctuationMethodRule` | PHPDoc summary of every method must end with `.`, `?`, or `!`                           |
 | `AtclauseOrderRule`           | PHPDoc tags must appear in order: `@param` → `@return` → `@throws` (configurable)       |
+| `PhpDocMissingMethodRule`     | Every public method in a class must have a PHPDoc comment (configurable)                |
 
 ---
 
@@ -102,6 +103,9 @@ parameters:
                 - '@param'
                 - '@return'
                 - '@throws'
+        phpDocMissingMethod:
+            checkPublicOnly: true
+            skipOverridden: true
 ```
 
 Default values match the defaults described in the rules table above. Omitting a parameter keeps the default. Diagnostic identifier for `AtclauseOrderRule`: `haspadar.atclauseOrder` (for targeted ignores, e.g. `@phpstan-ignore haspadar.atclauseOrder`).
