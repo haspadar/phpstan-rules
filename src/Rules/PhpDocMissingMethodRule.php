@@ -81,7 +81,7 @@ final readonly class PhpDocMissingMethodRule implements Rule
     {
         foreach ($node->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attr) {
-                if ($attr->name->getLast() === 'Override') {
+                if (in_array($attr->name->toString(), ['Override', '\Override'], true)) {
                     return true;
                 }
             }
