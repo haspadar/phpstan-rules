@@ -42,6 +42,7 @@ final class Rules
             Rules\PhpDocEmptyMethodRule::class,
             Rules\AtclauseOrderRule::class,
             Rules\PhpDocMissingMethodRule::class,
+            Rules\PhpDocMissingPropertyRule::class,
         ];
     }
 }
