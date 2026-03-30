@@ -1,0 +1,98 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Haspadar\PHPStanRules\Rules;
+
+use Override;
+use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
+use PHPStan\Rules\IdentifierRuleError;
+use PHPStan\Rules\Rule;
+use PHPStan\Rules\RuleErrorBuilder;
+
+/**
+ * Checks that every public method in a class has a PHPDoc comment.
+ * Non-public methods are skipped when checkPublicOnly is true (default).
+ * Methods with the #[Override] attribute are skipped when skipOverridden is true (default).
+ * Methods in interfaces and traits are always skipped.
+ *
+ * @implements Rule<ClassMethod>
+ */
+final readonly class PhpDocMissingMethodRule implements Rule
+{
+    private bool $checkPublicOnly;
+
+    private bool $skipOverridden;
+
+    /**
+     * @param array{checkPublicOnly?: bool, skipOverridden?: bool} $options
+     */
+    public function __construct(array $options = [])
+    {
+        $this->checkPublicOnly = $options['checkPublicOnly'] ?? true;
+        $this->skipOverridden = $options['skipOverridden'] ?? true;
+    }
+
+    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
+    #[Override]
+    public function getNodeType(): string
+    {
+        return ClassMethod::class;
+    }
+
+    /**
+     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     *
+     * @throws \PHPStan\ShouldNotHappenException
+     *
+     * @return list<IdentifierRuleError>
+     */
+    #[Override]
+    public function processNode(Node $node, Scope $scope): array
+    {
+        $reflection = $scope->getClassReflection();
+
+        /** @var ClassMethod $node */
+        if ($reflection === null || !$reflection->isClass()) {
+            return [];
+        }
+
+        if ($this->checkPublicOnly && !$node->isPublic()) {
+            return [];
+        }
+
+        if ($this->skipOverridden && $this->hasOverrideAttribute($node)) {
+            return [];
+        }
+
+        if ($node->getDocComment() !== null) {
+            return [];
+        }
+
+        return [
+            RuleErrorBuilder::message(
+                sprintf('PHPDoc is missing for method %s().', $node->name->toString()),
+            )
+                ->identifier('haspadar.phpdocMissingMethod')
+                ->build(),
+        ];
+    }
+
+    /**
+     * Returns true if the method has the #[Override] attribute
+     */
+    private function hasOverrideAttribute(ClassMethod $node): bool
+    {
+        foreach ($node->attrGroups as $attrGroup) {
+            foreach ($attrGroup->attrs as $attr) {
+                if ($attr->name->getLast() === 'Override') {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+}
