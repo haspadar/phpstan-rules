@@ -23,6 +23,7 @@ use Haspadar\PHPStanRules\Rules\NoParameterReassignmentRule;
 use Haspadar\PHPStanRules\Rules\PhpDocPunctuationClassRule;
 use Haspadar\PHPStanRules\Rules\PhpDocPunctuationMethodRule;
 use Haspadar\PHPStanRules\Rules\PhpDocEmptyClassRule;
+use Haspadar\PHPStanRules\Rules\AtclauseOrderRule;
 use Haspadar\PHPStanRules\Rules\PhpDocEmptyMethodRule;
 use Haspadar\PHPStanRules\Rules\ProhibitPublicStaticMethodsRule;
 use Haspadar\PHPStanRules\Rules\ReturnCountRule;
@@ -61,6 +62,7 @@ final class RulesTest extends TestCase
                 PhpDocPunctuationMethodRule::class,
                 PhpDocEmptyClassRule::class,
                 PhpDocEmptyMethodRule::class,
+                AtclauseOrderRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',

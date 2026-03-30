@@ -40,6 +40,7 @@ final class Rules
             Rules\PhpDocPunctuationMethodRule::class,
             Rules\PhpDocEmptyClassRule::class,
             Rules\PhpDocEmptyMethodRule::class,
+            Rules\AtclauseOrderRule::class,
         ];
     }
 }
