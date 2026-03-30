@@ -25,6 +25,7 @@ use Haspadar\PHPStanRules\Rules\PhpDocPunctuationMethodRule;
 use Haspadar\PHPStanRules\Rules\PhpDocEmptyClassRule;
 use Haspadar\PHPStanRules\Rules\AtclauseOrderRule;
 use Haspadar\PHPStanRules\Rules\PhpDocEmptyMethodRule;
+use Haspadar\PHPStanRules\Rules\PhpDocMissingMethodRule;
 use Haspadar\PHPStanRules\Rules\ProhibitPublicStaticMethodsRule;
 use Haspadar\PHPStanRules\Rules\ReturnCountRule;
 use Haspadar\PHPStanRules\Rules\StatementCountRule;
@@ -63,6 +64,7 @@ final class RulesTest extends TestCase
                 PhpDocEmptyClassRule::class,
                 PhpDocEmptyMethodRule::class,
                 AtclauseOrderRule::class,
+                PhpDocMissingMethodRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',
