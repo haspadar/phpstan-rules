@@ -60,6 +60,17 @@ final class PhpDocMissingMethodRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function reportsErrorWhenNonOverrideAttributePresentButNoPhpDoc(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/PhpDocMissingMethodRule/ClassWithNonOverrideAttribute.php'],
+            [
+                ['PHPDoc is missing for method oldMethod().', 9],
+            ],
+        );
+    }
+
+    #[Test]
     public function suppressesErrorWhenPhpstanIgnorePresent(): void
     {
         $this->analyse(
