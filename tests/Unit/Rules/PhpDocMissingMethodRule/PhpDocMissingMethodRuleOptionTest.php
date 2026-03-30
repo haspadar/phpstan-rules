@@ -36,4 +36,13 @@ final class PhpDocMissingMethodRuleOptionTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function passesWhenAliasedOverrideAttributePresentButNoPhpDoc(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/PhpDocMissingMethodRule/ClassWithAliasedOverrideAttribute.php'],
+            [],
+        );
+    }
 }
