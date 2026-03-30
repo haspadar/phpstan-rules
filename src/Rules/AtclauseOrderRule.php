@@ -52,14 +52,10 @@ final readonly class AtclauseOrderRule implements Rule
     {
         $reflection = $scope->getClassReflection();
 
-        if ($reflection === null || !$reflection->isClass()) {
-            return [];
-        }
-
         /** @var ClassMethod $node */
         $docComment = $node->getDocComment();
 
-        if ($docComment === null) {
+        if ($reflection === null || !$reflection->isClass() || $docComment === null) {
             return [];
         }
 
