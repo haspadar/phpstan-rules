@@ -41,6 +41,7 @@ final class Rules
             Rules\PhpDocEmptyClassRule::class,
             Rules\PhpDocEmptyMethodRule::class,
             Rules\AtclauseOrderRule::class,
+            Rules\PhpDocMissingClassRule::class,
             Rules\PhpDocMissingMethodRule::class,
             Rules\PhpDocMissingPropertyRule::class,
             Rules\ReturnDescriptionCapitalRule::class,

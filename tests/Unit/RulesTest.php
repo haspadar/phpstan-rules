@@ -25,6 +25,7 @@ use Haspadar\PHPStanRules\Rules\PhpDocPunctuationMethodRule;
 use Haspadar\PHPStanRules\Rules\PhpDocEmptyClassRule;
 use Haspadar\PHPStanRules\Rules\AtclauseOrderRule;
 use Haspadar\PHPStanRules\Rules\PhpDocEmptyMethodRule;
+use Haspadar\PHPStanRules\Rules\PhpDocMissingClassRule;
 use Haspadar\PHPStanRules\Rules\PhpDocMissingMethodRule;
 use Haspadar\PHPStanRules\Rules\PhpDocMissingPropertyRule;
 use Haspadar\PHPStanRules\Rules\ParamDescriptionCapitalRule;
@@ -67,6 +68,7 @@ final class RulesTest extends TestCase
                 PhpDocEmptyClassRule::class,
                 PhpDocEmptyMethodRule::class,
                 AtclauseOrderRule::class,
+                PhpDocMissingClassRule::class,
                 PhpDocMissingMethodRule::class,
                 PhpDocMissingPropertyRule::class,
                 ReturnDescriptionCapitalRule::class,
