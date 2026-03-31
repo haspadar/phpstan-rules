@@ -70,4 +70,48 @@ final class PhpDocMissingClassRuleTest extends RuleTestCase
             'Abstract class without PHPDoc must be reported',
         );
     }
+
+    #[Test]
+    public function reportsErrorWhenInterfaceHasNoPhpDoc(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/PhpDocMissingClassRule/InterfaceWithoutPhpDoc.php'],
+            [
+                ['PHPDoc is missing for interface InterfaceWithoutPhpDoc.', 7],
+            ],
+            'Interface without PHPDoc must be reported',
+        );
+    }
+
+    #[Test]
+    public function passesWhenInterfaceHasPhpDoc(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/PhpDocMissingClassRule/InterfaceWithPhpDoc.php'],
+            [],
+            'Interface with PHPDoc should pass',
+        );
+    }
+
+    #[Test]
+    public function reportsErrorWhenEnumHasNoPhpDoc(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/PhpDocMissingClassRule/EnumWithoutPhpDoc.php'],
+            [
+                ['PHPDoc is missing for enum EnumWithoutPhpDoc.', 7],
+            ],
+            'Enum without PHPDoc must be reported',
+        );
+    }
+
+    #[Test]
+    public function passesWhenEnumHasPhpDoc(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/PhpDocMissingClassRule/EnumWithPhpDoc.php'],
+            [],
+            'Enum with PHPDoc should pass',
+        );
+    }
 }

@@ -7,17 +7,22 @@ namespace Haspadar\PHPStanRules\Rules;
 use Override;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Enum_;
+use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
 /**
- * Checks that every named class has a PHPDoc comment.
+ * Checks that every named class, interface, and enum has a PHPDoc comment.
  * Anonymous classes are skipped — they are typically used for stubs in tests.
- * Interfaces and traits use different node types and are not checked by this rule.
+ * Traits are skipped — trait documentation conventions differ.
+ * Reports identifier `haspadar.phpdocMissingClass` for all matching node types.
  *
- * @implements Rule<Class_>
+ * @implements Rule<ClassLike>
  */
 final readonly class PhpDocMissingClassRule implements Rule
 {
@@ -25,7 +30,7 @@ final readonly class PhpDocMissingClassRule implements Rule
     #[Override]
     public function getNodeType(): string
     {
-        return Class_::class;
+        return ClassLike::class;
     }
 
     /**
@@ -40,16 +45,30 @@ final readonly class PhpDocMissingClassRule implements Rule
         Node $node,
         Scope $scope,
     ): array {
-        /** @var Class_ $node */
-        if ($node->isAnonymous() || $node->getDocComment() !== null) {
+        /** @var ClassLike $node */
+        if ($node instanceof Trait_) {
             return [];
         }
+
+        if ($node instanceof Class_ && $node->isAnonymous()) {
+            return [];
+        }
+
+        if ($node->getDocComment() !== null) {
+            return [];
+        }
+
+        $kind = match (true) {
+            $node instanceof Interface_ => 'interface',
+            $node instanceof Enum_ => 'enum',
+            default => 'class',
+        };
 
         $name = $node->name !== null ? $node->name->toString() : '';
 
         return [
             RuleErrorBuilder::message(
-                sprintf('PHPDoc is missing for class %s.', $name),
+                sprintf('PHPDoc is missing for %s %s.', $kind, $name),
             )
                 ->identifier('haspadar.phpdocMissingClass')
                 ->build(),
