@@ -73,7 +73,7 @@ final class ReturnDescriptionCapitalRule implements Rule
 
         $description = $this->extractReturnDescription($docComment->getText());
 
-        if ($description === null || $description === '' || $this->startsWithCapital($description)) {
+        if ($description === null || $this->startsWithCapital($description)) {
             return [];
         }
 
