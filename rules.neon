@@ -256,6 +256,10 @@ services:
         tags:
             - phpstan.rules.rule
     -
+        class: Haspadar\PHPStanRules\Rules\PhpDocMissingClassRule
+        tags:
+            - phpstan.rules.rule
+    -
         class: Haspadar\PHPStanRules\Rules\PhpDocMissingMethodRule
         arguments:
             options:
