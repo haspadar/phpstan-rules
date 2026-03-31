@@ -60,6 +60,16 @@ final class ReturnDescriptionCapitalRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function passesWhenPhpDocHasNoReturnTag(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/ReturnDescriptionCapitalRule/MethodWithPhpDocButNoReturnTag.php'],
+            [],
+            'PHPDoc without @return tag should pass',
+        );
+    }
+
+    #[Test]
     public function passesWhenMethodIsInInterface(): void
     {
         $this->analyse(

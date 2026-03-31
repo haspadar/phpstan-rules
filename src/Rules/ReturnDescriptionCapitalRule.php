@@ -108,10 +108,12 @@ final class ReturnDescriptionCapitalRule implements Rule
     }
 
     /**
-     * Returns true if the string starts with an uppercase letter
+     * Returns true if the string starts with an uppercase Unicode letter
      */
     private function startsWithCapital(string $text): bool
     {
-        return $text !== '' && ctype_alpha($text[0]) && mb_strtoupper(mb_substr($text, 0, 1)) === mb_substr($text, 0, 1);
+        $firstChar = mb_substr($text, 0, 1);
+
+        return $firstChar !== '' && preg_match('/^\p{L}/u', $firstChar) === 1 && mb_strtoupper($firstChar) === $firstChar;
     }
 }
