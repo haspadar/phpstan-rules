@@ -70,6 +70,16 @@ final class ReturnDescriptionCapitalRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function passesWhenMethodIsInTrait(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/ReturnDescriptionCapitalRule/TraitMethod.php'],
+            [],
+            'Trait method should be skipped',
+        );
+    }
+
+    #[Test]
     public function suppressesErrorWhenPhpstanIgnorePresent(): void
     {
         $this->analyse(
