@@ -8,12 +8,6 @@ use Override;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
-use PHPStan\PhpDocParser\Lexer\Lexer;
-use PHPStan\PhpDocParser\Parser\ConstExprParser;
-use PHPStan\PhpDocParser\Parser\PhpDocParser;
-use PHPStan\PhpDocParser\Parser\TokenIterator;
-use PHPStan\PhpDocParser\Parser\TypeParser;
-use PHPStan\PhpDocParser\ParserConfig;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
@@ -22,27 +16,21 @@ use PHPStan\Rules\RuleErrorBuilder;
  * Checks that the description of each @param PHPDoc tag in every class method
  * starts with a capital letter. Methods without a PHPDoc block, @param tags
  * without a description, and methods in interfaces and traits are skipped.
- * Uses PHPStan PhpDocParser to correctly handle generic types with spaces
+ * Uses PhpDocDescriptionChecker to correctly handle generic types with spaces
  * (e.g. array<int, string>).
  *
  * @implements Rule<ClassMethod>
  */
 final readonly class ParamDescriptionCapitalRule implements Rule
 {
-    private readonly Lexer $lexer;
-
-    private readonly PhpDocParser $phpDocParser;
+    private PhpDocDescriptionChecker $checker;
 
     /**
      * @throws \PHPStan\ShouldNotHappenException
      */
     public function __construct()
     {
-        $config = new ParserConfig([]);
-        $constExprParser = new ConstExprParser($config);
-        $typeParser = new TypeParser($config, $constExprParser);
-        $this->lexer = new Lexer($config);
-        $this->phpDocParser = new PhpDocParser($config, $typeParser, $constExprParser);
+        $this->checker = new PhpDocDescriptionChecker();
     }
 
     /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
@@ -83,20 +71,17 @@ final readonly class ParamDescriptionCapitalRule implements Rule
      */
     private function collectErrors(string $docText, string $methodName): array
     {
-        $tokens = new TokenIterator($this->lexer->tokenize($docText));
-        $phpDocNode = $this->phpDocParser->parse($tokens);
-
         $errors = [];
 
-        foreach ($phpDocNode->getParamTagValues() as $paramTag) {
-            if ($paramTag->description === '' || $this->startsWithCapital($paramTag->description)) {
+        foreach ($this->checker->extractParamDescriptions($docText) as $paramName => $description) {
+            if ($this->checker->startsWithCapital($description)) {
                 continue;
             }
 
             $errors[] = RuleErrorBuilder::message(
                 sprintf(
                     '@param %s description for %s() must start with a capital letter.',
-                    $paramTag->parameterName,
+                    $paramName,
                     $methodName,
                 ),
             )
@@ -105,15 +90,5 @@ final readonly class ParamDescriptionCapitalRule implements Rule
         }
 
         return $errors;
-    }
-
-    /**
-     * Returns true if the string starts with an uppercase Unicode letter
-     */
-    private function startsWithCapital(string $text): bool
-    {
-        $firstChar = mb_substr($text, 0, 1);
-
-        return $firstChar !== '' && preg_match('/^\p{L}/u', $firstChar) === 1 && mb_strtoupper($firstChar) === $firstChar;
     }
 }
