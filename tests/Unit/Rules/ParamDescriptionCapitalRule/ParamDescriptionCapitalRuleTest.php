@@ -100,6 +100,19 @@ final class ParamDescriptionCapitalRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function reportsErrorsForTwoLowercaseParams(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/ParamDescriptionCapitalRule/MethodWithTwoLowercaseParams.php'],
+            [
+                ['@param $name description for getName() must start with a capital letter.', 17],
+                ['@param $age description for getName() must start with a capital letter.', 17],
+            ],
+            'Both lowercase @param descriptions must be reported',
+        );
+    }
+
+    #[Test]
     public function reportsErrorOnlyForLowercaseParamAmongMultiple(): void
     {
         $this->analyse(

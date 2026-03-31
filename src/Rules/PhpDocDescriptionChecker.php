@@ -81,8 +81,6 @@ final readonly class PhpDocDescriptionChecker
      */
     public function startsWithCapital(string $text): bool
     {
-        $firstChar = mb_substr($text, 0, 1);
-
-        return $firstChar !== '' && preg_match('/^\p{L}/u', $firstChar) === 1 && mb_strtoupper($firstChar) === $firstChar;
+        return preg_match('/^\p{Lu}/u', $text) === 1;
     }
 }
