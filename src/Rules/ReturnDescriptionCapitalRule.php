@@ -8,6 +8,12 @@ use Override;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
+use PHPStan\PhpDocParser\Lexer\Lexer;
+use PHPStan\PhpDocParser\Parser\ConstExprParser;
+use PHPStan\PhpDocParser\Parser\PhpDocParser;
+use PHPStan\PhpDocParser\Parser\TokenIterator;
+use PHPStan\PhpDocParser\Parser\TypeParser;
+use PHPStan\PhpDocParser\ParserConfig;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
@@ -16,11 +22,29 @@ use PHPStan\Rules\RuleErrorBuilder;
  * Checks that the description of the @return PHPDoc tag in every class method
  * starts with a capital letter. Methods without a PHPDoc block, @return tags
  * without a description, and methods in interfaces and traits are skipped.
+ * Uses PHPStan PhpDocParser to correctly handle generic types with spaces
+ * (e.g. array<int, string>).
  *
  * @implements Rule<ClassMethod>
  */
-final readonly class ReturnDescriptionCapitalRule implements Rule
+final class ReturnDescriptionCapitalRule implements Rule
 {
+    private readonly Lexer $lexer;
+
+    private readonly PhpDocParser $phpDocParser;
+
+    /**
+     * @throws \PHPStan\ShouldNotHappenException
+     */
+    public function __construct()
+    {
+        $config = new ParserConfig([]);
+        $constExprParser = new ConstExprParser($config);
+        $typeParser = new TypeParser($config, $constExprParser);
+        $this->lexer = new Lexer($config);
+        $this->phpDocParser = new PhpDocParser($config, $typeParser, $constExprParser);
+    }
+
     /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
@@ -49,7 +73,7 @@ final readonly class ReturnDescriptionCapitalRule implements Rule
 
         $description = $this->extractReturnDescription($docComment->getText());
 
-        if ($description === null || $this->startsWithCapital($description)) {
+        if ($description === null || $description === '' || $this->startsWithCapital($description)) {
             return [];
         }
 
@@ -66,15 +90,21 @@ final readonly class ReturnDescriptionCapitalRule implements Rule
     }
 
     /**
-     * Extracts the description text from @return tag, or null if absent or no description
+     * Extracts the description text from @return tag using PhpDocParser,
+     * or returns null if the tag is absent or has no description
+     *
+     * @throws \PHPStan\ShouldNotHappenException
      */
     private function extractReturnDescription(string $docText): ?string
     {
-        if (preg_match('/^\s*\*\s*@return\s+\S+\s+([^*\s].*)$/m', $docText, $matches) !== 1) {
-            return null;
+        $tokens = new TokenIterator($this->lexer->tokenize($docText));
+        $phpDocNode = $this->phpDocParser->parse($tokens);
+
+        foreach ($phpDocNode->getReturnTagValues() as $returnTag) {
+            return $returnTag->description !== '' ? $returnTag->description : null;
         }
 
-        return trim($matches[1]);
+        return null;
     }
 
     /**
