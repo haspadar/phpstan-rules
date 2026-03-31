@@ -46,15 +46,10 @@ final readonly class PhpDocMissingClassRule implements Rule
         Scope $scope,
     ): array {
         /** @var ClassLike $node */
-        if ($node instanceof Trait_) {
-            return [];
-        }
-
-        if ($node instanceof Class_ && $node->isAnonymous()) {
-            return [];
-        }
-
-        if ($node->getDocComment() !== null) {
+        if ($node instanceof Trait_
+            || ($node instanceof Class_ && $node->isAnonymous())
+            || $node->getDocComment() !== null
+        ) {
             return [];
         }
 
