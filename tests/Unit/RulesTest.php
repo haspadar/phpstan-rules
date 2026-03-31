@@ -27,6 +27,7 @@ use Haspadar\PHPStanRules\Rules\AtclauseOrderRule;
 use Haspadar\PHPStanRules\Rules\PhpDocEmptyMethodRule;
 use Haspadar\PHPStanRules\Rules\PhpDocMissingMethodRule;
 use Haspadar\PHPStanRules\Rules\PhpDocMissingPropertyRule;
+use Haspadar\PHPStanRules\Rules\ParamDescriptionCapitalRule;
 use Haspadar\PHPStanRules\Rules\ReturnDescriptionCapitalRule;
 use Haspadar\PHPStanRules\Rules\ProhibitPublicStaticMethodsRule;
 use Haspadar\PHPStanRules\Rules\ReturnCountRule;
@@ -69,6 +70,7 @@ final class RulesTest extends TestCase
                 PhpDocMissingMethodRule::class,
                 PhpDocMissingPropertyRule::class,
                 ReturnDescriptionCapitalRule::class,
+                ParamDescriptionCapitalRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',
