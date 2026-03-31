@@ -36,8 +36,10 @@ final readonly class ProtectedMethodInFinalClassRule implements Rule
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         /** @var Class_ $node */
         if (!$node->isFinal()) {
             return [];

@@ -27,8 +27,10 @@ final readonly class FileLengthRule implements Rule
      *     skipComments?: bool
      * } $options
      */
-    public function __construct(int $maxLines = 1000, array $options = [])
-    {
+    public function __construct(
+        int $maxLines = 1000,
+        array $options = [],
+    ) {
         $this->maxLines = $maxLines;
         $this->skipBlankLines = $options['skipBlankLines'] ?? false;
         $this->skipComments = $options['skipComments'] ?? false;
@@ -47,8 +49,10 @@ final readonly class FileLengthRule implements Rule
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         $lines = $this->lineCount($scope);
 
         if ($lines <= $this->maxLines) {
@@ -103,11 +107,11 @@ final readonly class FileLengthRule implements Rule
         return $result;
     }
 
-    /**
-     * @return array{bool, bool}
-     */
-    private function shouldSkip(string $line, bool $inBlockComment): array
-    {
+    /** @return array{bool, bool} */
+    private function shouldSkip(
+        string $line,
+        bool $inBlockComment,
+    ): array {
         if ($inBlockComment) {
             $stillInBlock = !str_contains($line, '*/');
 

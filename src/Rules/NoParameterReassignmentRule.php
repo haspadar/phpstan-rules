@@ -52,8 +52,10 @@ final readonly class NoParameterReassignmentRule implements Rule
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         /** @var ClassMethod $node */
         $paramNames = $this->parameterNames($node);
 
@@ -125,8 +127,10 @@ final readonly class NoParameterReassignmentRule implements Rule
      * @param Node $target
      * @param ClassMethod $method
      */
-    private static function isInsideScopeBoundary(Node $target, ClassMethod $method): bool
-    {
+    private static function isInsideScopeBoundary(
+        Node $target,
+        ClassMethod $method,
+    ): bool {
         $parents = (new NodeFinder())->find(
             $method->stmts ?? [],
             static fn(Node $n): bool => ($n instanceof Closure

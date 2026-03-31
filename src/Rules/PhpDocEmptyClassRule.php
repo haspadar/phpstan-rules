@@ -37,8 +37,10 @@ final readonly class PhpDocEmptyClassRule implements Rule
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         /** @var Class_ $node */
         $docComment = $node->getDocComment();
 

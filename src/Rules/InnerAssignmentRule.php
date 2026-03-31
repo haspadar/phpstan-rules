@@ -45,8 +45,10 @@ final readonly class InnerAssignmentRule implements Rule
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         /** @var ClassMethod $node */
         $loopCondAssigns = $this->collectLoopConditionAssigns($node);
 
@@ -88,8 +90,10 @@ final readonly class InnerAssignmentRule implements Rule
      * @param Assign|AssignOp|AssignRef $assign
      * @param ClassMethod $method
      */
-    private function isStandaloneStatement(Assign|AssignOp|AssignRef $assign, ClassMethod $method): bool
-    {
+    private function isStandaloneStatement(
+        Assign|AssignOp|AssignRef $assign,
+        ClassMethod $method,
+    ): bool {
         /** @var list<Expression> $expressions */
         $expressions = (new NodeFinder())->findInstanceOf($method->stmts ?? [], Expression::class);
 

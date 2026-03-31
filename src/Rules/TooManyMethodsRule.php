@@ -24,8 +24,10 @@ final readonly class TooManyMethodsRule implements Rule
      *     onlyPublic?: bool
      * } $options
      */
-    public function __construct(int $maxMethods = 20, array $options = [])
-    {
+    public function __construct(
+        int $maxMethods = 20,
+        array $options = [],
+    ) {
         $this->maxMethods = $maxMethods;
         $this->onlyPublic = $options['onlyPublic'] ?? false;
     }
@@ -43,8 +45,10 @@ final readonly class TooManyMethodsRule implements Rule
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         /** @var Class_ $node */
         $methods = $node->getMethods();
 

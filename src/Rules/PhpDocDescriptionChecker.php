@@ -23,9 +23,7 @@ final readonly class PhpDocDescriptionChecker
 
     private PhpDocParser $phpDocParser;
 
-    /**
-     * @throws \PHPStan\ShouldNotHappenException
-     */
+    /** @throws \PHPStan\ShouldNotHappenException */
     public function __construct()
     {
         $config = new ParserConfig([]);

@@ -38,8 +38,10 @@ final readonly class PhpDocEmptyMethodRule implements Rule
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         $reflection = $scope->getClassReflection();
 
         if ($reflection === null || !$reflection->isClass()) {

@@ -36,8 +36,10 @@ final readonly class FinalClassRule implements Rule
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         /** @var Class_ $node */
         if ($node->isAbstract() || $node->isAnonymous() || $node->isFinal() || $node->name === null) { // @codeCoverageIgnore
             return [];

@@ -23,9 +23,7 @@ final readonly class PhpDocMissingPropertyRule implements Rule
 {
     private bool $checkPublicOnly;
 
-    /**
-     * @param array{checkPublicOnly?: bool} $options
-     */
+    /** @param array{checkPublicOnly?: bool} $options */
     public function __construct(array $options = [])
     {
         $this->checkPublicOnly = $options['checkPublicOnly'] ?? true;
@@ -46,8 +44,10 @@ final readonly class PhpDocMissingPropertyRule implements Rule
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         $reflection = $scope->getClassReflection();
 
         /** @var Property $node */

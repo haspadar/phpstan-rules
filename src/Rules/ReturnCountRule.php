@@ -60,8 +60,10 @@ final readonly class ReturnCountRule implements Rule
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         /** @var ClassMethod $node */
         if ($node->stmts === null) {
             return [];

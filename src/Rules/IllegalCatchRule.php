@@ -25,9 +25,7 @@ final readonly class IllegalCatchRule implements Rule
     /** @var list<string> */
     private array $illegalClassNames;
 
-    /**
-     * @param list<string> $illegalClassNames Short class names (without leading backslash) that are forbidden in catch
-     */
+    /** @param list<string> $illegalClassNames Short class names (without leading backslash) that are forbidden in catch */
     public function __construct(array $illegalClassNames = ['Exception', 'Throwable', 'RuntimeException', 'Error'])
     {
         $this->illegalClassNames = $illegalClassNames;
@@ -48,8 +46,10 @@ final readonly class IllegalCatchRule implements Rule
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         /** @var Catch_ $node */
         $errors = [];
 

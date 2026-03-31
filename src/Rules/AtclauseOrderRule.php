@@ -25,9 +25,7 @@ final readonly class AtclauseOrderRule implements Rule
     /** @var list<string> */
     private array $tagOrder;
 
-    /**
-     * @param array{tagOrder?: list<string>} $options
-     */
+    /** @param array{tagOrder?: list<string>} $options */
     public function __construct(array $options = [])
     {
         $this->tagOrder = $options['tagOrder'] ?? ['@param', '@return', '@throws'];
@@ -48,8 +46,10 @@ final readonly class AtclauseOrderRule implements Rule
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         $reflection = $scope->getClassReflection();
 
         /** @var ClassMethod $node */
@@ -90,8 +90,10 @@ final readonly class AtclauseOrderRule implements Rule
      *
      * @return list<IdentifierRuleError>
      */
-    private function detectViolations(array $tags, string $methodName): array
-    {
+    private function detectViolations(
+        array $tags,
+        string $methodName,
+    ): array {
         $errors = [];
         $lastIndex = -1;
         $lastTag = '';

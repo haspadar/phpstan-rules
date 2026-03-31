@@ -66,8 +66,10 @@ final readonly class BooleanExpressionComplexityRule implements Rule
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         /** @var ClassMethod $node */
         $max = $this->maxOperatorsInSingleExpression($node);
 
@@ -153,8 +155,10 @@ final readonly class BooleanExpressionComplexityRule implements Rule
      *
      * @param array<Node> $nodes
      */
-    private function containsNode(array $nodes, Node $target): bool
-    {
+    private function containsNode(
+        array $nodes,
+        Node $target,
+    ): bool {
         foreach ($nodes as $node) {
             if ($this->isScopeBoundary($node)) {
                 continue;

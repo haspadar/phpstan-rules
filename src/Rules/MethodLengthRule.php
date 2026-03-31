@@ -27,8 +27,10 @@ final readonly class MethodLengthRule implements Rule
      *     skipComments?: bool
      * } $options
      */
-    public function __construct(int $maxLines = 100, array $options = [])
-    {
+    public function __construct(
+        int $maxLines = 100,
+        array $options = [],
+    ) {
         $this->maxLines = $maxLines;
         $this->skipBlankLines = $options['skipBlankLines'] ?? false;
         $this->skipComments = $options['skipComments'] ?? false;
@@ -47,8 +49,10 @@ final readonly class MethodLengthRule implements Rule
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         /** @var ClassMethod $node */
         $lines = $this->lineCount($node, $scope);
 
@@ -70,8 +74,10 @@ final readonly class MethodLengthRule implements Rule
         ];
     }
 
-    private function lineCount(ClassMethod $node, Scope $scope): int
-    {
+    private function lineCount(
+        ClassMethod $node,
+        Scope $scope,
+    ): int {
         $result = file($scope->getFile(), FILE_IGNORE_NEW_LINES);
         $allLines = $result === false ? [] : $result;
 
