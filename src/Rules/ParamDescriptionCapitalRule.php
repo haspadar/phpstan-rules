@@ -13,15 +13,15 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
 /**
- * Checks that the description of the @return PHPDoc tag in every class method
- * starts with a capital letter. Methods without a PHPDoc block, @return tags
+ * Checks that the description of each @param PHPDoc tag in every class method
+ * starts with a capital letter. Methods without a PHPDoc block, @param tags
  * without a description, and methods in interfaces and traits are skipped.
  * Uses PhpDocDescriptionChecker to correctly handle generic types with spaces
  * (e.g. array<int, string>).
  *
  * @implements Rule<ClassMethod>
  */
-final readonly class ReturnDescriptionCapitalRule implements Rule
+final readonly class ParamDescriptionCapitalRule implements Rule
 {
     private PhpDocDescriptionChecker $checker;
 
@@ -59,21 +59,36 @@ final readonly class ReturnDescriptionCapitalRule implements Rule
             return [];
         }
 
-        $description = $this->checker->extractReturnDescription($docComment->getText());
+        return $this->collectErrors($docComment->getText(), $node->name->toString());
+    }
 
-        if ($description === null || $this->checker->startsWithCapital($description)) {
-            return [];
-        }
+    /**
+     * Collects errors for all @param tags whose description starts with a lowercase letter
+     *
+     * @throws \PHPStan\ShouldNotHappenException
+     *
+     * @return list<IdentifierRuleError>
+     */
+    private function collectErrors(string $docText, string $methodName): array
+    {
+        $errors = [];
 
-        return [
-            RuleErrorBuilder::message(
+        foreach ($this->checker->extractParamDescriptions($docText) as $paramName => $description) {
+            if ($this->checker->startsWithCapital($description)) {
+                continue;
+            }
+
+            $errors[] = RuleErrorBuilder::message(
                 sprintf(
-                    '@return description for %s() must start with a capital letter.',
-                    $node->name->toString(),
+                    '@param %s description for %s() must start with a capital letter.',
+                    $paramName,
+                    $methodName,
                 ),
             )
-                ->identifier('haspadar.returnCapital')
-                ->build(),
-        ];
+                ->identifier('haspadar.paramCapital')
+                ->build();
+        }
+
+        return $errors;
     }
 }

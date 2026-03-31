@@ -53,6 +53,7 @@
 | `PhpDocMissingMethodRule`     | Every public method in a class must have a PHPDoc comment (configurable)                |
 | `PhpDocMissingPropertyRule`   | Every public property in a class must have a PHPDoc comment (configurable)              |
 | `ReturnDescriptionCapitalRule` | `@return` tag description must start with a capital letter                             |
+| `ParamDescriptionCapitalRule`  | `@param` tag descriptions must start with a capital letter                             |
 
 ---
 

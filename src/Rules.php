@@ -44,6 +44,7 @@ final class Rules
             Rules\PhpDocMissingMethodRule::class,
             Rules\PhpDocMissingPropertyRule::class,
             Rules\ReturnDescriptionCapitalRule::class,
+            Rules\ParamDescriptionCapitalRule::class,
         ];
     }
 }
