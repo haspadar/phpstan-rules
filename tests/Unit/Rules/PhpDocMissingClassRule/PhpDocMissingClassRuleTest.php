@@ -114,4 +114,14 @@ final class PhpDocMissingClassRuleTest extends RuleTestCase
             'Enum with PHPDoc should pass',
         );
     }
+
+    #[Test]
+    public function passesWhenTraitHasNoPhpDoc(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/PhpDocMissingClassRule/TraitWithoutPhpDoc.php'],
+            [],
+            'Trait should be skipped even without PHPDoc',
+        );
+    }
 }
