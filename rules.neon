@@ -270,3 +270,7 @@ services:
                 checkPublicOnly: %haspadar.phpDocMissingProperty.checkPublicOnly%
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\ReturnDescriptionCapitalRule
+        tags:
+            - phpstan.rules.rule
