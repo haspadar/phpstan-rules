@@ -45,8 +45,10 @@ final readonly class ConstructorInitializationRule implements Rule
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         /** @var ClassMethod $node */
         if ($node->name->toString() !== '__construct') {
             return [];
@@ -77,9 +79,7 @@ final readonly class ConstructorInitializationRule implements Rule
         return $errors;
     }
 
-    /**
-     * @param Node\Stmt $stmt
-     */
+    /** @param Node\Stmt $stmt */
     private function isAllowedStatement(Node\Stmt $stmt): bool
     {
         if (!$stmt instanceof Expression) {
@@ -89,9 +89,7 @@ final readonly class ConstructorInitializationRule implements Rule
         return $this->isThisPropertyAssignment($stmt) || $this->isParentConstructorCall($stmt);
     }
 
-    /**
-     * @param Expression $stmt
-     */
+    /** @param Expression $stmt */
     private function isThisPropertyAssignment(Expression $stmt): bool
     {
         return $stmt->expr instanceof Assign
@@ -101,9 +99,7 @@ final readonly class ConstructorInitializationRule implements Rule
             && $this->isAllowedValue($stmt->expr->expr);
     }
 
-    /**
-     * @param Expr $expr
-     */
+    /** @param Expr $expr */
     private function isAllowedValue(Expr $expr): bool
     {
         return $expr instanceof Variable
@@ -116,9 +112,7 @@ final readonly class ConstructorInitializationRule implements Rule
             || $expr instanceof Node\Scalar\Float_;
     }
 
-    /**
-     * @param Expression $stmt
-     */
+    /** @param Expression $stmt */
     private function isParentConstructorCall(Expression $stmt): bool
     {
         return $stmt->expr instanceof StaticCall

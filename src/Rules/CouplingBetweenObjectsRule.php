@@ -40,8 +40,10 @@ final readonly class CouplingBetweenObjectsRule implements Rule
      *     excludedClasses?: list<string>
      * } $options
      */
-    public function __construct(int $maximum = 15, array $options = [])
-    {
+    public function __construct(
+        int $maximum = 15,
+        array $options = [],
+    ) {
         $this->maximum = $maximum;
         $this->excludedClasses = $options['excludedClasses'] ?? [];
         $this->extractor = new CouplingBetweenObjectsRule\TypeNameExtractor();
@@ -61,8 +63,10 @@ final readonly class CouplingBetweenObjectsRule implements Rule
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         /** @var Class_ $node */
         $count = count($this->collectTypes($node));
 

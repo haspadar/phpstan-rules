@@ -60,8 +60,10 @@ final readonly class IllegalThrowsRule implements Rule
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         /** @var ClassMethod $node */
         if ($this->ignoreOverriddenMethods && $this->isOverridden($node)) {
             return [];
@@ -120,8 +122,10 @@ final readonly class IllegalThrowsRule implements Rule
      *
      * @return list<array{typeName: string, line: int}>
      */
-    private function parseThrowsTags(string $docComment, int $docStartLine): array
-    {
+    private function parseThrowsTags(
+        string $docComment,
+        int $docStartLine,
+    ): array {
         $lines = explode("\n", $docComment);
         $result = [];
 

@@ -25,9 +25,7 @@ final readonly class ReturnDescriptionCapitalRule implements Rule
 {
     private PhpDocDescriptionChecker $checker;
 
-    /**
-     * @throws \PHPStan\ShouldNotHappenException
-     */
+    /** @throws \PHPStan\ShouldNotHappenException */
     public function __construct()
     {
         $this->checker = new PhpDocDescriptionChecker();
@@ -48,8 +46,10 @@ final readonly class ReturnDescriptionCapitalRule implements Rule
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         $reflection = $scope->getClassReflection();
 
         /** @var ClassMethod $node */

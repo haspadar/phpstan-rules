@@ -53,8 +53,10 @@ final readonly class ModifiedControlVariableRule implements Rule
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         /** @var ClassMethod $node */
         $errors = [];
 
@@ -136,8 +138,11 @@ final readonly class ModifiedControlVariableRule implements Rule
      *
      * @return list<IdentifierRuleError>
      */
-    private function findModificationsInBody(array $stmts, array $controlVars, string $loopType): array
-    {
+    private function findModificationsInBody(
+        array $stmts,
+        array $controlVars,
+        string $loopType,
+    ): array {
         if ($controlVars === []) {
             return [];
         }

@@ -26,9 +26,7 @@ final readonly class PhpDocMissingMethodRule implements Rule
 
     private bool $skipOverridden;
 
-    /**
-     * @param array{checkPublicOnly?: bool, skipOverridden?: bool} $options
-     */
+    /** @param array{checkPublicOnly?: bool, skipOverridden?: bool} $options */
     public function __construct(array $options = [])
     {
         $this->checkPublicOnly = $options['checkPublicOnly'] ?? true;
@@ -50,8 +48,10 @@ final readonly class PhpDocMissingMethodRule implements Rule
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         $reflection = $scope->getClassReflection();
 
         /** @var ClassMethod $node */

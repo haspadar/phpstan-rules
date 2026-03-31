@@ -24,8 +24,10 @@ final readonly class ParameterNumberRule implements Rule
      *     ignoreOverridden?: bool
      * } $options
      */
-    public function __construct(int $maxParameters = 3, array $options = [])
-    {
+    public function __construct(
+        int $maxParameters = 3,
+        array $options = [],
+    ) {
         $this->maxParameters = $maxParameters;
         $this->ignoreOverridden = $options['ignoreOverridden'] ?? true;
     }
@@ -43,8 +45,10 @@ final readonly class ParameterNumberRule implements Rule
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         /** @var ClassMethod $node */
         if ($this->ignoreOverridden && $this->hasOverrideAttribute($node)) {
             return [];

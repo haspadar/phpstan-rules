@@ -27,9 +27,7 @@ use Throwable;
  */
 final readonly class MutableExceptionRule implements Rule
 {
-    /**
-     * @param ReflectionProvider $reflectionProvider
-     */
+    /** @param ReflectionProvider $reflectionProvider */
     public function __construct(
         private ReflectionProvider $reflectionProvider,
     ) {}
@@ -49,8 +47,10 @@ final readonly class MutableExceptionRule implements Rule
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         /** @var Class_ $node */
         if ($node->isAbstract() || $node->isAnonymous() || $node->namespacedName === null) { // @codeCoverageIgnore
             return [];
@@ -58,14 +58,10 @@ final readonly class MutableExceptionRule implements Rule
 
         $className = $node->namespacedName->toString();
 
-        if (!$this->reflectionProvider->hasClass($className)) {
+        if (!$this->reflectionProvider->hasClass($className)
+            || !$this->reflectionProvider->getClass($className)->implementsInterface(Throwable::class)
+        ) {
             return []; // @codeCoverageIgnore
-        }
-
-        $reflection = $this->reflectionProvider->getClass($className);
-
-        if (!$reflection->implementsInterface(Throwable::class)) {
-            return [];
         }
 
         $errors = [];

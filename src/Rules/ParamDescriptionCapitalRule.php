@@ -25,9 +25,7 @@ final readonly class ParamDescriptionCapitalRule implements Rule
 {
     private PhpDocDescriptionChecker $checker;
 
-    /**
-     * @throws \PHPStan\ShouldNotHappenException
-     */
+    /** @throws \PHPStan\ShouldNotHappenException */
     public function __construct()
     {
         $this->checker = new PhpDocDescriptionChecker();
@@ -48,8 +46,10 @@ final readonly class ParamDescriptionCapitalRule implements Rule
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(Node $node, Scope $scope): array
-    {
+    public function processNode(
+        Node $node,
+        Scope $scope,
+    ): array {
         $reflection = $scope->getClassReflection();
 
         /** @var ClassMethod $node */
@@ -69,8 +69,10 @@ final readonly class ParamDescriptionCapitalRule implements Rule
      *
      * @return list<IdentifierRuleError>
      */
-    private function collectErrors(string $docText, string $methodName): array
-    {
+    private function collectErrors(
+        string $docText,
+        string $methodName,
+    ): array {
         $errors = [];
 
         foreach ($this->checker->extractParamDescriptions($docText) as $paramName => $description) {
