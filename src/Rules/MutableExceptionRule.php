@@ -58,14 +58,10 @@ final readonly class MutableExceptionRule implements Rule
 
         $className = $node->namespacedName->toString();
 
-        if (!$this->reflectionProvider->hasClass($className)) {
+        if (!$this->reflectionProvider->hasClass($className)
+            || !$this->reflectionProvider->getClass($className)->implementsInterface(Throwable::class)
+        ) {
             return []; // @codeCoverageIgnore
-        }
-
-        $reflection = $this->reflectionProvider->getClass($className);
-
-        if (!$reflection->implementsInterface(Throwable::class)) {
-            return [];
         }
 
         $errors = [];

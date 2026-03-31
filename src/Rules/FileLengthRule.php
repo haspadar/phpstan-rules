@@ -113,17 +113,11 @@ final readonly class FileLengthRule implements Rule
         bool $inBlockComment,
     ): array {
         if ($inBlockComment) {
-            $stillInBlock = !str_contains($line, '*/');
-
-            return [$this->skipComments, $stillInBlock];
+            return [$this->skipComments, !str_contains($line, '*/')];
         }
 
-        if ($this->skipComments && preg_match('(^\s*(//|#))', $line) === 1) {
-            return [true, false];
-        }
-
-        if ($this->skipComments && preg_match('(^\s*/\*)', $line) === 1) {
-            return [true, !str_contains($line, '*/')];
+        if ($this->skipComments && preg_match('(^\s*(//|#|/\*))', $line) === 1) {
+            return [true, preg_match('(^\s*/\*)', $line) === 1 && !str_contains($line, '*/')];
         }
 
         return [$this->shouldSkipBlankLine($line), false];
