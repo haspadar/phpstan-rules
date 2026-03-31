@@ -27,7 +27,7 @@ use PHPStan\Rules\RuleErrorBuilder;
  *
  * @implements Rule<ClassMethod>
  */
-final class ReturnDescriptionCapitalRule implements Rule
+final readonly class ReturnDescriptionCapitalRule implements Rule
 {
     private readonly Lexer $lexer;
 
