@@ -22,7 +22,6 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final readonly class PhpDocEmptyClassRule implements Rule
 {
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -30,14 +29,13 @@ final readonly class PhpDocEmptyClassRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * @psalm-param Class_ $node
      * @throws \PHPStan\ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
-        /** @var Class_ $node */
         $docComment = $node->getDocComment();
 
         if ($docComment === null) {

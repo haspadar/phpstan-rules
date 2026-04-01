@@ -26,7 +26,6 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final readonly class PhpDocMissingClassRule implements Rule
 {
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -34,7 +33,6 @@ final readonly class PhpDocMissingClassRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
      * @throws \PHPStan\ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
@@ -55,7 +53,6 @@ final readonly class PhpDocMissingClassRule implements Rule
             default => 'class',
         };
 
-        // @codeCoverageIgnore null only for anonymous
         $name = $node->name?->toString() ?? '';
 
         return [

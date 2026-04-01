@@ -22,7 +22,6 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final readonly class ProhibitPublicStaticMethodsRule implements Rule
 {
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -30,7 +29,6 @@ final readonly class ProhibitPublicStaticMethodsRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
      * @throws \PHPStan\ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
@@ -42,11 +40,7 @@ final readonly class ProhibitPublicStaticMethodsRule implements Rule
             return [];
         }
 
-        $reflection = $scope->getClassReflection();
-        // @codeCoverageIgnore
-        $className = $reflection !== null
-            ? $reflection->getName()
-            : 'anonymous';
+        $className = $scope->getClassReflection()?->getName() ?? 'anonymous';
 
         return [
             RuleErrorBuilder::message(

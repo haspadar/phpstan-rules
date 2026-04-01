@@ -37,7 +37,6 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final readonly class NoParameterReassignmentRule implements Rule
 {
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -45,14 +44,13 @@ final readonly class NoParameterReassignmentRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * @psalm-param ClassMethod $node
      * @throws \PHPStan\ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
-        /** @var ClassMethod $node */
         $paramNames = $this->parameterNames($node);
 
         if ($paramNames === []) {

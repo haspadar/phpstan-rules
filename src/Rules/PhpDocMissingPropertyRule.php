@@ -29,7 +29,6 @@ final readonly class PhpDocMissingPropertyRule implements Rule
         $this->checkPublicOnly = $options['checkPublicOnly'] ?? true;
     }
 
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -37,7 +36,6 @@ final readonly class PhpDocMissingPropertyRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
      * @throws \PHPStan\ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */

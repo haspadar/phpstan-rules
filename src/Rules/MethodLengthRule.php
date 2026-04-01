@@ -31,7 +31,6 @@ final readonly class MethodLengthRule implements Rule
         $this->skipComments = $options['skipComments'] ?? false;
     }
 
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -39,13 +38,12 @@ final readonly class MethodLengthRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * @psalm-param ClassMethod $node
      * @return list<IdentifierRuleError>
      */
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
-        /** @var ClassMethod $node */
         $lines = $this->lineCount($node, $scope);
 
         if ($lines <= $this->maxLines) {

@@ -46,7 +46,6 @@ final readonly class CyclomaticComplexityRule implements Rule
         }
     }
 
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -54,23 +53,19 @@ final readonly class CyclomaticComplexityRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * @psalm-param ClassMethod $node
      * @return list<IdentifierRuleError>
      */
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
-        /** @var ClassMethod $node */
         $complexity = $this->complexity($node);
 
         if ($complexity <= $this->maxComplexity) {
             return [];
         }
 
-        $reflection = $scope->getClassReflection();
-        $className = $reflection !== null
-            ? $reflection->getName()
-            : 'unknown';
+        $className = $scope->getClassReflection()?->getName() ?? 'unknown';
 
         return [
             RuleErrorBuilder::message(

@@ -31,17 +31,13 @@ final readonly class FileLengthRule implements Rule
         $this->skipComments = $options['skipComments'] ?? false;
     }
 
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
         return FileNode::class;
     }
 
-    /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
-     * @return list<IdentifierRuleError>
-     */
+    /** @return list<IdentifierRuleError> */
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {

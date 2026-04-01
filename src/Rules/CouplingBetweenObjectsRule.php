@@ -52,20 +52,22 @@ final readonly class CouplingBetweenObjectsRule implements Rule
 
     /**
      * @inheritDoc
+     * @psalm-param Class_ $node
      * @return list<IdentifierRuleError>
      */
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
-        /** @var Class_ $node */
+        if ($node->name === null) {
+            return [];
+        }
+
         $count = count($this->collectTypes($node));
 
         if ($count <= $this->maximum) {
             return [];
         }
 
-        /** @psalm-suppress PossiblyNullReference -- PHPStan assigns names to anonymous classes before processNode */
-        // @phpstan-ignore method.nonObject
         $className = $node->name->toString();
 
         return [

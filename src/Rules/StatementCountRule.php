@@ -42,7 +42,6 @@ final readonly class StatementCountRule implements Rule
         }
     }
 
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -50,24 +49,20 @@ final readonly class StatementCountRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * @psalm-param ClassMethod $node
      * @throws \PHPStan\ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
-        /** @var ClassMethod $node */
         $count = $this->countStatements(array_values($node->stmts ?? []));
 
         if ($count <= $this->maxStatements) {
             return [];
         }
 
-        $reflection = $scope->getClassReflection();
-        $className = $reflection !== null
-            ? $reflection->getName()
-            : 'unknown';
+        $className = $scope->getClassReflection()?->getName() ?? 'unknown';
 
         return [
             RuleErrorBuilder::message(

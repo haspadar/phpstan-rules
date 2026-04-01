@@ -27,7 +27,6 @@ final readonly class IllegalCatchRule implements Rule
         private array $illegalClassNames = ['Exception', 'Throwable', 'RuntimeException', 'Error'],
     ) {}
 
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -35,14 +34,13 @@ final readonly class IllegalCatchRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * @psalm-param Catch_ $node
      * @throws \PHPStan\ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
-        /** @var Catch_ $node */
         $errors = [];
 
         foreach ($node->types as $type) {

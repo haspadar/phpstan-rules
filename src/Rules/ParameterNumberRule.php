@@ -27,17 +27,13 @@ final readonly class ParameterNumberRule implements Rule
         $this->ignoreOverridden = $options['ignoreOverridden'] ?? true;
     }
 
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
         return ClassMethod::class;
     }
 
-    /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
-     * @return list<IdentifierRuleError>
-     */
+    /** @return list<IdentifierRuleError> */
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {

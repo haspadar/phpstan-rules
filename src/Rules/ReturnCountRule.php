@@ -41,7 +41,6 @@ final readonly class ReturnCountRule implements Rule
         }
     }
 
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -49,7 +48,6 @@ final readonly class ReturnCountRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
      * @throws \PHPStan\ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
@@ -67,11 +65,7 @@ final readonly class ReturnCountRule implements Rule
             return [];
         }
 
-        $reflection = $scope->getClassReflection();
-        // @codeCoverageIgnore
-        $className = $reflection !== null
-            ? $reflection->getName()
-            : 'unknown';
+        $className = $scope->getClassReflection()?->getName() ?? 'unknown';
 
         return [
             RuleErrorBuilder::message(

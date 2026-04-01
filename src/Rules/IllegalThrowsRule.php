@@ -45,7 +45,6 @@ final readonly class IllegalThrowsRule implements Rule
         $this->ignoreOverriddenMethods = $options['ignoreOverriddenMethods'] ?? true;
     }
 
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -53,7 +52,6 @@ final readonly class IllegalThrowsRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
      * @throws \PHPStan\ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */

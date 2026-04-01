@@ -21,7 +21,6 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final readonly class FinalClassRule implements Rule
 {
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -29,7 +28,6 @@ final readonly class FinalClassRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
      * @throws \PHPStan\ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
@@ -38,7 +36,6 @@ final readonly class FinalClassRule implements Rule
     {
         /** @var Class_ $node */
 
-        // @codeCoverageIgnore
         if ($node->isAbstract() || $node->isAnonymous() || $node->isFinal() || $node->name === null) {
             return [];
         }

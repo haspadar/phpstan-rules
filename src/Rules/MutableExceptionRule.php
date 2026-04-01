@@ -29,7 +29,6 @@ final readonly class MutableExceptionRule implements Rule
 {
     public function __construct(private ReflectionProvider $reflectionProvider) {}
 
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -37,7 +36,6 @@ final readonly class MutableExceptionRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
      * @throws \PHPStan\ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
@@ -46,7 +44,6 @@ final readonly class MutableExceptionRule implements Rule
     {
         /** @var Class_ $node */
 
-        // @codeCoverageIgnore
         if ($node->isAbstract() || $node->isAnonymous() || $node->namespacedName === null) {
             return [];
         }
@@ -56,7 +53,6 @@ final readonly class MutableExceptionRule implements Rule
         if (!$this->reflectionProvider->hasClass($className)
             || !$this->reflectionProvider->getClass($className)->implementsInterface(Throwable::class)
         ) {
-            // @codeCoverageIgnore
             return [];
         }
 

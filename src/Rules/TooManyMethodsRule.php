@@ -27,7 +27,6 @@ final readonly class TooManyMethodsRule implements Rule
         $this->onlyPublic = $options['onlyPublic'] ?? false;
     }
 
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -35,13 +34,12 @@ final readonly class TooManyMethodsRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * @psalm-param Class_ $node
      * @return list<IdentifierRuleError>
      */
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
-        /** @var Class_ $node */
         $methods = $node->getMethods();
 
         if ($this->onlyPublic) {

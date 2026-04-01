@@ -33,7 +33,6 @@ final readonly class PhpDocMissingMethodRule implements Rule
         $this->skipOverridden = $options['skipOverridden'] ?? true;
     }
 
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -41,7 +40,6 @@ final readonly class PhpDocMissingMethodRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
      * @throws \PHPStan\ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */

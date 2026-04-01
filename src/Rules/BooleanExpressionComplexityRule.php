@@ -47,7 +47,6 @@ final readonly class BooleanExpressionComplexityRule implements Rule
         }
     }
 
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -55,24 +54,20 @@ final readonly class BooleanExpressionComplexityRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * @psalm-param ClassMethod $node
      * @throws \PHPStan\ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
-        /** @var ClassMethod $node */
         $max = $this->maxOperatorsInSingleExpression($node);
 
         if ($max <= $this->maxOperators) {
             return [];
         }
 
-        $reflection = $scope->getClassReflection();
-        $className = $reflection !== null
-            ? $reflection->getName()
-            : 'unknown';
+        $className = $scope->getClassReflection()?->getName() ?? 'unknown';
 
         return [
             RuleErrorBuilder::message(
