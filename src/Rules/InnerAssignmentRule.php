@@ -45,6 +45,7 @@ final readonly class InnerAssignmentRule implements Rule
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
+        /** @var ClassMethod $node */
         $loopCondAssigns = $this->collectLoopConditionAssigns($node);
 
         $errors = [];

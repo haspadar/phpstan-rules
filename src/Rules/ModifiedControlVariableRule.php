@@ -47,12 +47,14 @@ final readonly class ModifiedControlVariableRule implements Rule
 
     /**
      * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
-     * "еркщцы \ЗРЗЫефт\ЫрщгдвТщеРфззутУчсузешщт
+     * @psalm-suppress RedundantFunctionCall -- PHPStan requires array_values() here; Psalm considers it redundant
+     * @throws \PHPStan\ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
+        /** @var ClassMethod $node */
         $errors = [];
 
         /** @var list<For_> $forLoops */
@@ -60,7 +62,10 @@ final readonly class ModifiedControlVariableRule implements Rule
 
         foreach ($forLoops as $loop) {
             $controlVars = $this->collectForControlVars($loop);
-            $errors = array_merge($errors, $this->findModificationsInBody($loop->stmts, $controlVars, 'for'));
+            $errors = array_merge(
+                $errors,
+                $this->findModificationsInBody(array_values($loop->stmts), $controlVars, 'for'),
+            );
         }
 
         /** @var list<Foreach_> $foreachLoops */
@@ -68,7 +73,10 @@ final readonly class ModifiedControlVariableRule implements Rule
 
         foreach ($foreachLoops as $loop) {
             $controlVars = $this->collectForeachControlVars($loop);
-            $errors = array_merge($errors, $this->findModificationsInBody($loop->stmts, $controlVars, 'foreach'));
+            $errors = array_merge(
+                $errors,
+                $this->findModificationsInBody(array_values($loop->stmts), $controlVars, 'foreach'),
+            );
         }
 
         return $errors;
@@ -183,6 +191,7 @@ final readonly class ModifiedControlVariableRule implements Rule
             }
 
             if ($this->isModificationNode($node)) {
+                /** @var Assign|AssignOp|AssignRef|PreInc|PostInc|PreDec|PostDec $node */
                 $result[] = $node;
             }
 

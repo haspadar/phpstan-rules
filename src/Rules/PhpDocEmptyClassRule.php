@@ -37,6 +37,7 @@ final readonly class PhpDocEmptyClassRule implements Rule
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
+        /** @var Class_ $node */
         $docComment = $node->getDocComment();
 
         if ($docComment === null) {

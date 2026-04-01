@@ -46,6 +46,7 @@ final readonly class AtclauseOrderRule implements Rule
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
+        /** @var ClassMethod $node */
         $reflection = $scope->getClassReflection();
 
         $docComment = $node->getDocComment();

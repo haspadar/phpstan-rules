@@ -52,6 +52,7 @@ final readonly class NoParameterReassignmentRule implements Rule
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
+        /** @var ClassMethod $node */
         $paramNames = $this->parameterNames($node);
 
         if ($paramNames === []) {
@@ -98,7 +99,8 @@ final readonly class NoParameterReassignmentRule implements Rule
      */
     private function findWriteExpressions(ClassMethod $node): array
     {
-        return (new NodeFinder())->find(
+        /** @var list<Assign|AssignOp|AssignRef|PreInc|PostInc|PreDec|PostDec> $result */
+        $result = (new NodeFinder())->find(
             $node->stmts ?? [],
             static fn(Node $n): bool => ($n instanceof Assign
                 || $n instanceof AssignOp
@@ -109,6 +111,8 @@ final readonly class NoParameterReassignmentRule implements Rule
                 || $n instanceof PostDec)
                 && !self::isInsideScopeBoundary($n, $node),
         );
+
+        return $result;
     }
 
     /**

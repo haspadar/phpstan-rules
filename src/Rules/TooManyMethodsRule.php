@@ -41,6 +41,7 @@ final readonly class TooManyMethodsRule implements Rule
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
+        /** @var Class_ $node */
         $methods = $node->getMethods();
 
         if ($this->onlyPublic) {

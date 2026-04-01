@@ -46,6 +46,7 @@ final readonly class PhpDocPunctuationClassRule implements Rule
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
+        /** @var Class_ $node */
         $docComment = $node->getDocComment();
         $summary = $docComment !== null
             ? SummaryExtractor::extract($docComment->getText())

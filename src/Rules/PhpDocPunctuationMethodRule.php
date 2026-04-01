@@ -47,6 +47,7 @@ final readonly class PhpDocPunctuationMethodRule implements Rule
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
+        /** @var ClassMethod $node */
         $reflection = $scope->getClassReflection();
 
         if ($reflection === null || !$reflection->isClass()) {

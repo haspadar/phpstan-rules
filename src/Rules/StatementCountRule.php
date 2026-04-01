@@ -57,7 +57,8 @@ final readonly class StatementCountRule implements Rule
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
-        $count = $this->countStatements($node->stmts ?? []);
+        /** @var ClassMethod $node */
+        $count = $this->countStatements(array_values($node->stmts ?? []));
 
         if ($count <= $this->maxStatements) {
             return [];

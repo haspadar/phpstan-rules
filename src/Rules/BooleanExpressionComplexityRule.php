@@ -62,6 +62,7 @@ final readonly class BooleanExpressionComplexityRule implements Rule
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
+        /** @var ClassMethod $node */
         $max = $this->maxOperatorsInSingleExpression($node);
 
         if ($max <= $this->maxOperators) {
@@ -97,7 +98,7 @@ final readonly class BooleanExpressionComplexityRule implements Rule
      */
     private function maxOperatorsInSingleExpression(ClassMethod $node): int
     {
-        $allOperators = $this->collectOperators($node->stmts ?? []);
+        $allOperators = $this->collectOperators(array_values($node->stmts ?? []));
         $max = 0;
 
         foreach ($allOperators as $candidate) {

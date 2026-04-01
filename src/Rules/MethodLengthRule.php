@@ -45,6 +45,7 @@ final readonly class MethodLengthRule implements Rule
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
+        /** @var ClassMethod $node */
         $lines = $this->lineCount($node, $scope);
 
         if ($lines <= $this->maxLines) {

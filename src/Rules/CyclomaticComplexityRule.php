@@ -60,6 +60,7 @@ final readonly class CyclomaticComplexityRule implements Rule
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
+        /** @var ClassMethod $node */
         $complexity = $this->complexity($node);
 
         if ($complexity <= $this->maxComplexity) {

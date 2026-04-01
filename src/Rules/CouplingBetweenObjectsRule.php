@@ -57,6 +57,7 @@ final readonly class CouplingBetweenObjectsRule implements Rule
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
+        /** @var Class_ $node */
         $count = count($this->collectTypes($node));
 
         if ($count <= $this->maximum) {

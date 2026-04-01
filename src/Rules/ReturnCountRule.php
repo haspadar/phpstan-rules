@@ -61,7 +61,7 @@ final readonly class ReturnCountRule implements Rule
             return [];
         }
 
-        $count = $this->countReturns($node->stmts);
+        $count = $this->countReturns(array_values($node->stmts));
 
         if ($count <= $this->max) {
             return [];

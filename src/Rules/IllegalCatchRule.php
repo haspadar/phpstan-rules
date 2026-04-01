@@ -42,6 +42,7 @@ final readonly class IllegalCatchRule implements Rule
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
+        /** @var Catch_ $node */
         $errors = [];
 
         foreach ($node->types as $type) {
