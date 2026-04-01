@@ -26,7 +26,8 @@
     },
     "require-dev": {
         "haspadar/piqule": "dev-main",
-        "slevomat/coding-standard": "^8.28"
+        "slevomat/coding-standard": "^8.28",
+        "kubawerlos/php-cs-fixer-custom-fixers": "^3.36"
     },
     "extra": {
         "phpstan": {

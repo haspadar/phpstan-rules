@@ -15,9 +15,16 @@ declare(strict_types=1);
  * configuration belong to the consuming project.
  */
 
+$customFixers = new PhpCsFixerCustomFixers\Fixers();
+
 return (new PhpCsFixer\Config())
+    ->registerCustomFixers($customFixers)
     ->setRiskyAllowed(true)
-    ->setRules([
+    ->setRules(array_merge(
+        require __DIR__ . '/kubawerlos-code.php',
+        require __DIR__ . '/kubawerlos-phpdoc.php',
+    [
+
         '@PER-CS2.0' => true,
         '@PHP8x3Migration' => true,
         '@PHP8x4Migration' => true,
@@ -44,13 +51,13 @@ return (new PhpCsFixer\Config())
 
         // Strict types
         'declare_strict_types' => true,
+        'declare_equal_normalize' => ['space' => 'single'],
 
         // Final & visibility
         'final_class' => true,
         'final_internal_class' => true,
 
         // Types
-        'fully_qualified_strict_types' => true,
         'native_type_declaration_casing' => true,
 
         // Formatting
@@ -59,6 +66,7 @@ return (new PhpCsFixer\Config())
             'elements' => ['method' => 'one', 'property' => 'one'],
         ],
         'method_argument_space' => ['on_multiline' => 'ensure_fully_multiline'],
+        'no_blank_lines_after_class_opening' => true,
         'no_extra_blank_lines' => ['tokens' => ['extra', 'throw', 'use']],
         'no_trailing_comma_in_singleline' => true,
         'no_whitespace_in_blank_line' => true,
@@ -69,7 +77,6 @@ return (new PhpCsFixer\Config())
         'phpdoc_no_empty_return' => true,
         'phpdoc_order' => true,
         'phpdoc_scalar' => true,
-        'phpdoc_separation' => true,
         'phpdoc_trim' => true,
         'phpdoc_types' => true,
         'phpdoc_var_without_name' => true,
@@ -97,5 +104,5 @@ return (new PhpCsFixer\Config())
         'full_opening_tag' => true,
         'single_quote' => true,
         'ternary_operator_spaces' => true,
-    ])
+    ]))
     ->setUnsupportedPhpVersionAllowed(true);
