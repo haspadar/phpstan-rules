@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -40,19 +40,14 @@ final readonly class AtclauseOrderRule implements Rule
 
     /**
      * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
-     *
      * @throws \PHPStan\ShouldNotHappenException
-     *
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
+    public function processNode(Node $node, Scope $scope): array
+    {
         $reflection = $scope->getClassReflection();
 
-        /** @var ClassMethod $node */
         $docComment = $node->getDocComment();
 
         if ($reflection === null || !$reflection->isClass() || $docComment === null) {
@@ -85,15 +80,11 @@ final readonly class AtclauseOrderRule implements Rule
      * Returns errors for any tags appearing out of required order
      *
      * @param list<string> $tags
-     *
      * @throws \PHPStan\ShouldNotHappenException
-     *
      * @return list<IdentifierRuleError>
      */
-    private function detectViolations(
-        array $tags,
-        string $methodName,
-    ): array {
+    private function detectViolations(array $tags, string $methodName): array
+    {
         $errors = [];
         $lastIndex = -1;
         $lastTag = '';

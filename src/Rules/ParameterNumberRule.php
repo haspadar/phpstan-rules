@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -15,8 +15,6 @@ use PHPStan\Rules\RuleErrorBuilder;
 /** @implements Rule<ClassMethod> */
 final readonly class ParameterNumberRule implements Rule
 {
-    private int $maxParameters;
-
     private bool $ignoreOverridden;
 
     /**
@@ -24,11 +22,8 @@ final readonly class ParameterNumberRule implements Rule
      *     ignoreOverridden?: bool
      * } $options
      */
-    public function __construct(
-        int $maxParameters = 3,
-        array $options = [],
-    ) {
-        $this->maxParameters = $maxParameters;
+    public function __construct(private int $maxParameters = 3, array $options = [])
+    {
         $this->ignoreOverridden = $options['ignoreOverridden'] ?? true;
     }
 
@@ -41,14 +36,11 @@ final readonly class ParameterNumberRule implements Rule
 
     /**
      * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
-     *
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
+    public function processNode(Node $node, Scope $scope): array
+    {
         /** @var ClassMethod $node */
         if ($this->ignoreOverridden && $this->hasOverrideAttribute($node)) {
             return [];
@@ -61,7 +53,9 @@ final readonly class ParameterNumberRule implements Rule
         }
 
         $reflection = $scope->getClassReflection();
-        $className = $reflection !== null ? $reflection->getName() : 'unknown';
+        $className = $reflection !== null
+            ? $reflection->getName()
+            : 'unknown';
 
         return [
             RuleErrorBuilder::message(

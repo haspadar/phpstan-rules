@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -30,18 +30,16 @@ final readonly class FinalClassRule implements Rule
 
     /**
      * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
-     *
      * @throws \PHPStan\ShouldNotHappenException
-     *
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
+    public function processNode(Node $node, Scope $scope): array
+    {
         /** @var Class_ $node */
-        if ($node->isAbstract() || $node->isAnonymous() || $node->isFinal() || $node->name === null) { // @codeCoverageIgnore
+
+        // @codeCoverageIgnore
+        if ($node->isAbstract() || $node->isAnonymous() || $node->isFinal() || $node->name === null) {
             return [];
         }
 

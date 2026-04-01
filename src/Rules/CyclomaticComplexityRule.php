@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -32,22 +32,18 @@ use PHPStan\Rules\RuleErrorBuilder;
 /** @implements Rule<ClassMethod> */
 final readonly class CyclomaticComplexityRule implements Rule
 {
-    private int $maxComplexity;
-
     /**
      * Constructs the rule with the given complexity limit
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(int $maxComplexity = 10)
+    public function __construct(private int $maxComplexity = 10)
     {
         if ($maxComplexity <= 0) {
             throw new InvalidArgumentException(
                 sprintf('maxComplexity must be a positive integer, %d given', $maxComplexity),
             );
         }
-
-        $this->maxComplexity = $maxComplexity;
     }
 
     /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
@@ -59,15 +55,11 @@ final readonly class CyclomaticComplexityRule implements Rule
 
     /**
      * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
-     *
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
-        /** @var ClassMethod $node */
+    public function processNode(Node $node, Scope $scope): array
+    {
         $complexity = $this->complexity($node);
 
         if ($complexity <= $this->maxComplexity) {
@@ -75,7 +67,9 @@ final readonly class CyclomaticComplexityRule implements Rule
         }
 
         $reflection = $scope->getClassReflection();
-        $className = $reflection !== null ? $reflection->getName() : 'unknown';
+        $className = $reflection !== null
+            ? $reflection->getName()
+            : 'unknown';
 
         return [
             RuleErrorBuilder::message(

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -45,7 +45,9 @@ final readonly class PhpDocDescriptionChecker
         $phpDocNode = $this->phpDocParser->parse($tokens);
 
         foreach ($phpDocNode->getReturnTagValues() as $returnTag) {
-            return $returnTag->description !== '' ? $returnTag->description : null;
+            return $returnTag->description !== ''
+                ? $returnTag->description
+                : null;
         }
 
         return null;
@@ -55,7 +57,6 @@ final readonly class PhpDocDescriptionChecker
      * Returns all @param tag descriptions that are non-empty, keyed by parameter name
      *
      * @throws \PHPStan\ShouldNotHappenException
-     *
      * @return array<string, string>
      */
     public function extractParamDescriptions(string $docText): array

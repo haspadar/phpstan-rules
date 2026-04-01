@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -31,16 +31,12 @@ final readonly class NoPhpDocForOverriddenRule implements Rule
 
     /**
      * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
-     *
      * @throws \PHPStan\ShouldNotHappenException
-     *
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
+    public function processNode(Node $node, Scope $scope): array
+    {
         /** @var ClassMethod $node */
         if (!$this->hasOverrideAttribute($node) || $node->getDocComment() === null) {
             return [];

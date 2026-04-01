@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -22,14 +22,10 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final readonly class IllegalCatchRule implements Rule
 {
-    /** @var list<string> */
-    private array $illegalClassNames;
-
     /** @param list<string> $illegalClassNames Short class names (without leading backslash) that are forbidden in catch */
-    public function __construct(array $illegalClassNames = ['Exception', 'Throwable', 'RuntimeException', 'Error'])
-    {
-        $this->illegalClassNames = $illegalClassNames;
-    }
+    public function __construct(
+        private array $illegalClassNames = ['Exception', 'Throwable', 'RuntimeException', 'Error'],
+    ) {}
 
     /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
@@ -40,17 +36,12 @@ final readonly class IllegalCatchRule implements Rule
 
     /**
      * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
-     *
      * @throws \PHPStan\ShouldNotHappenException
-     *
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
-        /** @var Catch_ $node */
+    public function processNode(Node $node, Scope $scope): array
+    {
         $errors = [];
 
         foreach ($node->types as $type) {

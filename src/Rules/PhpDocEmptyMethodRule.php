@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -32,25 +32,22 @@ final readonly class PhpDocEmptyMethodRule implements Rule
 
     /**
      * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
-     *
      * @throws \PHPStan\ShouldNotHappenException
-     *
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
+    public function processNode(Node $node, Scope $scope): array
+    {
         $reflection = $scope->getClassReflection();
 
         if ($reflection === null || !$reflection->isClass()) {
             return [];
         }
 
-        /** @var ClassMethod $node */
         $docComment = $node->getDocComment();
-        $summary = $docComment !== null ? SummaryExtractor::extract($docComment->getText()) : null;
+        $summary = $docComment !== null
+            ? SummaryExtractor::extract($docComment->getText())
+            : null;
 
         if ($summary !== null || $docComment === null) {
             return [];

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -41,25 +41,22 @@ final readonly class PhpDocPunctuationMethodRule implements Rule
 
     /**
      * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
-     *
      * @throws \PHPStan\ShouldNotHappenException
-     *
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
+    public function processNode(Node $node, Scope $scope): array
+    {
         $reflection = $scope->getClassReflection();
 
         if ($reflection === null || !$reflection->isClass()) {
             return [];
         }
 
-        /** @var ClassMethod $node */
         $docComment = $node->getDocComment();
-        $summary = $docComment !== null ? SummaryExtractor::extract($docComment->getText()) : null;
+        $summary = $docComment !== null
+            ? SummaryExtractor::extract($docComment->getText())
+            : null;
 
         if ($summary === null) {
             return [];
@@ -105,6 +102,8 @@ final readonly class PhpDocPunctuationMethodRule implements Rule
      */
     private function startsWithCapital(string $text): bool
     {
-        return $text !== '' && mb_strtoupper(mb_substr($text, 0, 1)) === mb_substr($text, 0, 1) && ctype_alpha($text[0]);
+        return $text !== '' && mb_strtoupper(mb_substr($text, 0, 1)) === mb_substr($text, 0, 1) && ctype_alpha(
+            $text[0],
+        );
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -30,16 +30,12 @@ final readonly class ProtectedMethodInFinalClassRule implements Rule
 
     /**
      * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
-     *
      * @throws \PHPStan\ShouldNotHappenException
-     *
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
+    public function processNode(Node $node, Scope $scope): array
+    {
         /** @var Class_ $node */
         if (!$node->isFinal()) {
             return [];
@@ -52,7 +48,9 @@ final readonly class ProtectedMethodInFinalClassRule implements Rule
                 continue;
             }
 
-            $className = $node->name !== null ? $node->name->toString() : 'anonymous';
+            $className = $node->name !== null
+                ? $node->name->toString()
+                : 'anonymous';
 
             $errors[] = RuleErrorBuilder::message(
                 sprintf(

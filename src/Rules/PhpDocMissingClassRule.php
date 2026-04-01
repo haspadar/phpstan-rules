@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -35,16 +35,12 @@ final readonly class PhpDocMissingClassRule implements Rule
 
     /**
      * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
-     *
      * @throws \PHPStan\ShouldNotHappenException
-     *
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
+    public function processNode(Node $node, Scope $scope): array
+    {
         /** @var ClassLike $node */
         if ($node instanceof Trait_
             || ($node instanceof Class_ && $node->isAnonymous())
@@ -59,7 +55,8 @@ final readonly class PhpDocMissingClassRule implements Rule
             default => 'class',
         };
 
-        $name = $node->name?->toString() ?? ''; // @codeCoverageIgnore null only for anonymous
+        // @codeCoverageIgnore null only for anonymous
+        $name = $node->name?->toString() ?? '';
 
         return [
             RuleErrorBuilder::message(

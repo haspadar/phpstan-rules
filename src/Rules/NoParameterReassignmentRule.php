@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -46,17 +46,12 @@ final readonly class NoParameterReassignmentRule implements Rule
 
     /**
      * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
-     *
      * @throws \PHPStan\ShouldNotHappenException
-     *
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
-        /** @var ClassMethod $node */
+    public function processNode(Node $node, Scope $scope): array
+    {
         $paramNames = $this->parameterNames($node);
 
         if ($paramNames === []) {
@@ -99,13 +94,10 @@ final readonly class NoParameterReassignmentRule implements Rule
      * inside closures, arrow functions, nested functions, and anonymous classes
      * which introduce a new variable scope.
      *
-     * @param ClassMethod $node
-     *
      * @return list<Assign|AssignOp|AssignRef|PreInc|PostInc|PreDec|PostDec>
      */
     private function findWriteExpressions(ClassMethod $node): array
     {
-        /** @var list<Assign|AssignOp|AssignRef|PreInc|PostInc|PreDec|PostDec> */
         return (new NodeFinder())->find(
             $node->stmts ?? [],
             static fn(Node $n): bool => ($n instanceof Assign
@@ -123,14 +115,9 @@ final readonly class NoParameterReassignmentRule implements Rule
      * Returns true if the node is nested inside a closure, arrow function,
      * nested function declaration, or anonymous class within the given method,
      * meaning it belongs to a different variable scope.
-     *
-     * @param Node $target
-     * @param ClassMethod $method
      */
-    private static function isInsideScopeBoundary(
-        Node $target,
-        ClassMethod $method,
-    ): bool {
+    private static function isInsideScopeBoundary(Node $target, ClassMethod $method): bool
+    {
         $parents = (new NodeFinder())->find(
             $method->stmts ?? [],
             static fn(Node $n): bool => ($n instanceof Closure
@@ -143,11 +130,7 @@ final readonly class NoParameterReassignmentRule implements Rule
         return $parents !== [];
     }
 
-    /**
-     * @param ClassMethod $node
-     *
-     * @return list<string>
-     */
+    /** @return list<string> */
     private function parameterNames(ClassMethod $node): array
     {
         $names = [];

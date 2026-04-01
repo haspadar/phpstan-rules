@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -28,22 +28,18 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final readonly class StatementCountRule implements Rule
 {
-    private int $maxStatements;
-
     /**
      * Constructs the rule with the given statement limit
      *
      * @throws InvalidArgumentException when maxStatements is not a positive integer
      */
-    public function __construct(int $maxStatements = 30)
+    public function __construct(private int $maxStatements = 30)
     {
         if ($maxStatements <= 0) {
             throw new InvalidArgumentException(
                 sprintf('maxStatements must be a positive integer, %d given', $maxStatements),
             );
         }
-
-        $this->maxStatements = $maxStatements;
     }
 
     /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
@@ -55,17 +51,12 @@ final readonly class StatementCountRule implements Rule
 
     /**
      * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
-     *
      * @throws \PHPStan\ShouldNotHappenException
-     *
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
-        /** @var ClassMethod $node */
+    public function processNode(Node $node, Scope $scope): array
+    {
         $count = $this->countStatements($node->stmts ?? []);
 
         if ($count <= $this->maxStatements) {
@@ -73,7 +64,9 @@ final readonly class StatementCountRule implements Rule
         }
 
         $reflection = $scope->getClassReflection();
-        $className = $reflection !== null ? $reflection->getName() : 'unknown';
+        $className = $reflection !== null
+            ? $reflection->getName()
+            : 'unknown';
 
         return [
             RuleErrorBuilder::message(
@@ -94,7 +87,7 @@ final readonly class StatementCountRule implements Rule
      * Recursively counts executable statements in the given list of nodes,
      * without entering nested scope boundaries
      *
-     * @param array<Node> $stmts
+     * @param list<Node> $stmts
      */
     private function countStatements(array $stmts): int
     {

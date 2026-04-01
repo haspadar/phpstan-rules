@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -27,10 +27,7 @@ use Throwable;
  */
 final readonly class MutableExceptionRule implements Rule
 {
-    /** @param ReflectionProvider $reflectionProvider */
-    public function __construct(
-        private ReflectionProvider $reflectionProvider,
-    ) {}
+    public function __construct(private ReflectionProvider $reflectionProvider) {}
 
     /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
@@ -41,18 +38,16 @@ final readonly class MutableExceptionRule implements Rule
 
     /**
      * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
-     *
      * @throws \PHPStan\ShouldNotHappenException
-     *
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
+    public function processNode(Node $node, Scope $scope): array
+    {
         /** @var Class_ $node */
-        if ($node->isAbstract() || $node->isAnonymous() || $node->namespacedName === null) { // @codeCoverageIgnore
+
+        // @codeCoverageIgnore
+        if ($node->isAbstract() || $node->isAnonymous() || $node->namespacedName === null) {
             return [];
         }
 
@@ -61,7 +56,8 @@ final readonly class MutableExceptionRule implements Rule
         if (!$this->reflectionProvider->hasClass($className)
             || !$this->reflectionProvider->getClass($className)->implementsInterface(Throwable::class)
         ) {
-            return []; // @codeCoverageIgnore
+            // @codeCoverageIgnore
+            return [];
         }
 
         $errors = [];
@@ -76,10 +72,7 @@ final readonly class MutableExceptionRule implements Rule
     }
 
     /**
-     * @param Property $property
-     *
      * @throws \PHPStan\ShouldNotHappenException
-     *
      * @return list<IdentifierRuleError>
      */
     private function errorsForProperty(Property $property): array

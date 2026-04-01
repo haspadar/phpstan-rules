@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -27,22 +27,18 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final readonly class ReturnCountRule implements Rule
 {
-    private int $max;
-
     /**
      * Constructs the rule with the given return statement limit
      *
      * @throws InvalidArgumentException when max is not a positive integer
      */
-    public function __construct(int $max = 1)
+    public function __construct(private int $max = 1)
     {
         if ($max <= 0) {
             throw new InvalidArgumentException(
                 sprintf('max must be a positive integer, %d given', $max),
             );
         }
-
-        $this->max = $max;
     }
 
     /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
@@ -54,16 +50,12 @@ final readonly class ReturnCountRule implements Rule
 
     /**
      * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
-     *
      * @throws \PHPStan\ShouldNotHappenException
-     *
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
+    public function processNode(Node $node, Scope $scope): array
+    {
         /** @var ClassMethod $node */
         if ($node->stmts === null) {
             return [];
@@ -76,7 +68,10 @@ final readonly class ReturnCountRule implements Rule
         }
 
         $reflection = $scope->getClassReflection();
-        $className = $reflection !== null ? $reflection->getName() : 'unknown'; // @codeCoverageIgnore
+        // @codeCoverageIgnore
+        $className = $reflection !== null
+            ? $reflection->getName()
+            : 'unknown';
 
         return [
             RuleErrorBuilder::message(
@@ -97,7 +92,7 @@ final readonly class ReturnCountRule implements Rule
      * Recursively counts return statements in the given list of nodes,
      * without entering nested scope boundaries
      *
-     * @param array<Node> $stmts
+     * @param list<Node> $stmts
      */
     private function countReturns(array $stmts): int
     {
