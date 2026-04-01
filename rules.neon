@@ -282,3 +282,7 @@ services:
         class: Haspadar\PHPStanRules\Rules\ParamDescriptionCapitalRule
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\NoPhpDocForOverriddenRule
+        tags:
+            - phpstan.rules.rule
