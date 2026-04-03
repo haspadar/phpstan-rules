@@ -10,4 +10,4 @@ override:
 append:
     phpstan.neon_includes:
         - "../../rules.neon"
-        - "../../phpstan-self.neon"
+        - "../../rules-ignore.neon"
