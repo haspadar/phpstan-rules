@@ -100,8 +100,7 @@ final readonly class NoParameterReassignmentRule implements Rule
      */
     private function findWriteExpressions(ClassMethod $node): array
     {
-        /** @var list<Assign|AssignOp|AssignRef|PreInc|PostInc|PreDec|PostDec> $result */
-        $result = (new NodeFinder())->find(
+        $found = (new NodeFinder())->find(
             $node->stmts ?? [],
             static fn(Node $n): bool => ($n instanceof Assign
                 || $n instanceof AssignOp
@@ -113,7 +112,8 @@ final readonly class NoParameterReassignmentRule implements Rule
                 && !self::isInsideScopeBoundary($n, $node),
         );
 
-        return $result;
+        /** @phpstan-var list<Assign|AssignOp|AssignRef|PreInc|PostInc|PreDec|PostDec> $found */
+        return $found;
     }
 
     /**
