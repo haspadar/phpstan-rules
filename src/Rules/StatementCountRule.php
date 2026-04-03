@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -16,11 +16,13 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
- * Counts executable statements in a class method and reports an error when the count
- * exceeds the configured limit. Executable statements are all Stmt nodes except
- * structural/declarative ones (Nop, Label, Declare_, Else_, Block).
+ * Counts executable statements in a class method and reports an error when the count exceeds the limit.
+ *
+ * Executable statements are all Stmt nodes except structural/declarative ones
+ * (Nop, Label, Declare_, Else_, Block).
  * Nested scopes (closures, arrow functions, anonymous classes, property hooks) are
  * not traversed — their statements are excluded from the count.
  *
@@ -28,25 +30,20 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final readonly class StatementCountRule implements Rule
 {
-    private int $maxStatements;
-
     /**
-     * Constructs the rule with the given statement limit
+     * Constructs the rule with the given statement limit.
      *
      * @throws InvalidArgumentException when maxStatements is not a positive integer
      */
-    public function __construct(int $maxStatements = 30)
+    public function __construct(private int $maxStatements = 30)
     {
         if ($maxStatements <= 0) {
             throw new InvalidArgumentException(
                 sprintf('maxStatements must be a positive integer, %d given', $maxStatements),
             );
         }
-
-        $this->maxStatements = $maxStatements;
     }
 
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -54,26 +51,22 @@ final readonly class StatementCountRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * Analyses the node and returns a list of errors.
      *
-     * @throws \PHPStan\ShouldNotHappenException
-     *
+     * @psalm-param ClassMethod $node
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
-        /** @var ClassMethod $node */
-        $count = $this->countStatements($node->stmts ?? []);
+    public function processNode(Node $node, Scope $scope): array
+    {
+        $count = $this->countStatements(array_values($node->stmts ?? []));
 
         if ($count <= $this->maxStatements) {
             return [];
         }
 
-        $reflection = $scope->getClassReflection();
-        $className = $reflection !== null ? $reflection->getName() : 'unknown';
+        $className = $scope->getClassReflection()?->getName() ?? 'unknown';
 
         return [
             RuleErrorBuilder::message(
@@ -91,10 +84,9 @@ final readonly class StatementCountRule implements Rule
     }
 
     /**
-     * Recursively counts executable statements in the given list of nodes,
-     * without entering nested scope boundaries
+     * Recursively counts executable statements in the given list of nodes, without entering scope boundaries.
      *
-     * @param array<Node> $stmts
+     * @param list<Node> $stmts
      */
     private function countStatements(array $stmts): int
     {
@@ -116,7 +108,7 @@ final readonly class StatementCountRule implements Rule
     }
 
     /**
-     * Returns true for nodes that introduce a new scope boundary
+     * Returns true for nodes that introduce a new scope boundary.
      */
     private function isScopeBoundary(Node $node): bool
     {
@@ -128,7 +120,7 @@ final readonly class StatementCountRule implements Rule
     }
 
     /**
-     * Returns true for executable statement nodes (all Stmt except structural ones)
+     * Returns true for executable statement nodes (all Stmt except structural ones).
      */
     private function isExecutable(Node $node): bool
     {

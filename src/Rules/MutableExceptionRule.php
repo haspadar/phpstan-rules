@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -13,26 +13,23 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 use Throwable;
 
 /**
- * Reports non-readonly properties in exception classes. A class is considered an exception
- * if it implements \Throwable (checked via PHPStan ReflectionProvider using the fully
- * qualified class name from the AST node). Only own (non-inherited) properties are checked.
- * Abstract and anonymous classes are excluded. Readonly class modifier cannot be used
- * because RuntimeException and Exception are not readonly, so each property must be
- * declared readonly individually.
+ * Reports non-readonly properties in exception classes.
+ * A class is considered an exception if it implements \Throwable (checked via PHPStan ReflectionProvider).
+ * Only own (non-inherited) properties are checked. Abstract and anonymous classes are excluded.
  *
  * @implements Rule<Class_>
  */
 final readonly class MutableExceptionRule implements Rule
 {
-    /** @param ReflectionProvider $reflectionProvider */
-    public function __construct(
-        private ReflectionProvider $reflectionProvider,
-    ) {}
+    /**
+     * Constructs the rule with the given reflection provider.
+     */
+    public function __construct(private ReflectionProvider $reflectionProvider) {}
 
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -40,19 +37,17 @@ final readonly class MutableExceptionRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * Analyses the node and returns a list of errors.
      *
-     * @throws \PHPStan\ShouldNotHappenException
-     *
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
+    public function processNode(Node $node, Scope $scope): array
+    {
         /** @var Class_ $node */
-        if ($node->isAbstract() || $node->isAnonymous() || $node->namespacedName === null) { // @codeCoverageIgnore
+
+        if ($node->isAbstract() || $node->isAnonymous() || $node->namespacedName === null) {
             return [];
         }
 
@@ -61,7 +56,7 @@ final readonly class MutableExceptionRule implements Rule
         if (!$this->reflectionProvider->hasClass($className)
             || !$this->reflectionProvider->getClass($className)->implementsInterface(Throwable::class)
         ) {
-            return []; // @codeCoverageIgnore
+            return [];
         }
 
         $errors = [];
@@ -76,10 +71,9 @@ final readonly class MutableExceptionRule implements Rule
     }
 
     /**
-     * @param Property $property
+     * Returns errors for each non-readonly property declared in the given property node.
      *
-     * @throws \PHPStan\ShouldNotHappenException
-     *
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     private function errorsForProperty(Property $property): array

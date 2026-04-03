@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\NodeHelper;
 
@@ -14,7 +14,7 @@ use PhpParser\Node;
 final class ChildNodes
 {
     /**
-     * Returns all direct child Node instances of the given node
+     * Returns all direct child Node instances of the given node.
      *
      * @return list<Node>
      */

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -11,32 +11,33 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
-/** @implements Rule<ClassMethod> */
+/**
+ * Reports a class method that exceeds the configured maximum line count.
+ *
+ * @implements Rule<ClassMethod>
+ */
 final readonly class MethodLengthRule implements Rule
 {
-    private int $maxLines;
-
     private bool $skipBlankLines;
 
     private bool $skipComments;
 
     /**
+     * Constructs the rule with the given line limit and filtering options.
+     *
      * @param array{
      *     skipBlankLines?: bool,
      *     skipComments?: bool
      * } $options
      */
-    public function __construct(
-        int $maxLines = 100,
-        array $options = [],
-    ) {
-        $this->maxLines = $maxLines;
+    public function __construct(private int $maxLines = 100, array $options = [])
+    {
         $this->skipBlankLines = $options['skipBlankLines'] ?? false;
         $this->skipComments = $options['skipComments'] ?? false;
     }
 
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -44,16 +45,15 @@ final readonly class MethodLengthRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * Analyses the node and returns a list of errors.
      *
+     * @psalm-param ClassMethod $node
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
-        /** @var ClassMethod $node */
+    public function processNode(Node $node, Scope $scope): array
+    {
         $lines = $this->lineCount($node, $scope);
 
         if ($lines <= $this->maxLines) {
@@ -74,12 +74,18 @@ final readonly class MethodLengthRule implements Rule
         ];
     }
 
-    private function lineCount(
-        ClassMethod $node,
-        Scope $scope,
-    ): int {
-        $result = file($scope->getFile(), FILE_IGNORE_NEW_LINES);
-        $allLines = $result === false ? [] : $result;
+    /**
+     * Returns the number of countable lines in the method.
+     *
+     * @throws ShouldNotHappenException
+     */
+    private function lineCount(ClassMethod $node, Scope $scope): int
+    {
+        $allLines = file($scope->getFile(), FILE_IGNORE_NEW_LINES);
+
+        if ($allLines === false) {
+            throw new ShouldNotHappenException();
+        }
 
         $methodLines = array_slice(
             $allLines,
@@ -106,8 +112,9 @@ final readonly class MethodLengthRule implements Rule
     }
 
     /**
-     * @param list<string> $methodLines
+     * Filters the given lines to those that should be counted toward the limit.
      *
+     * @param list<string> $methodLines
      * @return array<int, string>
      */
     private function countableLines(array $methodLines): array

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -11,6 +11,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Detects public static methods in classes and reports an error for each one.
@@ -22,7 +23,6 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final readonly class ProhibitPublicStaticMethodsRule implements Rule
 {
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -30,24 +30,20 @@ final readonly class ProhibitPublicStaticMethodsRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * Analyses the node and returns a list of errors.
      *
-     * @throws \PHPStan\ShouldNotHappenException
-     *
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
+    public function processNode(Node $node, Scope $scope): array
+    {
         /** @var ClassMethod $node */
         if (!$node->isPublic() || !$node->isStatic()) {
             return [];
         }
 
-        $reflection = $scope->getClassReflection();
-        $className = $reflection !== null ? $reflection->getName() : 'anonymous'; // @codeCoverageIgnore
+        $className = $scope->getClassReflection()?->getName() ?? 'anonymous';
 
         return [
             RuleErrorBuilder::message(

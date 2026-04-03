@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -25,6 +25,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Detects modifications of loop control variables inside the loop body.
@@ -38,7 +39,6 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final readonly class ModifiedControlVariableRule implements Rule
 {
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -46,18 +46,16 @@ final readonly class ModifiedControlVariableRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * Analyses the node and returns a list of errors.
      *
-     * @throws \PHPStan\ShouldNotHappenException
-     *
+     * @psalm-suppress RedundantFunctionCall -- array<Stmt> per PHPStan vs list<Stmt> per Psalm; array_values() needed for PHPStan
+     * @psalm-param ClassMethod $node
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
-        /** @var ClassMethod $node */
+    public function processNode(Node $node, Scope $scope): array
+    {
         $errors = [];
 
         /** @var list<For_> $forLoops */
@@ -65,7 +63,7 @@ final readonly class ModifiedControlVariableRule implements Rule
 
         foreach ($forLoops as $loop) {
             $controlVars = $this->collectForControlVars($loop);
-            $errors = array_merge($errors, $this->findModificationsInBody($loop->stmts, $controlVars, 'for'));
+            array_push($errors, ...$this->findModificationsInBody(array_values($loop->stmts), $controlVars, 'for'));
         }
 
         /** @var list<Foreach_> $foreachLoops */
@@ -73,16 +71,14 @@ final readonly class ModifiedControlVariableRule implements Rule
 
         foreach ($foreachLoops as $loop) {
             $controlVars = $this->collectForeachControlVars($loop);
-            $errors = array_merge($errors, $this->findModificationsInBody($loop->stmts, $controlVars, 'foreach'));
+            array_push($errors, ...$this->findModificationsInBody(array_values($loop->stmts), $controlVars, 'foreach'));
         }
 
         return $errors;
     }
 
     /**
-     * Collects variable names declared in the init expressions of a `for` loop
-     *
-     * @param For_ $loop
+     * Collects variable names declared in the init expressions of a `for` loop.
      *
      * @return list<string>
      */
@@ -105,9 +101,7 @@ final readonly class ModifiedControlVariableRule implements Rule
     }
 
     /**
-     * Collects variable names used as iteration variables in a `foreach` loop
-     *
-     * @param Foreach_ $loop
+     * Collects variable names used as iteration variables in a `foreach` loop.
      *
      * @return list<string>
      */
@@ -127,15 +121,11 @@ final readonly class ModifiedControlVariableRule implements Rule
     }
 
     /**
-     * Finds all modifications (assign, compound assign, increment, decrement)
-     * of any of the given variable names within the loop body statements
+     * Finds all modifications of the given control variable names within the loop body statements.
      *
-     * @param array<Node\Stmt> $stmts
+     * @param list<Node\Stmt> $stmts
      * @param list<string> $controlVars
-     * @param string $loopType
-     *
-     * @throws \PHPStan\ShouldNotHappenException
-     *
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     private function findModificationsInBody(
@@ -179,12 +169,10 @@ final readonly class ModifiedControlVariableRule implements Rule
     }
 
     /**
-     * Collects modification nodes from statements without descending into
-     * nested scopes (closures and arrow functions)
+     * Collects modification nodes from statements without descending into nested scopes.
      *
-     * @param array<Node> $nodes
-     *
-     * @return list<Assign|AssignOp|AssignRef|PreInc|PostInc|PreDec|PostDec>
+     * @param list<Node> $nodes
+     * @return list<Node>
      */
     private function collectModificationsSkippingNestedScopes(array $nodes): array
     {
@@ -196,18 +184,17 @@ final readonly class ModifiedControlVariableRule implements Rule
             }
 
             if ($this->isModificationNode($node)) {
-                /** @var Assign|AssignOp|AssignRef|PreInc|PostInc|PreDec|PostDec $node */
                 $result[] = $node;
             }
 
-            $result = array_merge($result, $this->collectModificationsSkippingNestedScopes(ChildNodes::of($node)));
+            array_push($result, ...$this->collectModificationsSkippingNestedScopes(ChildNodes::of($node)));
         }
 
         return $result;
     }
 
     /**
-     * Returns true if the node is any kind of variable modification expression
+     * Returns true if the node is any kind of variable modification expression.
      */
     private function isModificationNode(Node $node): bool
     {
@@ -221,12 +208,11 @@ final readonly class ModifiedControlVariableRule implements Rule
     }
 
     /**
-     * Extracts the variable node from any modification expression
-     *
-     * @param Assign|AssignOp|AssignRef|PreInc|PostInc|PreDec|PostDec $mod
+     * Extracts the variable node from any modification expression.
      */
-    private function extractVarNode(Assign|AssignOp|AssignRef|PreInc|PostInc|PreDec|PostDec $mod): Node\Expr
-    {
+    private function extractVarNode(
+        Assign|AssignOp|AssignRef|PreInc|PostInc|PreDec|PostDec $mod,
+    ): Node\Expr {
         return $mod->var;
     }
 }

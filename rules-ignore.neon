@@ -1,0 +1,14 @@
+parameters:
+    ignoreErrors:
+        -
+            identifier: haspadar.constructorInit
+        -
+            identifier: haspadar.noPublicStatic
+        -
+            identifier: haspadar.noPhpdocOverride
+        -
+            identifier: haspadar.booleanComplexity
+        -
+            identifier: haspadar.returnCount
+        -
+            identifier: haspadar.cyclomaticComplexity

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\PhpDoc;
 
@@ -13,8 +13,7 @@ namespace Haspadar\PHPStanRules\PhpDoc;
 final class SummaryExtractor
 {
     /**
-     * Returns the trimmed summary line from the given PHPDoc text,
-     * or null if no summary is present (tags-only or empty block).
+     * Returns the trimmed summary line from the given PHPDoc text, or null if no summary is present.
      */
     public static function extract(string $docText): ?string
     {

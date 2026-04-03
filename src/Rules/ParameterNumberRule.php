@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -11,28 +11,29 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
-/** @implements Rule<ClassMethod> */
+/**
+ * Reports a class method that has more parameters than the configured maximum.
+ *
+ * @implements Rule<ClassMethod>
+ */
 final readonly class ParameterNumberRule implements Rule
 {
-    private int $maxParameters;
-
     private bool $ignoreOverridden;
 
     /**
+     * Constructs the rule with the given parameter limit and options.
+     *
      * @param array{
      *     ignoreOverridden?: bool
      * } $options
      */
-    public function __construct(
-        int $maxParameters = 3,
-        array $options = [],
-    ) {
-        $this->maxParameters = $maxParameters;
+    public function __construct(private int $maxParameters = 3, array $options = [])
+    {
         $this->ignoreOverridden = $options['ignoreOverridden'] ?? true;
     }
 
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -40,15 +41,14 @@ final readonly class ParameterNumberRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * Analyses the node and returns a list of errors.
      *
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
+    public function processNode(Node $node, Scope $scope): array
+    {
         /** @var ClassMethod $node */
         if ($this->ignoreOverridden && $this->hasOverrideAttribute($node)) {
             return [];
@@ -61,7 +61,12 @@ final readonly class ParameterNumberRule implements Rule
         }
 
         $reflection = $scope->getClassReflection();
-        $className = $reflection !== null ? $reflection->getName() : 'unknown';
+
+        if ($reflection === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $className = $reflection->getName();
 
         return [
             RuleErrorBuilder::message(
@@ -78,7 +83,7 @@ final readonly class ParameterNumberRule implements Rule
         ];
     }
 
-    /** Checks whether the method has the #[Override] attribute */
+    /** Checks whether the method has the #[Override] attribute. */
     private function hasOverrideAttribute(ClassMethod $node): bool
     {
         foreach ($node->attrGroups as $attrGroup) {

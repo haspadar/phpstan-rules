@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -14,15 +14,14 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
 /**
- * Counts unique types a class depends on directly: property types, method parameter types,
- * return types, `new` expressions, static calls, and `catch` type hints.
+ * Counts unique types a class depends on directly, including property types, method parameter types, return types, new expressions, static calls, and catch type hints.
  * Types listed in `excludedClasses` are not counted.
  *
  * @implements Rule<Class_>
  */
 final readonly class CouplingBetweenObjectsRule implements Rule
 {
-    private int $maximum;
+    private const array SCALAR_TYPES = ['self', 'parent', 'static', 'void', 'null', 'bool', 'int', 'float', 'string', 'array', 'object', 'callable', 'iterable', 'never', 'mixed', 'true', 'false'];
 
     /** @var list<string> */
     private array $excludedClasses;
@@ -31,26 +30,21 @@ final readonly class CouplingBetweenObjectsRule implements Rule
 
     private CouplingBetweenObjectsRule\MethodBodyTypeCollector $bodyCollector;
 
-    /** @var list<string> */
-    private const SCALAR_TYPES = ['self', 'parent', 'static', 'void', 'null', 'bool', 'int', 'float', 'string', 'array', 'object', 'callable', 'iterable', 'never', 'mixed', 'true', 'false'];
-
     /**
-     * @param int $maximum maximum number of unique dependent types allowed per class
+     * Constructs the rule with the given coupling limit and optional exclusion list.
+     *
+     * @param int $maximum Maximum number of unique dependent types allowed per class
      * @param array{
      *     excludedClasses?: list<string>
      * } $options
      */
-    public function __construct(
-        int $maximum = 15,
-        array $options = [],
-    ) {
-        $this->maximum = $maximum;
+    public function __construct(private int $maximum = 15, array $options = [])
+    {
         $this->excludedClasses = $options['excludedClasses'] ?? [];
         $this->extractor = new CouplingBetweenObjectsRule\TypeNameExtractor();
         $this->bodyCollector = new CouplingBetweenObjectsRule\MethodBodyTypeCollector();
     }
 
-    /** @inheritDoc */
     #[Override]
     public function getNodeType(): string
     {
@@ -58,24 +52,25 @@ final readonly class CouplingBetweenObjectsRule implements Rule
     }
 
     /**
-     * @inheritDoc
+     * Analyses the node and returns a list of errors.
      *
+     * @psalm-param Class_ $node
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
-        /** @var Class_ $node */
+    public function processNode(Node $node, Scope $scope): array
+    {
+        if ($node->name === null) {
+            return [];
+        }
+
         $count = count($this->collectTypes($node));
 
         if ($count <= $this->maximum) {
             return [];
         }
 
-        /** @psalm-suppress PossiblyNullReference -- PHPStan assigns names to anonymous classes before processNode */
-        $className = $node->name->toString(); // @phpstan-ignore method.nonObject
+        $className = $node->name->toString();
 
         return [
             RuleErrorBuilder::message(
@@ -92,7 +87,7 @@ final readonly class CouplingBetweenObjectsRule implements Rule
     }
 
     /**
-     * Collects all unique type names from the class, excluding scalars and excluded classes
+     * Collects all unique type names from the class, excluding scalars and excluded classes.
      *
      * @return list<string>
      */
@@ -107,7 +102,7 @@ final readonly class CouplingBetweenObjectsRule implements Rule
     }
 
     /**
-     * Collects type names from property declarations
+     * Collects type names from property declarations.
      *
      * @return list<string>
      */
@@ -125,7 +120,7 @@ final readonly class CouplingBetweenObjectsRule implements Rule
     }
 
     /**
-     * Collects type names from all method signatures and bodies
+     * Collects type names from all method signatures and bodies.
      *
      * @return list<string>
      */
@@ -142,7 +137,7 @@ final readonly class CouplingBetweenObjectsRule implements Rule
     }
 
     /**
-     * Collects type names from method parameter and return type declarations
+     * Collects type names from method parameter and return type declarations.
      *
      * @return list<string>
      */
@@ -164,7 +159,7 @@ final readonly class CouplingBetweenObjectsRule implements Rule
     }
 
     /**
-     * Collects type names from `new`, static calls, and `catch` inside a method body
+     * Collects type names from `new`, static calls, and `catch` inside a method body.
      *
      * @return list<string>
      */
@@ -174,10 +169,9 @@ final readonly class CouplingBetweenObjectsRule implements Rule
     }
 
     /**
-     * Filters out scalar types and excluded classes, then deduplicates the result
+     * Filters out scalar types and excluded classes, then deduplicates the result.
      *
      * @param list<string> $names
-     *
      * @return list<string>
      */
     private function filterAndDeduplicate(array $names): array

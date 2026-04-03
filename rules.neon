@@ -18,11 +18,11 @@ parameters:
             maximum: 15
             excludedClasses: []
         booleanExpressionComplexity:
-            maxOperators: 3
+            maxOperators: 5
         cyclomaticComplexity:
             maxComplexity: 10
         returnCount:
-            max: 1
+            max: 3
         statementCount:
             maxStatements: 30
         illegalCatch:
@@ -43,9 +43,9 @@ parameters:
             checkCapitalization: true
         atclauseOrder:
             tagOrder:
-                - '@param'
-                - '@return'
-                - '@throws'
+                - param
+                - throws
+                - return
         phpDocMissingMethod:
             checkPublicOnly: true
             skipOverridden: true

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -12,13 +12,14 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
- * Checks that the PHPDoc summary line of every class method ends with
- * a period, question mark, or exclamation mark, and optionally starts with
- * a capital letter. Methods without a PHPDoc block are skipped. Blocks
- * containing only tags (no summary) are skipped. Methods in interfaces
- * and traits are skipped.
+ * Checks that the PHPDoc summary line of every class method ends with proper punctuation.
+ *
+ * Optionally also checks that the summary starts with a capital letter.
+ * Methods without a PHPDoc block, methods in interfaces and traits, and blocks containing only
+ * tags (no summary) are skipped.
  *
  * @implements Rule<ClassMethod>
  */
@@ -26,13 +27,16 @@ final readonly class PhpDocPunctuationMethodRule implements Rule
 {
     private bool $checkCapitalization;
 
-    /** @param array{checkCapitalization?: bool} $options */
+    /**
+     * Constructs the rule with the given capitalization option.
+     *
+     * @param array{checkCapitalization?: bool} $options
+     */
     public function __construct(array $options = [])
     {
         $this->checkCapitalization = $options['checkCapitalization'] ?? true;
     }
 
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -40,26 +44,25 @@ final readonly class PhpDocPunctuationMethodRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * Analyses the node and returns a list of errors.
      *
-     * @throws \PHPStan\ShouldNotHappenException
-     *
+     * @psalm-param ClassMethod $node
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
+    public function processNode(Node $node, Scope $scope): array
+    {
         $reflection = $scope->getClassReflection();
 
         if ($reflection === null || !$reflection->isClass()) {
             return [];
         }
 
-        /** @var ClassMethod $node */
         $docComment = $node->getDocComment();
-        $summary = $docComment !== null ? SummaryExtractor::extract($docComment->getText()) : null;
+        $summary = $docComment !== null
+            ? SummaryExtractor::extract($docComment->getText())
+            : null;
 
         if ($summary === null) {
             return [];
@@ -91,7 +94,7 @@ final readonly class PhpDocPunctuationMethodRule implements Rule
     }
 
     /**
-     * Returns true if the string ends with `.`, `?`, or `!`
+     * Returns true if the string ends with `.`, `?`, or `!`.
      */
     private function endsWithPunctuation(string $text): bool
     {
@@ -101,10 +104,12 @@ final readonly class PhpDocPunctuationMethodRule implements Rule
     }
 
     /**
-     * Returns true if the string starts with an uppercase letter
+     * Returns true if the string starts with an uppercase letter.
      */
     private function startsWithCapital(string $text): bool
     {
-        return $text !== '' && mb_strtoupper(mb_substr($text, 0, 1)) === mb_substr($text, 0, 1) && ctype_alpha($text[0]);
+        return $text !== '' && mb_strtoupper(mb_substr($text, 0, 1)) === mb_substr($text, 0, 1) && ctype_alpha(
+            $text[0],
+        );
     }
 }

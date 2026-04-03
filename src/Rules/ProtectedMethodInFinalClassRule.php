@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -11,6 +11,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Detects protected methods in final classes and reports an error for each one.
@@ -21,7 +22,6 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final readonly class ProtectedMethodInFinalClassRule implements Rule
 {
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -29,30 +29,30 @@ final readonly class ProtectedMethodInFinalClassRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * Analyses the node and returns a list of errors.
      *
-     * @throws \PHPStan\ShouldNotHappenException
-     *
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
+    public function processNode(Node $node, Scope $scope): array
+    {
         /** @var Class_ $node */
         if (!$node->isFinal()) {
             return [];
         }
 
+        if ($node->name === null) {
+            throw new ShouldNotHappenException();
+        }
+
         $errors = [];
+        $className = $node->name->toString();
 
         foreach ($node->getMethods() as $method) {
             if (!$method->isProtected()) {
                 continue;
             }
-
-            $className = $node->name !== null ? $node->name->toString() : 'anonymous';
 
             $errors[] = RuleErrorBuilder::message(
                 sprintf(

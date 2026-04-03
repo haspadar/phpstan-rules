@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -11,28 +11,29 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
-/** @implements Rule<Class_> */
+/**
+ * Reports a class that has more methods than the configured maximum.
+ *
+ * @implements Rule<Class_>
+ */
 final readonly class TooManyMethodsRule implements Rule
 {
-    private int $maxMethods;
-
     private bool $onlyPublic;
 
     /**
+     * Constructs the rule with the given method limit and options.
+     *
      * @param array{
      *     onlyPublic?: bool
      * } $options
      */
-    public function __construct(
-        int $maxMethods = 20,
-        array $options = [],
-    ) {
-        $this->maxMethods = $maxMethods;
+    public function __construct(private int $maxMethods = 20, array $options = [])
+    {
         $this->onlyPublic = $options['onlyPublic'] ?? false;
     }
 
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -40,20 +41,19 @@ final readonly class TooManyMethodsRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * Analyses the node and returns a list of errors.
      *
+     * @psalm-param Class_ $node
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
-        /** @var Class_ $node */
+    public function processNode(Node $node, Scope $scope): array
+    {
         $methods = $node->getMethods();
 
         if ($this->onlyPublic) {
-            $methods = array_filter($methods, fn(Node\Stmt\ClassMethod $method) => $method->isPublic());
+            $methods = array_filter($methods, static fn(Node\Stmt\ClassMethod $method) => $method->isPublic());
         }
 
         $count = count($methods);
@@ -62,7 +62,11 @@ final readonly class TooManyMethodsRule implements Rule
             return [];
         }
 
-        $className = $node->name !== null ? $node->name->toString() : 'anonymous';
+        if ($node->name === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $className = $node->name->toString();
 
         return [
             RuleErrorBuilder::message(

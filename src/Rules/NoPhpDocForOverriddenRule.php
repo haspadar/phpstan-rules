@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -11,6 +11,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Checks that overridden methods do not have a PHPDoc comment.
@@ -22,7 +23,6 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final readonly class NoPhpDocForOverriddenRule implements Rule
 {
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -30,17 +30,14 @@ final readonly class NoPhpDocForOverriddenRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * Analyses the node and returns a list of errors.
      *
-     * @throws \PHPStan\ShouldNotHappenException
-     *
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
+    public function processNode(Node $node, Scope $scope): array
+    {
         /** @var ClassMethod $node */
         if (!$this->hasOverrideAttribute($node) || $node->getDocComment() === null) {
             return [];
@@ -58,7 +55,7 @@ final readonly class NoPhpDocForOverriddenRule implements Rule
         ];
     }
 
-    /** Returns true if the method has the #[Override] attribute */
+    /** Returns true if the method has the #[Override] attribute. */
     private function hasOverrideAttribute(ClassMethod $node): bool
     {
         foreach ($node->attrGroups as $attrGroup) {

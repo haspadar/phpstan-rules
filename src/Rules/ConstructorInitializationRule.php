@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -18,6 +18,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Detects logic in class constructors that goes beyond property initialization.
@@ -30,7 +31,6 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final readonly class ConstructorInitializationRule implements Rule
 {
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -38,17 +38,14 @@ final readonly class ConstructorInitializationRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * Analyses the node and returns a list of errors.
      *
-     * @throws \PHPStan\ShouldNotHappenException
-     *
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
+    public function processNode(Node $node, Scope $scope): array
+    {
         /** @var ClassMethod $node */
         if ($node->name->toString() !== '__construct') {
             return [];
@@ -62,7 +59,12 @@ final readonly class ConstructorInitializationRule implements Rule
             }
 
             $reflection = $scope->getClassReflection();
-            $className = $reflection !== null ? $reflection->getName() : 'anonymous';
+
+            if ($reflection === null) {
+                throw new ShouldNotHappenException();
+            }
+
+            $className = $reflection->getName();
 
             $errors[] = RuleErrorBuilder::message(
                 sprintf(
@@ -79,7 +81,6 @@ final readonly class ConstructorInitializationRule implements Rule
         return $errors;
     }
 
-    /** @param Node\Stmt $stmt */
     private function isAllowedStatement(Node\Stmt $stmt): bool
     {
         if (!$stmt instanceof Expression) {
@@ -89,7 +90,6 @@ final readonly class ConstructorInitializationRule implements Rule
         return $this->isThisPropertyAssignment($stmt) || $this->isParentConstructorCall($stmt);
     }
 
-    /** @param Expression $stmt */
     private function isThisPropertyAssignment(Expression $stmt): bool
     {
         return $stmt->expr instanceof Assign
@@ -99,7 +99,6 @@ final readonly class ConstructorInitializationRule implements Rule
             && $this->isAllowedValue($stmt->expr->expr);
     }
 
-    /** @param Expr $expr */
     private function isAllowedValue(Expr $expr): bool
     {
         return $expr instanceof Variable
@@ -112,7 +111,6 @@ final readonly class ConstructorInitializationRule implements Rule
             || $expr instanceof Node\Scalar\Float_;
     }
 
-    /** @param Expression $stmt */
     private function isParentConstructorCall(Expression $stmt): bool
     {
         return $stmt->expr instanceof StaticCall

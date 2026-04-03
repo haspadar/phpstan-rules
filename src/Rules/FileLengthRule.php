@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -11,32 +11,33 @@ use PHPStan\Node\FileNode;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
-/** @implements Rule<FileNode> */
+/**
+ * Reports a file that exceeds the configured maximum line count.
+ *
+ * @implements Rule<FileNode>
+ */
 final readonly class FileLengthRule implements Rule
 {
-    private int $maxLines;
-
     private bool $skipBlankLines;
 
     private bool $skipComments;
 
     /**
+     * Constructs the rule with the given line limit and filtering options.
+     *
      * @param array{
      *     skipBlankLines?: bool,
      *     skipComments?: bool
      * } $options
      */
-    public function __construct(
-        int $maxLines = 1000,
-        array $options = [],
-    ) {
-        $this->maxLines = $maxLines;
+    public function __construct(private int $maxLines = 1000, array $options = [])
+    {
         $this->skipBlankLines = $options['skipBlankLines'] ?? false;
         $this->skipComments = $options['skipComments'] ?? false;
     }
 
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -44,15 +45,14 @@ final readonly class FileLengthRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * Analyses the node and returns a list of errors.
      *
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
+    public function processNode(Node $node, Scope $scope): array
+    {
         $lines = $this->lineCount($scope);
 
         if ($lines <= $this->maxLines) {
@@ -73,10 +73,18 @@ final readonly class FileLengthRule implements Rule
         ];
     }
 
+    /**
+     * Returns the number of countable lines in the file.
+     *
+     * @throws ShouldNotHappenException
+     */
     private function lineCount(Scope $scope): int
     {
-        $result = file($scope->getFile(), FILE_IGNORE_NEW_LINES);
-        $allLines = $result === false ? [] : $result;
+        $allLines = file($scope->getFile(), FILE_IGNORE_NEW_LINES);
+
+        if ($allLines === false) {
+            throw new ShouldNotHappenException();
+        }
 
         return count($this->countableLines($allLines));
     }
@@ -87,8 +95,9 @@ final readonly class FileLengthRule implements Rule
     }
 
     /**
-     * @param list<string> $allLines
+     * Filters the given lines to those that should be counted toward the limit.
      *
+     * @param list<string> $allLines
      * @return array<int, string>
      */
     private function countableLines(array $allLines): array
@@ -107,11 +116,13 @@ final readonly class FileLengthRule implements Rule
         return $result;
     }
 
-    /** @return array{bool, bool} */
-    private function shouldSkip(
-        string $line,
-        bool $inBlockComment,
-    ): array {
+    /**
+     * Returns whether the given line should be skipped and the updated block-comment state.
+     *
+     * @return array{bool, bool}
+     */
+    private function shouldSkip(string $line, bool $inBlockComment): array
+    {
         if ($inBlockComment) {
             return [$this->skipComments, !str_contains($line, '*/')];
         }

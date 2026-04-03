@@ -13,23 +13,11 @@
 
     <rule ref="Generic.PHP.Syntax"/>
 
-    <!-- Slevomat: class structure -->
-    <rule ref="SlevomatCodingStandard.Files.TypeNameMatchesFileName">
-        <properties>
-            <property name="rootNamespaces" type="array">
-                <element key="src" value="Haspadar\PHPStanRules"/>
-            </property>
-        </properties>
-    </rule>
-    <rule ref="SlevomatCodingStandard.Classes.RequireMultiLineMethodSignature">
-        <properties>
-            <property name="minParametersCount" value="2"/>
-        </properties>
-    </rule>
-
-    <!-- Slevomat: doc comments -->
-    <rule ref="SlevomatCodingStandard.Commenting.RequireOneLineDocComment"/>
-    <rule ref="SlevomatCodingStandard.Attributes.AttributeAndTargetSpacing"/>
-
+    <rule ref=".piqule/phpcs/slevomat-types.xml"/>
+    <rule ref=".piqule/phpcs/slevomat-classes.xml"/>
+    <rule ref=".piqule/phpcs/slevomat-functions.xml"/>
+    <rule ref=".piqule/phpcs/slevomat-namespaces.xml"/>
+    <rule ref=".piqule/phpcs/slevomat-flow.xml"/>
+    <rule ref=".piqule/phpcs/slevomat-style.xml"/>
 
 </ruleset>

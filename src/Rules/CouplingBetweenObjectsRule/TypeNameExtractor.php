@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules\CouplingBetweenObjectsRule;
 
@@ -8,13 +8,12 @@ use PhpParser\Node;
 use PhpParser\Node\Name;
 
 /**
- * Extracts class/interface/trait names from type nodes,
- * handling nullable, union, and intersection types recursively
+ * Extracts class/interface/trait names from type nodes, handling nullable, union, and intersection types recursively.
  */
 final class TypeNameExtractor
 {
     /**
-     * Returns all type names referenced in the given type node
+     * Returns all type names referenced in the given type node.
      *
      * @return list<string>
      */

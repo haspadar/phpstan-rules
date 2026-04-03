@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -29,28 +29,27 @@ use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
-/** @implements Rule<ClassMethod> */
+/**
+ * Computes the cyclomatic complexity of each class method and reports an error when it exceeds the configured limit.
+ *
+ * @implements Rule<ClassMethod>
+ */
 final readonly class CyclomaticComplexityRule implements Rule
 {
-    private int $maxComplexity;
-
     /**
-     * Constructs the rule with the given complexity limit
+     * Constructs the rule with the given complexity limit.
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(int $maxComplexity = 10)
+    public function __construct(private int $maxComplexity = 10)
     {
         if ($maxComplexity <= 0) {
             throw new InvalidArgumentException(
                 sprintf('maxComplexity must be a positive integer, %d given', $maxComplexity),
             );
         }
-
-        $this->maxComplexity = $maxComplexity;
     }
 
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -58,24 +57,21 @@ final readonly class CyclomaticComplexityRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * Analyses the node and returns a list of errors.
      *
+     * @psalm-param ClassMethod $node
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
-        /** @var ClassMethod $node */
+    public function processNode(Node $node, Scope $scope): array
+    {
         $complexity = $this->complexity($node);
 
         if ($complexity <= $this->maxComplexity) {
             return [];
         }
 
-        $reflection = $scope->getClassReflection();
-        $className = $reflection !== null ? $reflection->getName() : 'unknown';
+        $className = $scope->getClassReflection()?->getName() ?? 'unknown';
 
         return [
             RuleErrorBuilder::message(
@@ -92,7 +88,7 @@ final readonly class CyclomaticComplexityRule implements Rule
         ];
     }
 
-    /** Computes the cyclomatic complexity of a method */
+    /** Computes the cyclomatic complexity of a method. */
     private function complexity(ClassMethod $node): int
     {
         $finder = new NodeFinder();
@@ -113,13 +109,13 @@ final readonly class CyclomaticComplexityRule implements Rule
         return $count;
     }
 
-    /** Returns true for nodes that contribute to cyclomatic complexity */
+    /** Returns true for nodes that contribute to cyclomatic complexity. */
     private function isBranchingNode(Node $node): bool
     {
         return $this->isControlFlowNode($node) || $this->isLogicalOrConditionalNode($node);
     }
 
-    /** Returns true for control flow statement nodes */
+    /** Returns true for control flow statement nodes. */
     private function isControlFlowNode(Node $node): bool
     {
         return $node instanceof If_
@@ -133,7 +129,7 @@ final readonly class CyclomaticComplexityRule implements Rule
             || $node instanceof MatchArm;
     }
 
-    /** Returns true for logical and conditional expression nodes */
+    /** Returns true for logical and conditional expression nodes. */
     private function isLogicalOrConditionalNode(Node $node): bool
     {
         return $node instanceof BooleanAnd

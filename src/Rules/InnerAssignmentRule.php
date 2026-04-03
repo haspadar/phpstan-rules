@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -19,6 +19,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Detects assignments used as subexpressions rather than standalone statements.
@@ -30,7 +31,6 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final readonly class InnerAssignmentRule implements Rule
 {
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -38,18 +38,15 @@ final readonly class InnerAssignmentRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * Analyses the node and returns a list of errors.
      *
-     * @throws \PHPStan\ShouldNotHappenException
-     *
+     * @psalm-param ClassMethod $node
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
-        /** @var ClassMethod $node */
+    public function processNode(Node $node, Scope $scope): array
+    {
         $loopCondAssigns = $this->collectLoopConditionAssigns($node);
 
         $errors = [];
@@ -83,12 +80,7 @@ final readonly class InnerAssignmentRule implements Rule
     }
 
     /**
-     * Returns true if the assignment node is the direct expression of any
-     * standalone Expression statement anywhere within the method body (i.e. it
-     * is used as a statement, not nested inside another expression).
-     *
-     * @param Assign|AssignOp|AssignRef $assign
-     * @param ClassMethod $method
+     * Returns true if the assignment node is a direct standalone Expression statement within the method body.
      */
     private function isStandaloneStatement(
         Assign|AssignOp|AssignRef $assign,
@@ -107,11 +99,8 @@ final readonly class InnerAssignmentRule implements Rule
     }
 
     /**
-     * Collects all Assign/AssignOp/AssignRef nodes that appear in loop
-     * conditions (while, do-while, for), which are conventional idioms
-     * and are excluded from the rule.
-     *
-     * @param ClassMethod $method
+     * Collects all assignment nodes that appear in loop conditions (while, do-while, for).
+     * These are conventional idioms and are excluded from the rule.
      *
      * @return list<Assign|AssignOp|AssignRef>
      */

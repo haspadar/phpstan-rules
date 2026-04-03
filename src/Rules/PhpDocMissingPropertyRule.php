@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -11,6 +11,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Checks that every public property in a class has a PHPDoc comment.
@@ -23,13 +24,16 @@ final readonly class PhpDocMissingPropertyRule implements Rule
 {
     private bool $checkPublicOnly;
 
-    /** @param array{checkPublicOnly?: bool} $options */
+    /**
+     * Constructs the rule with the given visibility options.
+     *
+     * @param array{checkPublicOnly?: bool} $options
+     */
     public function __construct(array $options = [])
     {
         $this->checkPublicOnly = $options['checkPublicOnly'] ?? true;
     }
 
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -37,17 +41,14 @@ final readonly class PhpDocMissingPropertyRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * Analyses the node and returns a list of errors.
      *
-     * @throws \PHPStan\ShouldNotHappenException
-     *
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
+    public function processNode(Node $node, Scope $scope): array
+    {
         $reflection = $scope->getClassReflection();
 
         /** @var Property $node */

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -24,6 +24,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Detects reassignment of method or constructor parameters.
@@ -37,7 +38,6 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final readonly class NoParameterReassignmentRule implements Rule
 {
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -45,18 +45,15 @@ final readonly class NoParameterReassignmentRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * Analyses the node and returns a list of errors.
      *
-     * @throws \PHPStan\ShouldNotHappenException
-     *
+     * @psalm-param ClassMethod $node
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
-        /** @var ClassMethod $node */
+    public function processNode(Node $node, Scope $scope): array
+    {
         $paramNames = $this->parameterNames($node);
 
         if ($paramNames === []) {
@@ -95,17 +92,15 @@ final readonly class NoParameterReassignmentRule implements Rule
     }
 
     /**
-     * Finds all write-expression nodes within the method body, excluding those
-     * inside closures, arrow functions, nested functions, and anonymous classes
-     * which introduce a new variable scope.
+     * Finds all write-expression nodes within the method body, excluding those inside scope boundaries.
      *
-     * @param ClassMethod $node
+     * Scope boundaries are closures, arrow functions, nested functions, and anonymous classes.
      *
      * @return list<Assign|AssignOp|AssignRef|PreInc|PostInc|PreDec|PostDec>
      */
     private function findWriteExpressions(ClassMethod $node): array
     {
-        /** @var list<Assign|AssignOp|AssignRef|PreInc|PostInc|PreDec|PostDec> */
+        /** @phpstan-var list<Assign|AssignOp|AssignRef|PreInc|PostInc|PreDec|PostDec> */
         return (new NodeFinder())->find(
             $node->stmts ?? [],
             static fn(Node $n): bool => ($n instanceof Assign
@@ -120,17 +115,12 @@ final readonly class NoParameterReassignmentRule implements Rule
     }
 
     /**
-     * Returns true if the node is nested inside a closure, arrow function,
-     * nested function declaration, or anonymous class within the given method,
-     * meaning it belongs to a different variable scope.
+     * Returns true if the node is nested inside a scope boundary within the given method.
      *
-     * @param Node $target
-     * @param ClassMethod $method
+     * Scope boundaries are closures, arrow functions, nested function declarations, and anonymous classes.
      */
-    private static function isInsideScopeBoundary(
-        Node $target,
-        ClassMethod $method,
-    ): bool {
+    private static function isInsideScopeBoundary(Node $target, ClassMethod $method): bool
+    {
         $parents = (new NodeFinder())->find(
             $method->stmts ?? [],
             static fn(Node $n): bool => ($n instanceof Closure
@@ -144,7 +134,7 @@ final readonly class NoParameterReassignmentRule implements Rule
     }
 
     /**
-     * @param ClassMethod $node
+     * Returns a list of parameter names for the given method node.
      *
      * @return list<string>
      */

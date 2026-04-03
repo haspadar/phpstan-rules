@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -15,6 +15,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Checks that every named class, interface, and enum has a PHPDoc comment.
@@ -26,7 +27,6 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final readonly class PhpDocMissingClassRule implements Rule
 {
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -34,17 +34,14 @@ final readonly class PhpDocMissingClassRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * Analyses the node and returns a list of errors.
      *
-     * @throws \PHPStan\ShouldNotHappenException
-     *
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
+    public function processNode(Node $node, Scope $scope): array
+    {
         /** @var ClassLike $node */
         if ($node instanceof Trait_
             || ($node instanceof Class_ && $node->isAnonymous())
@@ -59,7 +56,11 @@ final readonly class PhpDocMissingClassRule implements Rule
             default => 'class',
         };
 
-        $name = $node->name?->toString() ?? ''; // @codeCoverageIgnore null only for anonymous
+        if ($node->name === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $name = $node->name->toString();
 
         return [
             RuleErrorBuilder::message(

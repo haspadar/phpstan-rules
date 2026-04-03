@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -11,6 +11,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Checks that PHPDoc tags in class methods appear in the required order.
@@ -25,13 +26,20 @@ final readonly class AtclauseOrderRule implements Rule
     /** @var list<string> */
     private array $tagOrder;
 
-    /** @param array{tagOrder?: list<string>} $options */
+    /**
+     * Constructs the rule with the given tag order configuration.
+     *
+     * @param array{tagOrder?: list<string>} $options
+     */
     public function __construct(array $options = [])
     {
-        $this->tagOrder = $options['tagOrder'] ?? ['@param', '@return', '@throws'];
+        $tags = $options['tagOrder'] ?? ['@param', '@return', '@throws'];
+        $this->tagOrder = array_map(
+            static fn(string $tag): string => str_starts_with($tag, '@') ? $tag : '@' . $tag,
+            $tags,
+        );
     }
 
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -39,20 +47,17 @@ final readonly class AtclauseOrderRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * Analyses the node and returns a list of errors.
      *
-     * @throws \PHPStan\ShouldNotHappenException
-     *
+     * @psalm-param ClassMethod $node
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
+    public function processNode(Node $node, Scope $scope): array
+    {
         $reflection = $scope->getClassReflection();
 
-        /** @var ClassMethod $node */
         $docComment = $node->getDocComment();
 
         if ($reflection === null || !$reflection->isClass() || $docComment === null) {
@@ -69,7 +74,7 @@ final readonly class AtclauseOrderRule implements Rule
     }
 
     /**
-     * Filters PHPDoc tags to those listed in tagOrder, preserving document order
+     * Filters PHPDoc tags to those listed in tagOrder, preserving document order.
      *
      * @return list<string>
      */
@@ -82,18 +87,14 @@ final readonly class AtclauseOrderRule implements Rule
     }
 
     /**
-     * Returns errors for any tags appearing out of required order
+     * Returns errors for any tags appearing out of required order.
      *
      * @param list<string> $tags
-     *
-     * @throws \PHPStan\ShouldNotHappenException
-     *
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
-    private function detectViolations(
-        array $tags,
-        string $methodName,
-    ): array {
+    private function detectViolations(array $tags, string $methodName): array
+    {
         $errors = [];
         $lastIndex = -1;
         $lastTag = '';

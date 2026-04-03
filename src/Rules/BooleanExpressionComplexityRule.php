@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
@@ -21,10 +21,10 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
- * Finds the maximum number of boolean operators (&&, ||, and, or, xor) in any single
- * expression within a class method and reports an error when it exceeds the configured limit.
+ * Finds the maximum boolean operator count (&&, ||, and, or, xor) in any single expression within a class method.
  * Each expression is evaluated independently — operators across separate expressions are not summed.
  * Nested scopes (closures, arrow functions, anonymous classes) are excluded from the count.
  * Bitwise operators & and | are excluded — their intent cannot be determined without type analysis.
@@ -33,25 +33,20 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final readonly class BooleanExpressionComplexityRule implements Rule
 {
-    private int $maxOperators;
-
     /**
-     * Constructs the rule with the given boolean operator limit
+     * Constructs the rule with the given boolean operator limit.
      *
      * @throws InvalidArgumentException when maxOperators is not a positive integer
      */
-    public function __construct(int $maxOperators = 3)
+    public function __construct(private int $maxOperators = 3)
     {
         if ($maxOperators <= 0) {
             throw new InvalidArgumentException(
                 sprintf('maxOperators must be a positive integer, %d given', $maxOperators),
             );
         }
-
-        $this->maxOperators = $maxOperators;
     }
 
-    /** @psalm-suppress InvalidAttribute -- psalm/psalm#11723 */
     #[Override]
     public function getNodeType(): string
     {
@@ -59,26 +54,22 @@ final readonly class BooleanExpressionComplexityRule implements Rule
     }
 
     /**
-     * @psalm-suppress InvalidAttribute -- psalm/psalm#11723
+     * Analyses the node and returns a list of errors.
      *
-     * @throws \PHPStan\ShouldNotHappenException
-     *
+     * @psalm-param ClassMethod $node
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
-    public function processNode(
-        Node $node,
-        Scope $scope,
-    ): array {
-        /** @var ClassMethod $node */
+    public function processNode(Node $node, Scope $scope): array
+    {
         $max = $this->maxOperatorsInSingleExpression($node);
 
         if ($max <= $this->maxOperators) {
             return [];
         }
 
-        $reflection = $scope->getClassReflection();
-        $className = $reflection !== null ? $reflection->getName() : 'unknown';
+        $className = $scope->getClassReflection()?->getName() ?? 'unknown';
 
         return [
             RuleErrorBuilder::message(
@@ -96,15 +87,13 @@ final readonly class BooleanExpressionComplexityRule implements Rule
     }
 
     /**
-     * Returns the maximum number of boolean operators found in any single expression
-     * within the method body; each root boolean operator is counted independently so that
-     * operators across separate statements are never summed together.
+     * Returns the maximum boolean operator count found in any single expression within the method body.
+     * Each root operator is counted independently so that operators across separate statements are never summed.
      * Nested scopes (closures, arrow functions, anonymous classes) are not traversed.
-     * A root operator is one that is not contained inside another boolean operator.
      */
     private function maxOperatorsInSingleExpression(ClassMethod $node): int
     {
-        $allOperators = $this->collectOperators($node->stmts ?? []);
+        $allOperators = $this->collectOperators(array_values($node->stmts ?? []));
         $max = 0;
 
         foreach ($allOperators as $candidate) {
@@ -125,10 +114,9 @@ final readonly class BooleanExpressionComplexityRule implements Rule
     }
 
     /**
-     * Collects all boolean operators from the given nodes without entering nested scope boundaries
+     * Collects all boolean operators from the given nodes without entering nested scope boundaries.
      *
-     * @param array<Node> $nodes
-     *
+     * @param list<Node> $nodes
      * @return list<Node>
      */
     private function collectOperators(array $nodes): array
@@ -151,14 +139,12 @@ final readonly class BooleanExpressionComplexityRule implements Rule
     }
 
     /**
-     * Returns true if $target node is found anywhere inside $nodes without crossing scope boundaries
+     * Returns true if $target node is found anywhere inside $nodes without crossing scope boundaries.
      *
-     * @param array<Node> $nodes
+     * @param list<Node> $nodes
      */
-    private function containsNode(
-        array $nodes,
-        Node $target,
-    ): bool {
+    private function containsNode(array $nodes, Node $target): bool
+    {
         foreach ($nodes as $node) {
             if ($this->isScopeBoundary($node)) {
                 continue;
@@ -176,7 +162,7 @@ final readonly class BooleanExpressionComplexityRule implements Rule
         return false;
     }
 
-    /** Returns true for nodes that introduce a new scope boundary */
+    /** Returns true for nodes that introduce a new scope boundary. */
     private function isScopeBoundary(Node $node): bool
     {
         return $node instanceof Closure
@@ -184,7 +170,7 @@ final readonly class BooleanExpressionComplexityRule implements Rule
             || $node instanceof Class_;
     }
 
-    /** Returns true for nodes that are boolean operators */
+    /** Returns true for nodes that are boolean operators. */
     private function isBooleanOperator(Node $node): bool
     {
         return $node instanceof BooleanAnd
