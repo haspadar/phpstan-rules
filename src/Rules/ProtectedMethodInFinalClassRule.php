@@ -42,10 +42,12 @@ final readonly class ProtectedMethodInFinalClassRule implements Rule
             return [];
         }
 
+        if ($node->name === null) {
+            throw new ShouldNotHappenException();
+        }
+
         $errors = [];
-        $className = $node->name !== null
-            ? $node->name->toString()
-            : 'anonymous';
+        $className = $node->name->toString();
 
         foreach ($node->getMethods() as $method) {
             if (!$method->isProtected()) {

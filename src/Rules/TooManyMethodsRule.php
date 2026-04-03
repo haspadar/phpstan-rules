@@ -11,6 +11,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Reports a class that has more methods than the configured maximum.
@@ -43,6 +44,7 @@ final readonly class TooManyMethodsRule implements Rule
      * Analyses the node and returns a list of errors.
      *
      * @psalm-param Class_ $node
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
@@ -60,9 +62,11 @@ final readonly class TooManyMethodsRule implements Rule
             return [];
         }
 
-        $className = $node->name !== null
-            ? $node->name->toString()
-            : 'anonymous';
+        if ($node->name === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $className = $node->name->toString();
 
         return [
             RuleErrorBuilder::message(

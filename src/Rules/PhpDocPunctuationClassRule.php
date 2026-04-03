@@ -61,9 +61,11 @@ final readonly class PhpDocPunctuationClassRule implements Rule
             return [];
         }
 
-        $className = $node->name !== null
-            ? $node->name->toString()
-            : 'anonymous class';
+        if ($node->name === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $className = $node->name->toString();
         $errors = [];
 
         if (!$this->endsWithPunctuation($summary)) {

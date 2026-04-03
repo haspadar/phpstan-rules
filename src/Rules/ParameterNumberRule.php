@@ -11,6 +11,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Reports a class method that has more parameters than the configured maximum.
@@ -42,6 +43,7 @@ final readonly class ParameterNumberRule implements Rule
     /**
      * Analyses the node and returns a list of errors.
      *
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
@@ -59,9 +61,12 @@ final readonly class ParameterNumberRule implements Rule
         }
 
         $reflection = $scope->getClassReflection();
-        $className = $reflection !== null
-            ? $reflection->getName()
-            : 'unknown';
+
+        if ($reflection === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $className = $reflection->getName();
 
         return [
             RuleErrorBuilder::message(

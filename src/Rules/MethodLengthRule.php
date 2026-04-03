@@ -11,6 +11,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Reports a class method that exceeds the configured maximum line count.
@@ -47,6 +48,7 @@ final readonly class MethodLengthRule implements Rule
      * Analyses the node and returns a list of errors.
      *
      * @psalm-param ClassMethod $node
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
@@ -72,12 +74,18 @@ final readonly class MethodLengthRule implements Rule
         ];
     }
 
+    /**
+     * Returns the number of countable lines in the method.
+     *
+     * @throws ShouldNotHappenException
+     */
     private function lineCount(ClassMethod $node, Scope $scope): int
     {
-        $result = file($scope->getFile(), FILE_IGNORE_NEW_LINES);
-        $allLines = $result === false
-            ? []
-            : $result;
+        $allLines = file($scope->getFile(), FILE_IGNORE_NEW_LINES);
+
+        if ($allLines === false) {
+            throw new ShouldNotHappenException();
+        }
 
         $methodLines = array_slice(
             $allLines,

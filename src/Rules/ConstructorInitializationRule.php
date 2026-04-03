@@ -59,9 +59,12 @@ final readonly class ConstructorInitializationRule implements Rule
             }
 
             $reflection = $scope->getClassReflection();
-            $className = $reflection !== null
-                ? $reflection->getName()
-                : 'anonymous';
+
+            if ($reflection === null) {
+                throw new ShouldNotHappenException();
+            }
+
+            $className = $reflection->getName();
 
             $errors[] = RuleErrorBuilder::message(
                 sprintf(

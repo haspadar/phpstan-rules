@@ -51,9 +51,11 @@ final readonly class PhpDocEmptyClassRule implements Rule
             return [];
         }
 
-        $className = $node->name !== null
-            ? $node->name->toString()
-            : 'anonymous class';
+        if ($node->name === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $className = $node->name->toString();
 
         return [
             RuleErrorBuilder::message(
