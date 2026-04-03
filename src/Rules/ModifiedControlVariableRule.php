@@ -187,7 +187,7 @@ final readonly class ModifiedControlVariableRule implements Rule
                 $result[] = $node;
             }
 
-            $result = array_merge($result, $this->collectModificationsSkippingNestedScopes(ChildNodes::of($node)));
+            array_push($result, ...$this->collectModificationsSkippingNestedScopes(ChildNodes::of($node)));
         }
 
         return $result;

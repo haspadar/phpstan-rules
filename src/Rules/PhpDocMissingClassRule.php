@@ -56,7 +56,11 @@ final readonly class PhpDocMissingClassRule implements Rule
             default => 'class',
         };
 
-        $name = $node->name?->toString() ?? '';
+        if ($node->name === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $name = $node->name->toString();
 
         return [
             RuleErrorBuilder::message(

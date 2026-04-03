@@ -43,15 +43,14 @@ final readonly class ProtectedMethodInFinalClassRule implements Rule
         }
 
         $errors = [];
+        $className = $node->name !== null
+            ? $node->name->toString()
+            : 'anonymous';
 
         foreach ($node->getMethods() as $method) {
             if (!$method->isProtected()) {
                 continue;
             }
-
-            $className = $node->name !== null
-                ? $node->name->toString()
-                : 'anonymous';
 
             $errors[] = RuleErrorBuilder::message(
                 sprintf(

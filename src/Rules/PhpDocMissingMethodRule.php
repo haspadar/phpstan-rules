@@ -47,6 +47,7 @@ final readonly class PhpDocMissingMethodRule implements Rule
     /**
      * Analyses the node and returns a list of errors.
      *
+     * @psalm-param ClassMethod $node
      * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
@@ -55,7 +56,6 @@ final readonly class PhpDocMissingMethodRule implements Rule
     {
         $reflection = $scope->getClassReflection();
 
-        /** @var ClassMethod $node */
         if (
             $reflection === null
             || !$reflection->isClass()
