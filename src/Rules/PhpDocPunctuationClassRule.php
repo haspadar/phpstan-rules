@@ -12,12 +12,13 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
- * Checks that the PHPDoc summary line of every class declaration ends with
- * a period, question mark, or exclamation mark, and optionally starts with
- * a capital letter. Classes without a PHPDoc block are skipped. Blocks
- * containing only tags (no summary) are skipped.
+ * Checks that the PHPDoc summary line of every class declaration ends with proper punctuation.
+ *
+ * Optionally also checks that the summary starts with a capital letter.
+ * Classes without a PHPDoc block are skipped. Blocks containing only tags (no summary) are skipped.
  *
  * @implements Rule<Class_>
  */
@@ -25,7 +26,11 @@ final readonly class PhpDocPunctuationClassRule implements Rule
 {
     private bool $checkCapitalization;
 
-    /** @param array{checkCapitalization?: bool} $options */
+    /**
+     * Constructs the rule with the given capitalization option.
+     *
+     * @param array{checkCapitalization?: bool} $options
+     */
     public function __construct(array $options = [])
     {
         $this->checkCapitalization = $options['checkCapitalization'] ?? true;
@@ -38,8 +43,10 @@ final readonly class PhpDocPunctuationClassRule implements Rule
     }
 
     /**
+     * Analyses the node and returns a list of errors.
+     *
      * @psalm-param Class_ $node
-     * @throws \PHPStan\ShouldNotHappenException
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
@@ -82,7 +89,7 @@ final readonly class PhpDocPunctuationClassRule implements Rule
     }
 
     /**
-     * Returns true if the string ends with `.`, `?`, or `!`
+     * Returns true if the string ends with `.`, `?`, or `!`.
      */
     private function endsWithPunctuation(string $text): bool
     {
@@ -92,7 +99,7 @@ final readonly class PhpDocPunctuationClassRule implements Rule
     }
 
     /**
-     * Returns true if the string starts with an uppercase letter
+     * Returns true if the string starts with an uppercase letter.
      */
     private function startsWithCapital(string $text): bool
     {

@@ -12,12 +12,18 @@ use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
-/** @implements Rule<ClassMethod> */
+/**
+ * Reports a class method that has more parameters than the configured maximum.
+ *
+ * @implements Rule<ClassMethod>
+ */
 final readonly class ParameterNumberRule implements Rule
 {
     private bool $ignoreOverridden;
 
     /**
+     * Constructs the rule with the given parameter limit and options.
+     *
      * @param array{
      *     ignoreOverridden?: bool
      * } $options
@@ -33,7 +39,11 @@ final readonly class ParameterNumberRule implements Rule
         return ClassMethod::class;
     }
 
-    /** @return list<IdentifierRuleError> */
+    /**
+     * Analyses the node and returns a list of errors.
+     *
+     * @return list<IdentifierRuleError>
+     */
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
@@ -68,7 +78,7 @@ final readonly class ParameterNumberRule implements Rule
         ];
     }
 
-    /** Checks whether the method has the #[Override] attribute */
+    /** Checks whether the method has the #[Override] attribute. */
     private function hasOverrideAttribute(ClassMethod $node): bool
     {
         foreach ($node->attrGroups as $attrGroup) {

@@ -12,21 +12,20 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeFinder;
 
 /**
- * Collects type names referenced in a method body:
- * `new` expressions, static calls, and `catch` type hints
+ * Collects type names referenced in a method body: `new` expressions, static calls, and `catch` type hints.
  */
 final class MethodBodyTypeCollector
 {
     private NodeFinder $finder;
 
-    /** Initializes the shared NodeFinder instance */
+    /** Initializes the shared NodeFinder instance. */
     public function __construct()
     {
         $this->finder = new NodeFinder();
     }
 
     /**
-     * Returns all type names found in the method body statements
+     * Returns all type names found in the method body statements.
      *
      * @return list<string>
      */

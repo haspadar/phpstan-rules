@@ -18,6 +18,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Detects logic in class constructors that goes beyond property initialization.
@@ -37,7 +38,9 @@ final readonly class ConstructorInitializationRule implements Rule
     }
 
     /**
-     * @throws \PHPStan\ShouldNotHappenException
+     * Analyses the node and returns a list of errors.
+     *
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]

@@ -11,6 +11,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Checks that overridden methods do not have a PHPDoc comment.
@@ -29,7 +30,9 @@ final readonly class NoPhpDocForOverriddenRule implements Rule
     }
 
     /**
-     * @throws \PHPStan\ShouldNotHappenException
+     * Analyses the node and returns a list of errors.
+     *
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
@@ -52,7 +55,7 @@ final readonly class NoPhpDocForOverriddenRule implements Rule
         ];
     }
 
-    /** Returns true if the method has the #[Override] attribute */
+    /** Returns true if the method has the #[Override] attribute. */
     private function hasOverrideAttribute(ClassMethod $node): bool
     {
         foreach ($node->attrGroups as $attrGroup) {

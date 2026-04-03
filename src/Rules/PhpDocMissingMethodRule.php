@@ -11,6 +11,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Checks that every public method in a class has a PHPDoc comment.
@@ -26,7 +27,11 @@ final readonly class PhpDocMissingMethodRule implements Rule
 
     private bool $skipOverridden;
 
-    /** @param array{checkPublicOnly?: bool, skipOverridden?: bool} $options */
+    /**
+     * Constructs the rule with the given visibility and override options.
+     *
+     * @param array{checkPublicOnly?: bool, skipOverridden?: bool} $options
+     */
     public function __construct(array $options = [])
     {
         $this->checkPublicOnly = $options['checkPublicOnly'] ?? true;
@@ -40,7 +45,9 @@ final readonly class PhpDocMissingMethodRule implements Rule
     }
 
     /**
-     * @throws \PHPStan\ShouldNotHappenException
+     * Analyses the node and returns a list of errors.
+     *
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
@@ -69,7 +76,7 @@ final readonly class PhpDocMissingMethodRule implements Rule
     }
 
     /**
-     * Returns true if the method has the #[Override] attribute
+     * Returns true if the method has the #[Override] attribute.
      */
     private function hasOverrideAttribute(ClassMethod $node): bool
     {

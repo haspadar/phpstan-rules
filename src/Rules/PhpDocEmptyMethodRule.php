@@ -12,6 +12,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Checks that every method PHPDoc block in a concrete class contains a summary line.
@@ -30,8 +31,10 @@ final readonly class PhpDocEmptyMethodRule implements Rule
     }
 
     /**
+     * Analyses the node and returns a list of errors.
+     *
      * @psalm-param ClassMethod $node
-     * @throws \PHPStan\ShouldNotHappenException
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]

@@ -11,6 +11,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Checks that PHPDoc tags in class methods appear in the required order.
@@ -25,10 +26,18 @@ final readonly class AtclauseOrderRule implements Rule
     /** @var list<string> */
     private array $tagOrder;
 
-    /** @param array{tagOrder?: list<string>} $options */
+    /**
+     * Constructs the rule with the given tag order configuration.
+     *
+     * @param array{tagOrder?: list<string>} $options
+     */
     public function __construct(array $options = [])
     {
-        $this->tagOrder = $options['tagOrder'] ?? ['@param', '@return', '@throws'];
+        $tags = $options['tagOrder'] ?? ['@param', '@return', '@throws'];
+        $this->tagOrder = array_map(
+            static fn(string $tag): string => str_starts_with($tag, '@') ? $tag : '@' . $tag,
+            $tags,
+        );
     }
 
     #[Override]
@@ -38,8 +47,10 @@ final readonly class AtclauseOrderRule implements Rule
     }
 
     /**
+     * Analyses the node and returns a list of errors.
+     *
      * @psalm-param ClassMethod $node
-     * @throws \PHPStan\ShouldNotHappenException
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
@@ -63,7 +74,7 @@ final readonly class AtclauseOrderRule implements Rule
     }
 
     /**
-     * Filters PHPDoc tags to those listed in tagOrder, preserving document order
+     * Filters PHPDoc tags to those listed in tagOrder, preserving document order.
      *
      * @return list<string>
      */
@@ -76,10 +87,10 @@ final readonly class AtclauseOrderRule implements Rule
     }
 
     /**
-     * Returns errors for any tags appearing out of required order
+     * Returns errors for any tags appearing out of required order.
      *
      * @param list<string> $tags
-     * @throws \PHPStan\ShouldNotHappenException
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     private function detectViolations(array $tags, string $methodName): array

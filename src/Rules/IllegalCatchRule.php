@@ -11,6 +11,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Detects catch blocks that catch overly broad exception types.
@@ -22,7 +23,11 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final readonly class IllegalCatchRule implements Rule
 {
-    /** @param list<string> $illegalClassNames Short class names (without leading backslash) that are forbidden in catch */
+    /**
+     * Constructs the rule with the given list of forbidden catch class names.
+     *
+     * @param list<string> $illegalClassNames Short class names (without leading backslash) that are forbidden in catch
+     */
     public function __construct(
         private array $illegalClassNames = ['Exception', 'Throwable', 'RuntimeException', 'Error'],
     ) {}
@@ -34,8 +39,10 @@ final readonly class IllegalCatchRule implements Rule
     }
 
     /**
+     * Analyses the node and returns a list of errors.
+     *
      * @psalm-param Catch_ $node
-     * @throws \PHPStan\ShouldNotHappenException
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]

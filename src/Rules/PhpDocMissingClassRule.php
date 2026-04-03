@@ -15,6 +15,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Checks that every named class, interface, and enum has a PHPDoc comment.
@@ -33,7 +34,9 @@ final readonly class PhpDocMissingClassRule implements Rule
     }
 
     /**
-     * @throws \PHPStan\ShouldNotHappenException
+     * Analyses the node and returns a list of errors.
+     *
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]

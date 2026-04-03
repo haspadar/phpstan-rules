@@ -24,6 +24,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Detects reassignment of method or constructor parameters.
@@ -44,8 +45,10 @@ final readonly class NoParameterReassignmentRule implements Rule
     }
 
     /**
+     * Analyses the node and returns a list of errors.
+     *
      * @psalm-param ClassMethod $node
-     * @throws \PHPStan\ShouldNotHappenException
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
@@ -89,9 +92,9 @@ final readonly class NoParameterReassignmentRule implements Rule
     }
 
     /**
-     * Finds all write-expression nodes within the method body, excluding those
-     * inside closures, arrow functions, nested functions, and anonymous classes
-     * which introduce a new variable scope.
+     * Finds all write-expression nodes within the method body, excluding those inside scope boundaries.
+     *
+     * Scope boundaries are closures, arrow functions, nested functions, and anonymous classes.
      *
      * @return list<Assign|AssignOp|AssignRef|PreInc|PostInc|PreDec|PostDec>
      */
@@ -114,9 +117,9 @@ final readonly class NoParameterReassignmentRule implements Rule
     }
 
     /**
-     * Returns true if the node is nested inside a closure, arrow function,
-     * nested function declaration, or anonymous class within the given method,
-     * meaning it belongs to a different variable scope.
+     * Returns true if the node is nested inside a scope boundary within the given method.
+     *
+     * Scope boundaries are closures, arrow functions, nested function declarations, and anonymous classes.
      */
     private static function isInsideScopeBoundary(Node $target, ClassMethod $method): bool
     {
@@ -132,7 +135,11 @@ final readonly class NoParameterReassignmentRule implements Rule
         return $parents !== [];
     }
 
-    /** @return list<string> */
+    /**
+     * Returns a list of parameter names for the given method node.
+     *
+     * @return list<string>
+     */
     private function parameterNames(ClassMethod $node): array
     {
         $names = [];

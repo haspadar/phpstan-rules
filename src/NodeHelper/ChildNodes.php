@@ -14,7 +14,7 @@ use PhpParser\Node;
 final class ChildNodes
 {
     /**
-     * Returns all direct child Node instances of the given node
+     * Returns all direct child Node instances of the given node.
      *
      * @return list<Node>
      */

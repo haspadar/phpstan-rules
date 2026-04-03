@@ -12,12 +12,18 @@ use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
-/** @implements Rule<Class_> */
+/**
+ * Reports a class that has more methods than the configured maximum.
+ *
+ * @implements Rule<Class_>
+ */
 final readonly class TooManyMethodsRule implements Rule
 {
     private bool $onlyPublic;
 
     /**
+     * Constructs the rule with the given method limit and options.
+     *
      * @param array{
      *     onlyPublic?: bool
      * } $options
@@ -34,6 +40,8 @@ final readonly class TooManyMethodsRule implements Rule
     }
 
     /**
+     * Analyses the node and returns a list of errors.
+     *
      * @psalm-param Class_ $node
      * @return list<IdentifierRuleError>
      */

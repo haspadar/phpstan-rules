@@ -11,6 +11,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Detects protected methods in final classes and reports an error for each one.
@@ -28,7 +29,9 @@ final readonly class ProtectedMethodInFinalClassRule implements Rule
     }
 
     /**
-     * @throws \PHPStan\ShouldNotHappenException
+     * Analyses the node and returns a list of errors.
+     *
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]

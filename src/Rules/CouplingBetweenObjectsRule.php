@@ -14,8 +14,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
 /**
- * Counts unique types a class depends on directly: property types, method parameter types,
- * return types, `new` expressions, static calls, and `catch` type hints.
+ * Counts unique types a class depends on directly, including property types, method parameter types, return types, new expressions, static calls, and catch type hints.
  * Types listed in `excludedClasses` are not counted.
  *
  * @implements Rule<Class_>
@@ -32,7 +31,9 @@ final readonly class CouplingBetweenObjectsRule implements Rule
     private CouplingBetweenObjectsRule\MethodBodyTypeCollector $bodyCollector;
 
     /**
-     * @param int $maximum maximum number of unique dependent types allowed per class
+     * Constructs the rule with the given coupling limit and optional exclusion list.
+     *
+     * @param int $maximum Maximum number of unique dependent types allowed per class
      * @param array{
      *     excludedClasses?: list<string>
      * } $options
@@ -51,7 +52,8 @@ final readonly class CouplingBetweenObjectsRule implements Rule
     }
 
     /**
-     * @inheritDoc
+     * Analyses the node and returns a list of errors.
+     *
      * @psalm-param Class_ $node
      * @return list<IdentifierRuleError>
      */
@@ -85,7 +87,7 @@ final readonly class CouplingBetweenObjectsRule implements Rule
     }
 
     /**
-     * Collects all unique type names from the class, excluding scalars and excluded classes
+     * Collects all unique type names from the class, excluding scalars and excluded classes.
      *
      * @return list<string>
      */
@@ -100,7 +102,7 @@ final readonly class CouplingBetweenObjectsRule implements Rule
     }
 
     /**
-     * Collects type names from property declarations
+     * Collects type names from property declarations.
      *
      * @return list<string>
      */
@@ -118,7 +120,7 @@ final readonly class CouplingBetweenObjectsRule implements Rule
     }
 
     /**
-     * Collects type names from all method signatures and bodies
+     * Collects type names from all method signatures and bodies.
      *
      * @return list<string>
      */
@@ -135,7 +137,7 @@ final readonly class CouplingBetweenObjectsRule implements Rule
     }
 
     /**
-     * Collects type names from method parameter and return type declarations
+     * Collects type names from method parameter and return type declarations.
      *
      * @return list<string>
      */
@@ -157,7 +159,7 @@ final readonly class CouplingBetweenObjectsRule implements Rule
     }
 
     /**
-     * Collects type names from `new`, static calls, and `catch` inside a method body
+     * Collects type names from `new`, static calls, and `catch` inside a method body.
      *
      * @return list<string>
      */
@@ -167,7 +169,7 @@ final readonly class CouplingBetweenObjectsRule implements Rule
     }
 
     /**
-     * Filters out scalar types and excluded classes, then deduplicates the result
+     * Filters out scalar types and excluded classes, then deduplicates the result.
      *
      * @param list<string> $names
      * @return list<string>

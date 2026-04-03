@@ -16,11 +16,13 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
- * Counts executable statements in a class method and reports an error when the count
- * exceeds the configured limit. Executable statements are all Stmt nodes except
- * structural/declarative ones (Nop, Label, Declare_, Else_, Block).
+ * Counts executable statements in a class method and reports an error when the count exceeds the limit.
+ *
+ * Executable statements are all Stmt nodes except structural/declarative ones
+ * (Nop, Label, Declare_, Else_, Block).
  * Nested scopes (closures, arrow functions, anonymous classes, property hooks) are
  * not traversed — their statements are excluded from the count.
  *
@@ -29,7 +31,7 @@ use PHPStan\Rules\RuleErrorBuilder;
 final readonly class StatementCountRule implements Rule
 {
     /**
-     * Constructs the rule with the given statement limit
+     * Constructs the rule with the given statement limit.
      *
      * @throws InvalidArgumentException when maxStatements is not a positive integer
      */
@@ -49,8 +51,10 @@ final readonly class StatementCountRule implements Rule
     }
 
     /**
+     * Analyses the node and returns a list of errors.
+     *
      * @psalm-param ClassMethod $node
-     * @throws \PHPStan\ShouldNotHappenException
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
@@ -80,8 +84,7 @@ final readonly class StatementCountRule implements Rule
     }
 
     /**
-     * Recursively counts executable statements in the given list of nodes,
-     * without entering nested scope boundaries
+     * Recursively counts executable statements in the given list of nodes, without entering scope boundaries.
      *
      * @param list<Node> $stmts
      */
@@ -105,7 +108,7 @@ final readonly class StatementCountRule implements Rule
     }
 
     /**
-     * Returns true for nodes that introduce a new scope boundary
+     * Returns true for nodes that introduce a new scope boundary.
      */
     private function isScopeBoundary(Node $node): bool
     {
@@ -117,7 +120,7 @@ final readonly class StatementCountRule implements Rule
     }
 
     /**
-     * Returns true for executable statement nodes (all Stmt except structural ones)
+     * Returns true for executable statement nodes (all Stmt except structural ones).
      */
     private function isExecutable(Node $node): bool
     {

@@ -13,20 +13,21 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 use Throwable;
 
 /**
- * Reports non-readonly properties in exception classes. A class is considered an exception
- * if it implements \Throwable (checked via PHPStan ReflectionProvider using the fully
- * qualified class name from the AST node). Only own (non-inherited) properties are checked.
- * Abstract and anonymous classes are excluded. Readonly class modifier cannot be used
- * because RuntimeException and Exception are not readonly, so each property must be
- * declared readonly individually.
+ * Reports non-readonly properties in exception classes.
+ * A class is considered an exception if it implements \Throwable (checked via PHPStan ReflectionProvider).
+ * Only own (non-inherited) properties are checked. Abstract and anonymous classes are excluded.
  *
  * @implements Rule<Class_>
  */
 final readonly class MutableExceptionRule implements Rule
 {
+    /**
+     * Constructs the rule with the given reflection provider.
+     */
     public function __construct(private ReflectionProvider $reflectionProvider) {}
 
     #[Override]
@@ -36,7 +37,9 @@ final readonly class MutableExceptionRule implements Rule
     }
 
     /**
-     * @throws \PHPStan\ShouldNotHappenException
+     * Analyses the node and returns a list of errors.
+     *
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
@@ -68,7 +71,9 @@ final readonly class MutableExceptionRule implements Rule
     }
 
     /**
-     * @throws \PHPStan\ShouldNotHappenException
+     * Returns errors for each non-readonly property declared in the given property node.
+     *
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     private function errorsForProperty(Property $property): array

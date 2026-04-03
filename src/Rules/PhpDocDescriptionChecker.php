@@ -10,6 +10,7 @@ use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use PHPStan\PhpDocParser\Parser\TypeParser;
 use PHPStan\PhpDocParser\ParserConfig;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Parses PHPDoc blocks and checks whether tag descriptions start with a capital letter.
@@ -23,7 +24,11 @@ final readonly class PhpDocDescriptionChecker
 
     private PhpDocParser $phpDocParser;
 
-    /** @throws \PHPStan\ShouldNotHappenException */
+    /**
+     * Constructs the checker and initialises the PHPStan PHPDoc lexer and parser.
+     *
+     * @throws ShouldNotHappenException
+     */
     public function __construct()
     {
         $config = new ParserConfig([]);
@@ -34,10 +39,9 @@ final readonly class PhpDocDescriptionChecker
     }
 
     /**
-     * Extracts the description text from the first @return tag,
-     * or returns null if the tag is absent or has no description
+     * Extracts the description text from the first @return tag, or null if absent or empty.
      *
-     * @throws \PHPStan\ShouldNotHappenException
+     * @throws ShouldNotHappenException
      */
     public function extractReturnDescription(string $docText): ?string
     {
@@ -54,9 +58,9 @@ final readonly class PhpDocDescriptionChecker
     }
 
     /**
-     * Returns all @param tag descriptions that are non-empty, keyed by parameter name
+     * Returns all @param tag descriptions that are non-empty, keyed by parameter name.
      *
-     * @throws \PHPStan\ShouldNotHappenException
+     * @throws ShouldNotHappenException
      * @return array<string, string>
      */
     public function extractParamDescriptions(string $docText): array
@@ -76,7 +80,7 @@ final readonly class PhpDocDescriptionChecker
     }
 
     /**
-     * Returns true if the string starts with an uppercase Unicode letter
+     * Returns true if the string starts with an uppercase Unicode letter.
      */
     public function startsWithCapital(string $text): bool
     {

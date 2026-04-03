@@ -12,7 +12,11 @@ use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
-/** @implements Rule<ClassMethod> */
+/**
+ * Reports a class method that exceeds the configured maximum line count.
+ *
+ * @implements Rule<ClassMethod>
+ */
 final readonly class MethodLengthRule implements Rule
 {
     private bool $skipBlankLines;
@@ -20,6 +24,8 @@ final readonly class MethodLengthRule implements Rule
     private bool $skipComments;
 
     /**
+     * Constructs the rule with the given line limit and filtering options.
+     *
      * @param array{
      *     skipBlankLines?: bool,
      *     skipComments?: bool
@@ -38,6 +44,8 @@ final readonly class MethodLengthRule implements Rule
     }
 
     /**
+     * Analyses the node and returns a list of errors.
+     *
      * @psalm-param ClassMethod $node
      * @return list<IdentifierRuleError>
      */
@@ -96,6 +104,8 @@ final readonly class MethodLengthRule implements Rule
     }
 
     /**
+     * Filters the given lines to those that should be counted toward the limit.
+     *
      * @param list<string> $methodLines
      * @return array<int, string>
      */

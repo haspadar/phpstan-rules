@@ -12,7 +12,11 @@ use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
-/** @implements Rule<FileNode> */
+/**
+ * Reports a file that exceeds the configured maximum line count.
+ *
+ * @implements Rule<FileNode>
+ */
 final readonly class FileLengthRule implements Rule
 {
     private bool $skipBlankLines;
@@ -20,6 +24,8 @@ final readonly class FileLengthRule implements Rule
     private bool $skipComments;
 
     /**
+     * Constructs the rule with the given line limit and filtering options.
+     *
      * @param array{
      *     skipBlankLines?: bool,
      *     skipComments?: bool
@@ -37,7 +43,11 @@ final readonly class FileLengthRule implements Rule
         return FileNode::class;
     }
 
-    /** @return list<IdentifierRuleError> */
+    /**
+     * Analyses the node and returns a list of errors.
+     *
+     * @return list<IdentifierRuleError>
+     */
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
@@ -77,6 +87,8 @@ final readonly class FileLengthRule implements Rule
     }
 
     /**
+     * Filters the given lines to those that should be counted toward the limit.
+     *
      * @param list<string> $allLines
      * @return array<int, string>
      */
@@ -96,7 +108,11 @@ final readonly class FileLengthRule implements Rule
         return $result;
     }
 
-    /** @return array{bool, bool} */
+    /**
+     * Returns whether the given line should be skipped and the updated block-comment state.
+     *
+     * @return array{bool, bool}
+     */
     private function shouldSkip(string $line, bool $inBlockComment): array
     {
         if ($inBlockComment) {

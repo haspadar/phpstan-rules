@@ -25,6 +25,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Detects modifications of loop control variables inside the loop body.
@@ -45,9 +46,11 @@ final readonly class ModifiedControlVariableRule implements Rule
     }
 
     /**
+     * Analyses the node and returns a list of errors.
+     *
      * @psalm-suppress RedundantFunctionCall -- array<Stmt> per PHPStan vs list<Stmt> per Psalm; array_values() needed for PHPStan
      * @psalm-param ClassMethod $node
-     * @throws \PHPStan\ShouldNotHappenException
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
@@ -75,7 +78,7 @@ final readonly class ModifiedControlVariableRule implements Rule
     }
 
     /**
-     * Collects variable names declared in the init expressions of a `for` loop
+     * Collects variable names declared in the init expressions of a `for` loop.
      *
      * @return list<string>
      */
@@ -98,7 +101,7 @@ final readonly class ModifiedControlVariableRule implements Rule
     }
 
     /**
-     * Collects variable names used as iteration variables in a `foreach` loop
+     * Collects variable names used as iteration variables in a `foreach` loop.
      *
      * @return list<string>
      */
@@ -118,12 +121,11 @@ final readonly class ModifiedControlVariableRule implements Rule
     }
 
     /**
-     * Finds all modifications (assign, compound assign, increment, decrement)
-     * of any of the given variable names within the loop body statements
+     * Finds all modifications of the given control variable names within the loop body statements.
      *
      * @param list<Node\Stmt> $stmts
      * @param list<string> $controlVars
-     * @throws \PHPStan\ShouldNotHappenException
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     private function findModificationsInBody(
@@ -167,8 +169,7 @@ final readonly class ModifiedControlVariableRule implements Rule
     }
 
     /**
-     * Collects modification nodes from statements without descending into
-     * nested scopes (closures and arrow functions)
+     * Collects modification nodes from statements without descending into nested scopes.
      *
      * @param list<Node> $nodes
      * @return list<Node>
@@ -193,7 +194,7 @@ final readonly class ModifiedControlVariableRule implements Rule
     }
 
     /**
-     * Returns true if the node is any kind of variable modification expression
+     * Returns true if the node is any kind of variable modification expression.
      */
     private function isModificationNode(Node $node): bool
     {
@@ -207,7 +208,7 @@ final readonly class ModifiedControlVariableRule implements Rule
     }
 
     /**
-     * Extracts the variable node from any modification expression
+     * Extracts the variable node from any modification expression.
      */
     private function extractVarNode(
         Assign|AssignOp|AssignRef|PreInc|PostInc|PreDec|PostDec $mod,

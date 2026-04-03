@@ -29,11 +29,15 @@ use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
-/** @implements Rule<ClassMethod> */
+/**
+ * Computes the cyclomatic complexity of each class method and reports an error when it exceeds the configured limit.
+ *
+ * @implements Rule<ClassMethod>
+ */
 final readonly class CyclomaticComplexityRule implements Rule
 {
     /**
-     * Constructs the rule with the given complexity limit
+     * Constructs the rule with the given complexity limit.
      *
      * @throws InvalidArgumentException
      */
@@ -53,6 +57,8 @@ final readonly class CyclomaticComplexityRule implements Rule
     }
 
     /**
+     * Analyses the node and returns a list of errors.
+     *
      * @psalm-param ClassMethod $node
      * @return list<IdentifierRuleError>
      */
@@ -82,7 +88,7 @@ final readonly class CyclomaticComplexityRule implements Rule
         ];
     }
 
-    /** Computes the cyclomatic complexity of a method */
+    /** Computes the cyclomatic complexity of a method. */
     private function complexity(ClassMethod $node): int
     {
         $finder = new NodeFinder();
@@ -103,13 +109,13 @@ final readonly class CyclomaticComplexityRule implements Rule
         return $count;
     }
 
-    /** Returns true for nodes that contribute to cyclomatic complexity */
+    /** Returns true for nodes that contribute to cyclomatic complexity. */
     private function isBranchingNode(Node $node): bool
     {
         return $this->isControlFlowNode($node) || $this->isLogicalOrConditionalNode($node);
     }
 
-    /** Returns true for control flow statement nodes */
+    /** Returns true for control flow statement nodes. */
     private function isControlFlowNode(Node $node): bool
     {
         return $node instanceof If_
@@ -123,7 +129,7 @@ final readonly class CyclomaticComplexityRule implements Rule
             || $node instanceof MatchArm;
     }
 
-    /** Returns true for logical and conditional expression nodes */
+    /** Returns true for logical and conditional expression nodes. */
     private function isLogicalOrConditionalNode(Node $node): bool
     {
         return $node instanceof BooleanAnd

@@ -11,12 +11,13 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
- * Checks that the description of the @return PHPDoc tag in every class method
- * starts with a capital letter. Methods without a PHPDoc block, @return tags
- * without a description, and methods in interfaces and traits are skipped.
- * Uses PhpDocDescriptionChecker to correctly handle generic types with spaces
+ * Checks that the description of the @return PHPDoc tag in every class method starts with a capital letter.
+ *
+ * Methods without a PHPDoc block, @return tags without a description, and methods in interfaces and traits
+ * are skipped. Uses PhpDocDescriptionChecker to correctly handle generic types with spaces
  * (e.g. array<int, string>).
  *
  * @implements Rule<ClassMethod>
@@ -25,7 +26,11 @@ final readonly class ReturnDescriptionCapitalRule implements Rule
 {
     private PhpDocDescriptionChecker $checker;
 
-    /** @throws \PHPStan\ShouldNotHappenException */
+    /**
+     * Constructs the rule and initialises the shared PHPDoc description checker.
+     *
+     * @throws ShouldNotHappenException
+     */
     public function __construct()
     {
         $this->checker = new PhpDocDescriptionChecker();
@@ -38,8 +43,10 @@ final readonly class ReturnDescriptionCapitalRule implements Rule
     }
 
     /**
+     * Analyses the node and returns a list of errors.
+     *
      * @psalm-param ClassMethod $node
-     * @throws \PHPStan\ShouldNotHappenException
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]

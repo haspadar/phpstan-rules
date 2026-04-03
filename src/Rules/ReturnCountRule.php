@@ -16,10 +16,12 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
- * Counts return statements in a class method and reports an error when the count
- * exceeds the configured limit. Abstract methods and methods without body are skipped.
+ * Counts return statements in a class method and reports an error when the count exceeds the limit.
+ *
+ * Abstract methods and methods without body are skipped.
  * Nested scopes (closures, arrow functions) are not traversed — their return statements
  * are excluded from the count.
  *
@@ -28,7 +30,7 @@ use PHPStan\Rules\RuleErrorBuilder;
 final readonly class ReturnCountRule implements Rule
 {
     /**
-     * Constructs the rule with the given return statement limit
+     * Constructs the rule with the given return statement limit.
      *
      * @throws InvalidArgumentException when max is not a positive integer
      */
@@ -48,7 +50,9 @@ final readonly class ReturnCountRule implements Rule
     }
 
     /**
-     * @throws \PHPStan\ShouldNotHappenException
+     * Analyses the node and returns a list of errors.
+     *
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
@@ -83,8 +87,7 @@ final readonly class ReturnCountRule implements Rule
     }
 
     /**
-     * Recursively counts return statements in the given list of nodes,
-     * without entering nested scope boundaries
+     * Recursively counts return statements in the given list of nodes, without entering scope boundaries.
      *
      * @param list<Node> $stmts
      */

@@ -11,6 +11,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Checks that every public property in a class has a PHPDoc comment.
@@ -23,7 +24,11 @@ final readonly class PhpDocMissingPropertyRule implements Rule
 {
     private bool $checkPublicOnly;
 
-    /** @param array{checkPublicOnly?: bool} $options */
+    /**
+     * Constructs the rule with the given visibility options.
+     *
+     * @param array{checkPublicOnly?: bool} $options
+     */
     public function __construct(array $options = [])
     {
         $this->checkPublicOnly = $options['checkPublicOnly'] ?? true;
@@ -36,7 +41,9 @@ final readonly class PhpDocMissingPropertyRule implements Rule
     }
 
     /**
-     * @throws \PHPStan\ShouldNotHappenException
+     * Analyses the node and returns a list of errors.
+     *
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]

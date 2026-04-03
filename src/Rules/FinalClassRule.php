@@ -11,11 +11,12 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
- * Reports every non-final concrete class. A class must be either abstract (designed
- * for inheritance) or final (inheritance forbidden). Excluded: abstract classes,
- * anonymous classes. Interfaces and traits are never Class_ nodes and are never visited.
+ * Reports every non-final concrete class.
+ * A class must be either abstract (designed for inheritance) or final (inheritance forbidden).
+ * Excluded: abstract classes, anonymous classes. Interfaces and traits are never Class_ nodes and are never visited.
  *
  * @implements Rule<Class_>
  */
@@ -28,7 +29,9 @@ final readonly class FinalClassRule implements Rule
     }
 
     /**
-     * @throws \PHPStan\ShouldNotHappenException
+     * Analyses the node and returns a list of errors.
+     *
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]

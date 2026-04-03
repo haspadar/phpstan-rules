@@ -5,12 +5,12 @@ declare(strict_types = 1);
 namespace Haspadar\PHPStanRules;
 
 /**
- * Entry point for PHPStan rules registration
+ * Entry point for PHPStan rules registration.
  */
 final class Rules
 {
     /**
-     * Returns the list of rule class names provided by this extension
+     * Returns the list of rule class names provided by this extension.
      *
      * @return list<class-string>
      */
