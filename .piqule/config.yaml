@@ -101,7 +101,9 @@ defaults:
   psalm.enabled: true
   psalm.error_level: 1
   psalm.project.directories: ["../../src"]
+  psalm.project.files: []
   psalm.project.ignore: ["../../vendor", "../../tests", "../../.git"]
+  psalm.suppress.possibly_unused: []
 
   infection.enabled: true
   infection.php_options: "-d memory_limit=1G"
