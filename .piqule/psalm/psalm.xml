@@ -2,10 +2,14 @@
 <psalm
         errorLevel="1"
         xmlns="https://getpsalm.org/schema/config"
-        findUnusedCode="false"
+        findUnusedCode="true"
+        findUnusedBaselineEntry="true"
+        ensureArrayStringOffsetsExist="true"
+        reportMixedIssues="true"
 >
     <projectFiles>
         <directory name="../../src" />
+
         <ignoreFiles>
             <directory name="../../vendor" />
             <directory name="../../tests" />
@@ -14,5 +18,16 @@
     </projectFiles>
     <issueHandlers>
         <InvalidAttribute errorLevel="suppress" />
+        <UnusedClass errorLevel="suppress">
+            <errorLevel type="suppress">
+                <directory name="../../src" />
+            </errorLevel>
+        </UnusedClass>
+        <PossiblyUnusedMethod errorLevel="suppress">
+            <errorLevel type="suppress">
+                <directory name="../../src" />
+            </errorLevel>
+        </PossiblyUnusedMethod>
+
     </issueHandlers>
 </psalm>
