@@ -56,6 +56,7 @@
 | `ReturnDescriptionCapitalRule` | `@return` tag description must start with a capital letter                             |
 | `ParamDescriptionCapitalRule`  | `@param` tag descriptions must start with a capital letter                             |
 | `NoPhpDocForOverriddenRule`    | Overridden methods (`#[Override]`) must not have a PHPDoc comment                      |
+| `ClassConstantTypeHintRule`    | Every class constant must have a native type declaration (PHP 8.3+)                    |
 
 ---
 

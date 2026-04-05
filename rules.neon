@@ -286,3 +286,7 @@ services:
         class: Haspadar\PHPStanRules\Rules\NoPhpDocForOverriddenRule
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\ClassConstantTypeHintRule
+        tags:
+            - phpstan.rules.rule

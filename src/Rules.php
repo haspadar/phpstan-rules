@@ -47,6 +47,7 @@ final class Rules
             Rules\ReturnDescriptionCapitalRule::class,
             Rules\ParamDescriptionCapitalRule::class,
             Rules\NoPhpDocForOverriddenRule::class,
+            Rules\ClassConstantTypeHintRule::class,
         ];
     }
 }
