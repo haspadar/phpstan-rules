@@ -27,18 +27,38 @@ final class ChildNodes
             // @phpstan-ignore property.dynamicName
             $child = $node->$name;
 
-            if ($child instanceof Node) {
-                $children[] = $child;
-            } elseif (is_array($child)) {
-                /** @psalm-suppress MixedAssignment */
-                foreach ($child as $item) {
-                    if ($item instanceof Node) {
-                        $children[] = $item;
-                    }
-                }
+            foreach (self::extractNodes($child) as $extracted) {
+                $children[] = $extracted;
             }
         }
 
         return $children;
+    }
+
+    /**
+     * Extracts Node instances from a value that may be a Node, an array of Nodes, or neither.
+     *
+     * @return list<Node>
+     */
+    private static function extractNodes(mixed $value): array
+    {
+        if ($value instanceof Node) {
+            return [$value];
+        }
+
+        if (!is_array($value)) {
+            return [];
+        }
+
+        $nodes = [];
+
+        /** @psalm-suppress MixedAssignment */
+        foreach ($value as $item) {
+            if ($item instanceof Node) {
+                $nodes[] = $item;
+            }
+        }
+
+        return $nodes;
     }
 }
