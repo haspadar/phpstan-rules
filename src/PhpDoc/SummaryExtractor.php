@@ -20,11 +20,7 @@ final class SummaryExtractor
         $lines = explode("\n", $docText);
 
         foreach ($lines as $line) {
-            $trimmed = trim($line);
-            $trimmed = preg_replace('#^/\*\*\s*#', '', $trimmed) ?? $trimmed;
-            $trimmed = preg_replace('#\s*\*/$#', '', $trimmed) ?? $trimmed;
-            $trimmed = preg_replace('#^\*\s?#', '', $trimmed) ?? $trimmed;
-            $trimmed = trim($trimmed);
+            $trimmed = self::cleanLine($line);
 
             if ($trimmed === '' || $trimmed === '*') {
                 continue;
@@ -38,5 +34,18 @@ final class SummaryExtractor
         }
 
         return null;
+    }
+
+    /**
+     * Strips PHPDoc delimiters and leading asterisks from a single line.
+     */
+    private static function cleanLine(string $line): string
+    {
+        $trimmed = trim($line);
+        $trimmed = preg_replace('#^/\*\*\s*#', '', $trimmed) ?? $trimmed;
+        $trimmed = preg_replace('#\s*\*/$#', '', $trimmed) ?? $trimmed;
+        $trimmed = preg_replace('#^\*\s?#', '', $trimmed) ?? $trimmed;
+
+        return trim($trimmed);
     }
 }
