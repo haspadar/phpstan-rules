@@ -48,6 +48,7 @@ final class Rules
             Rules\ParamDescriptionCapitalRule::class,
             Rules\NoPhpDocForOverriddenRule::class,
             Rules\ClassConstantTypeHintRule::class,
+            Rules\NoLineCommentBeforeDeclarationRule::class,
         ];
     }
 }
