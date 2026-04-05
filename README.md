@@ -18,6 +18,7 @@
 | `TooManyMethodsRule`              | 20      | Class must not have more than N methods                                    |
 | `ParameterNumberRule`             | 3       | Method must not have more than N parameters                                |
 | `CyclomaticComplexityRule`        | 10      | Method cyclomatic complexity must not exceed N                             |
+| `CognitiveComplexityRule`         | 10      | Method cognitive complexity must not exceed N (nesting is penalised)       |
 | `CouplingBetweenObjectsRule`      | 15      | Class must not depend on more than N unique types                          |
 | `BooleanExpressionComplexityRule` | 3       | Method must not have more than N boolean operators in a single expression  |
 | `StatementCountRule`              | 30      | Method must not have more than N executable statements                     |
