@@ -10,6 +10,8 @@ use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Enum_;
+use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
@@ -49,29 +51,53 @@ final readonly class NoLineCommentBeforeDeclarationRule implements Rule
             $errors[] = $classError;
         }
 
+        return array_merge($errors, $this->checkMembers($node));
+    }
+
+    /**
+     * Checks all methods and properties inside the class-like for line comments.
+     *
+     * @return list<IdentifierRuleError>
+     */
+    private function checkMembers(ClassLike $node): array
+    {
+        $errors = [];
+
         foreach ($node->stmts as $stmt) {
             if ($stmt instanceof ClassMethod) {
-                $methodError = $this->checkNode($stmt, sprintf('Method %s()', $stmt->name->toString()));
+                $error = $this->checkNode($stmt, sprintf('Method %s()', $stmt->name->toString()));
 
-                if ($methodError !== null) {
-                    $errors[] = $methodError;
+                if ($error !== null) {
+                    $errors[] = $error;
                 }
             }
 
             if ($stmt instanceof Property) {
-                foreach ($stmt->props as $prop) {
-                    $propError = $this->checkNode($stmt, sprintf('Property $%s', $prop->name->toString()));
+                $error = $this->checkProperty($stmt);
 
-                    if ($propError !== null) {
-                        $errors[] = $propError;
-
-                        break;
-                    }
+                if ($error !== null) {
+                    $errors[] = $error;
                 }
             }
         }
 
         return $errors;
+    }
+
+    /**
+     * Checks a property statement for line comments.
+     */
+    private function checkProperty(Property $property): ?IdentifierRuleError
+    {
+        foreach ($property->props as $prop) {
+            $error = $this->checkNode($property, sprintf('Property $%s', $prop->name->toString()));
+
+            if ($error !== null) {
+                return $error;
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -114,6 +140,12 @@ final readonly class NoLineCommentBeforeDeclarationRule implements Rule
             return 'Anonymous class';
         }
 
-        return sprintf('Class %s', $node->name->toString());
+        $kind = match (true) {
+            $node instanceof Interface_ => 'Interface',
+            $node instanceof Enum_ => 'Enum',
+            default => 'Class',
+        };
+
+        return sprintf('%s %s', $kind, $node->name->toString());
     }
 }
