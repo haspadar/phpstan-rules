@@ -69,7 +69,7 @@ final readonly class CognitiveComplexityRule implements Rule
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
-        $complexity = $this->calculate(array_values($node->stmts ?? []), 0);
+        $complexity = $this->calculate($node->stmts ?? [], 0);
 
         if ($complexity <= $this->maxComplexity) {
             return [];
@@ -95,7 +95,7 @@ final readonly class CognitiveComplexityRule implements Rule
     /**
      * Recursively calculates cognitive complexity for a list of statements.
      *
-     * @param list<Node> $stmts
+     * @param Node[] $stmts
      */
     private function calculate(array $stmts, int $depth): int
     {
@@ -118,11 +118,11 @@ final readonly class CognitiveComplexityRule implements Rule
         }
 
         if ($node instanceof ElseIf_ || $node instanceof Else_ || $node instanceof Catch_) {
-            return 1 + $this->calculate(array_values($node->stmts), $depth + 1);
+            return 1 + $this->calculate($node->stmts, $depth + 1);
         }
 
         if ($node instanceof Switch_) {
-            return 1 + $depth + $this->scoreCases(array_values($node->cases), $depth + 1);
+            return 1 + $depth + $this->scoreCases($node->cases, $depth + 1);
         }
 
         return $this->scoreLoop($node, $depth);
@@ -134,11 +134,11 @@ final readonly class CognitiveComplexityRule implements Rule
     private function scoreLoop(Node $node, int $depth): int
     {
         if ($node instanceof While_ || $node instanceof Do_) {
-            return 1 + $depth + $this->calculate(array_values($node->stmts), $depth + 1);
+            return 1 + $depth + $this->calculate($node->stmts, $depth + 1);
         }
 
         if ($node instanceof For_ || $node instanceof Foreach_) {
-            return 1 + $depth + $this->calculate(array_values($node->stmts), $depth + 1);
+            return 1 + $depth + $this->calculate($node->stmts, $depth + 1);
         }
 
         return $this->scoreLeaf($node, $depth);
@@ -167,7 +167,7 @@ final readonly class CognitiveComplexityRule implements Rule
      */
     private function scoreIf(If_ $node, int $depth): int
     {
-        $score = $this->calculate(array_values($node->stmts), $depth + 1);
+        $score = $this->calculate($node->stmts, $depth + 1);
 
         foreach ($node->elseifs as $elseif) {
             $score += $this->scoreNode($elseif, $depth);
@@ -183,14 +183,14 @@ final readonly class CognitiveComplexityRule implements Rule
     /**
      * Scores switch cases, skipping default (null condition).
      *
-     * @param list<Case_> $cases
+     * @param Case_[] $cases
      */
     private function scoreCases(array $cases, int $depth): int
     {
         $score = 0;
 
         foreach ($cases as $case) {
-            $score += $this->calculate(array_values($case->stmts), $depth);
+            $score += $this->calculate($case->stmts, $depth);
         }
 
         return $score;
