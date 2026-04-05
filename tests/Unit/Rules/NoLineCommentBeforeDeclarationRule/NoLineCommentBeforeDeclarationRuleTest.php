@@ -117,4 +117,18 @@ final class NoLineCommentBeforeDeclarationRuleTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function reportsErrorWhenLineCommentBeforeTrait(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NoLineCommentBeforeDeclarationRule/LineCommentBeforeTrait.php'],
+            [
+                [
+                    'Trait LineCommentBeforeTrait has a line comment before its declaration; use a PHPDoc block instead.',
+                    7,
+                ],
+            ],
+        );
+    }
 }

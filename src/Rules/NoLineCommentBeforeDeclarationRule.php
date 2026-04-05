@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
@@ -139,6 +140,7 @@ final readonly class NoLineCommentBeforeDeclarationRule implements Rule
         $kind = match (true) {
             $node instanceof Interface_ => 'Interface',
             $node instanceof Enum_ => 'Enum',
+            $node instanceof Trait_ => 'Trait',
             default => 'Class',
         };
 
