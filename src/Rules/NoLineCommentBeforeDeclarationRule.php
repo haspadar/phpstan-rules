@@ -65,24 +65,30 @@ final readonly class NoLineCommentBeforeDeclarationRule implements Rule
         $errors = [];
 
         foreach ($node->stmts as $stmt) {
-            if ($stmt instanceof ClassMethod) {
-                $error = $this->checkNode($stmt, sprintf('Method %s()', $stmt->name->toString()));
+            $error = $this->checkMember($stmt);
 
-                if ($error !== null) {
-                    $errors[] = $error;
-                }
-            }
-
-            if ($stmt instanceof Property) {
-                $error = $this->checkProperty($stmt);
-
-                if ($error !== null) {
-                    $errors[] = $error;
-                }
+            if ($error !== null) {
+                $errors[] = $error;
             }
         }
 
         return $errors;
+    }
+
+    /**
+     * Checks a single class member (method or property) for line comments.
+     */
+    private function checkMember(Node $stmt): ?IdentifierRuleError
+    {
+        if ($stmt instanceof ClassMethod) {
+            return $this->checkNode($stmt, sprintf('Method %s()', $stmt->name->toString()));
+        }
+
+        if ($stmt instanceof Property) {
+            return $this->checkProperty($stmt);
+        }
+
+        return null;
     }
 
     /**
