@@ -290,3 +290,7 @@ services:
         class: Haspadar\PHPStanRules\Rules\ClassConstantTypeHintRule
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\NoLineCommentBeforeDeclarationRule
+        tags:
+            - phpstan.rules.rule
