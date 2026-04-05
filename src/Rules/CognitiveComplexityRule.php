@@ -123,6 +123,14 @@ final readonly class CognitiveComplexityRule implements Rule
             return 1 + $depth + $this->scoreCases($node->cases, $depth + 1);
         }
 
+        return $this->scoreBranch($node, $depth);
+    }
+
+    /**
+     * Returns the score for branch and jump nodes, delegates to loop scoring.
+     */
+    private function scoreBranch(Node $node, int $depth): int
+    {
         if ($node instanceof ElseIf_ || $node instanceof Catch_) {
             return 1 + $depth + $this->calculate($node->stmts, $depth + 1);
         }
@@ -131,11 +139,17 @@ final readonly class CognitiveComplexityRule implements Rule
             return 1 + $this->calculate($node->stmts, $depth + 1);
         }
 
+        if ($node instanceof Break_ || $node instanceof Continue_) {
+            return $node->num !== null
+                ? 1
+                : 0;
+        }
+
         return $this->scoreLoop($node, $depth);
     }
 
     /**
-     * Returns the complexity score for loop, ternary, and jump nodes.
+     * Returns the complexity score for loop and ternary nodes.
      */
     private function scoreLoop(Node $node, int $depth): int
     {
@@ -145,22 +159,6 @@ final readonly class CognitiveComplexityRule implements Rule
 
         if ($node instanceof Ternary || $node instanceof Coalesce) {
             return 1 + $depth + $this->scoreChildren($node, $depth);
-        }
-
-        return $this->scoreJump($node, $depth);
-    }
-
-    /**
-     * Returns 1 for labeled break/continue, delegates everything else to scoreChildren.
-     */
-    private function scoreJump(Node $node, int $depth): int
-    {
-        if ($node instanceof Break_ || $node instanceof Continue_) {
-            if ($node->num !== null) {
-                return 1;
-            }
-
-            return 0;
         }
 
         return $this->scoreChildren($node, $depth);
