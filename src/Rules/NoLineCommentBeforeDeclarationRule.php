@@ -136,16 +136,12 @@ final readonly class NoLineCommentBeforeDeclarationRule implements Rule
      */
     private function describeClassLike(ClassLike $node): string
     {
-        if ($node->name === null) {
-            return 'Anonymous class';
-        }
-
         $kind = match (true) {
             $node instanceof Interface_ => 'Interface',
             $node instanceof Enum_ => 'Enum',
             default => 'Class',
         };
 
-        return sprintf('%s %s', $kind, $node->name->toString());
+        return sprintf('%s %s', $kind, $node->name?->toString() ?? 'anonymous');
     }
 }
