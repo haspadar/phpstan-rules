@@ -95,7 +95,8 @@ final readonly class CognitiveComplexityRule implements Rule
     /**
      * Recursively calculates cognitive complexity for a list of statements.
      *
-     * @param Node[] $stmts
+     * @param list<Node> $stmts
+     * @phpstan-param array<Node> $stmts
      */
     private function calculate(array $stmts, int $depth): int
     {
@@ -183,7 +184,8 @@ final readonly class CognitiveComplexityRule implements Rule
     /**
      * Scores switch cases, skipping default (null condition).
      *
-     * @param Case_[] $cases
+     * @param list<Case_> $cases
+     * @phpstan-param array<Case_> $cases
      */
     private function scoreCases(array $cases, int $depth): int
     {
