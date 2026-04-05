@@ -108,4 +108,13 @@ final class NoLineCommentBeforeDeclarationRuleTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function passesWhenAnonymousClass(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NoLineCommentBeforeDeclarationRule/AnonymousClass.php'],
+            [],
+        );
+    }
 }
