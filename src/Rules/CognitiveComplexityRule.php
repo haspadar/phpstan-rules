@@ -123,14 +123,6 @@ final readonly class CognitiveComplexityRule implements Rule
             return 1 + $depth + $this->scoreCases($node->cases, $depth + 1);
         }
 
-        return $this->scoreStructural($node, $depth);
-    }
-
-    /**
-     * Returns the score for structural increments, loop nodes, and leaf nodes.
-     */
-    private function scoreStructural(Node $node, int $depth): int
-    {
         if ($node instanceof ElseIf_ || $node instanceof Catch_) {
             return 1 + $depth + $this->calculate($node->stmts, $depth + 1);
         }
@@ -143,34 +135,32 @@ final readonly class CognitiveComplexityRule implements Rule
     }
 
     /**
-     * Returns the complexity score for loop nodes, falling back to leaf scoring.
+     * Returns the complexity score for loop, ternary, and jump nodes.
      */
     private function scoreLoop(Node $node, int $depth): int
     {
-        if ($node instanceof While_ || $node instanceof Do_) {
+        if ($node instanceof While_ || $node instanceof Do_ || $node instanceof For_ || $node instanceof Foreach_) {
             return 1 + $depth + $this->calculate($node->stmts, $depth + 1);
         }
 
-        if ($node instanceof For_ || $node instanceof Foreach_) {
-            return 1 + $depth + $this->calculate($node->stmts, $depth + 1);
-        }
-
-        return $this->scoreLeaf($node, $depth);
-    }
-
-    /**
-     * Returns the complexity score for leaf-level nodes (ternary, coalesce, break, continue, children).
-     */
-    private function scoreLeaf(Node $node, int $depth): int
-    {
         if ($node instanceof Ternary || $node instanceof Coalesce) {
             return 1 + $depth + $this->scoreChildren($node, $depth);
         }
 
+        return $this->scoreJump($node, $depth);
+    }
+
+    /**
+     * Returns 1 for labeled break/continue, delegates everything else to scoreChildren.
+     */
+    private function scoreJump(Node $node, int $depth): int
+    {
         if ($node instanceof Break_ || $node instanceof Continue_) {
-            return $node->num !== null
-                ? 1
-                : 0;
+            if ($node->num !== null) {
+                return 1;
+            }
+
+            return 0;
         }
 
         return $this->scoreChildren($node, $depth);
