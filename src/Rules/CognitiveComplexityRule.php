@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
+use PhpParser\Node\Stmt\Finally_;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
@@ -118,12 +119,24 @@ final readonly class CognitiveComplexityRule implements Rule
             return 1 + $depth + $this->scoreIf($node, $depth);
         }
 
-        if ($node instanceof ElseIf_ || $node instanceof Else_ || $node instanceof Catch_) {
-            return 1 + $this->calculate($node->stmts, $depth + 1);
-        }
-
         if ($node instanceof Switch_) {
             return 1 + $depth + $this->scoreCases($node->cases, $depth + 1);
+        }
+
+        return $this->scoreStructural($node, $depth);
+    }
+
+    /**
+     * Returns the score for structural increments, loop nodes, and leaf nodes.
+     */
+    private function scoreStructural(Node $node, int $depth): int
+    {
+        if ($node instanceof ElseIf_ || $node instanceof Catch_) {
+            return 1 + $depth + $this->calculate($node->stmts, $depth + 1);
+        }
+
+        if ($node instanceof Else_ || $node instanceof Finally_) {
+            return 1 + $this->calculate($node->stmts, $depth + 1);
         }
 
         return $this->scoreLoop($node, $depth);
@@ -151,7 +164,7 @@ final readonly class CognitiveComplexityRule implements Rule
     private function scoreLeaf(Node $node, int $depth): int
     {
         if ($node instanceof Ternary || $node instanceof Coalesce) {
-            return 1 + $depth;
+            return 1 + $depth + $this->scoreChildren($node, $depth);
         }
 
         if ($node instanceof Break_ || $node instanceof Continue_) {
