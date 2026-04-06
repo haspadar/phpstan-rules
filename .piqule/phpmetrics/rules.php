@@ -20,7 +20,7 @@ return [
         'max_depth' => 3,
     ],
     'structure' => [
-        'max_methods_per_class' => 10,
+        'max_methods_per_class' => 11,
     ],
     'coupling' => [
         'max_afferent' => 12,

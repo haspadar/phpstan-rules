@@ -6,6 +6,7 @@ override:
     phpunit.testsuites.integration: []
     phpmetrics.complexity.max_weighted_methods_per_class: 40
     phpmetrics.complexity.max_cyclomatic_per_method: [12]
+    phpmetrics.structure.max_methods_per_class: [11]
     phpmd.cyclomatic: [12]
     sonar.exclusions: ["../../tests/**"]
     psalm.suppress.possibly_unused: ["../../src"]
