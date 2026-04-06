@@ -24,7 +24,7 @@ final class CognitiveComplexityRuleStructuresTest extends RuleTestCase
             [__DIR__ . '/../../../Fixtures/Rules/CognitiveComplexityRule/AllStructures.php'],
             [
                 [
-                    'Method Haspadar\PHPStanRules\Tests\Fixtures\Rules\CognitiveComplexityRule\AllStructures::allStructures() has cognitive complexity of 15. Maximum allowed is 10.',
+                    'Method Haspadar\PHPStanRules\Tests\Fixtures\Rules\CognitiveComplexityRule\AllStructures::allStructures() has cognitive complexity of 21. Maximum allowed is 10.',
                     14,
                 ],
             ],

@@ -45,15 +45,24 @@ final class AllStructures
 
         $result = $value ?? 0;   // +1 (depth 0) coalesce
 
+        if ($flag) {                           // +1 (depth 0)
+            $result += 1;
+        } elseif ($result > 0) {               // +1 (depth 0)
+            $result += 2;
+        }
+
         outer: for ($i = 0; $i < 3; $i++) {   // +1 (depth 0)
             for ($j = 0; $j < 3; $j++) {       // +1 +1 (depth 1)
                 if ($i === $j) {               // +1 +2 (depth 2)
                     continue 2;                // +1 labeled continue
                 }
+                if ($j > 1) {                  // +1 +2 (depth 2)
+                    break 2;                   // +1 labeled break
+                }
             }
         }
 
         return $result;
-        // total = 1+1+1+1+1+1+1+1+1+1+1+1+1 = 13
+        // total = 1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1 = 19
     }
 }
