@@ -143,7 +143,7 @@ final readonly class CognitiveComplexityRule implements Rule
     }
 
     /**
-     * Returns the complexity score for loop, ternary, and labeled jump nodes.
+     * Returns the complexity score for loop and ternary nodes, delegates jump scoring.
      */
     private function scoreLoopOrJump(Node $node, int $depth): int
     {
@@ -155,11 +155,15 @@ final readonly class CognitiveComplexityRule implements Rule
             return 1 + $depth + $this->scoreChildren($node, $depth);
         }
 
-        if ($node instanceof Break_ && $node->num !== null) {
-            return 1;
-        }
+        return $this->scoreJump($node, $depth);
+    }
 
-        if ($node instanceof Continue_ && $node->num !== null) {
+    /**
+     * Returns 1 for labeled break/continue, delegates to child scoring otherwise.
+     */
+    private function scoreJump(Node $node, int $depth): int
+    {
+        if (($node instanceof Break_ || $node instanceof Continue_) && $node->num !== null) {
             return 1;
         }
 
