@@ -35,5 +35,16 @@ if [ -n "$SEED" ]; then
   ARGS+=(--random-order-seed="$SEED")
 fi
 
+COVERAGE_FILE=".piqule/codecov/coverage.xml"
+
+if php -r 'exit(extension_loaded("xdebug") ? 0 : 1);' 2>/dev/null; then
+  mkdir -p "$(dirname "$COVERAGE_FILE")"
+  ARGS+=(--coverage-clover="$COVERAGE_FILE")
+  XDEBUG_MODE=coverage
+else
+  XDEBUG_MODE=off
+fi
+
 PHP_OPTIONS="-d memory_limit=512M"
+export XDEBUG_MODE
 php "$PHP_OPTIONS" "$BIN" "${ARGS[@]}"

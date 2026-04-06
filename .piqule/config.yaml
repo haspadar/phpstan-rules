@@ -14,6 +14,9 @@ defaults:
   exclude: ["vendor", "tests", ".git"]
   php.versions: ["8.3"]
 
+  check.default: "fast"
+  check.slow: ["infection", "sonar"]
+
   ci.piqule_bin: "vendor/bin/piqule"
   ci.pr.max_lines_changed: 250
 

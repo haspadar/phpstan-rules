@@ -51,7 +51,7 @@ return (new PhpCsFixer\Config())
 
         // Strict types
         'declare_strict_types' => true,
-        'declare_equal_normalize' => ['space' => 'single'],
+        'declare_equal_normalize' => ['space' => 'none'],
 
         // Final & visibility
         'final_class' => true,
