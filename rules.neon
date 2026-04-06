@@ -21,6 +21,8 @@ parameters:
             maxOperators: 5
         cyclomaticComplexity:
             maxComplexity: 10
+        cognitiveComplexity:
+            maxComplexity: 10
         returnCount:
             max: 3
         statementCount:
@@ -80,6 +82,9 @@ parametersSchema:
             maxOperators: int(),
         ]),
         cyclomaticComplexity: structure([
+            maxComplexity: int(),
+        ]),
+        cognitiveComplexity: structure([
             maxComplexity: int(),
         ]),
         returnCount: structure([
@@ -152,6 +157,12 @@ services:
         class: Haspadar\PHPStanRules\Rules\CyclomaticComplexityRule
         arguments:
             maxComplexity: %haspadar.cyclomaticComplexity.maxComplexity%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\CognitiveComplexityRule
+        arguments:
+            maxComplexity: %haspadar.cognitiveComplexity.maxComplexity%
         tags:
             - phpstan.rules.rule
     -

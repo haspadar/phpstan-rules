@@ -119,6 +119,15 @@ final class NoLineCommentBeforeDeclarationRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function passesWhenLineCommentBeforeClassConstant(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NoLineCommentBeforeDeclarationRule/ClassConstant.php'],
+            [],
+        );
+    }
+
+    #[Test]
     public function reportsErrorWhenLineCommentBeforeTrait(): void
     {
         $this->analyse(

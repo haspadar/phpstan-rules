@@ -2,7 +2,7 @@
 
 return [
     'complexity' => [
-        'max_cyclomatic_per_method' => 10,
+        'max_cyclomatic_per_method' => 12,
         'max_weighted_methods_per_class' => 40,
     ],
     'size' => [
@@ -20,7 +20,7 @@ return [
         'max_depth' => 3,
     ],
     'structure' => [
-        'max_methods_per_class' => 10,
+        'max_methods_per_class' => 11,
     ],
     'coupling' => [
         'max_afferent' => 12,

@@ -22,6 +22,7 @@ final class Rules
             Rules\TooManyMethodsRule::class,
             Rules\ParameterNumberRule::class,
             Rules\CyclomaticComplexityRule::class,
+            Rules\CognitiveComplexityRule::class,
             Rules\CouplingBetweenObjectsRule::class,
             Rules\BooleanExpressionComplexityRule::class,
             Rules\StatementCountRule::class,

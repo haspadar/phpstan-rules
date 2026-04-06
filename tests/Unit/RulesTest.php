@@ -7,6 +7,7 @@ namespace Haspadar\PHPStanRules\Tests\Unit;
 use Haspadar\PHPStanRules\Rules;
 use Haspadar\PHPStanRules\Rules\BooleanExpressionComplexityRule;
 use Haspadar\PHPStanRules\Rules\CouplingBetweenObjectsRule;
+use Haspadar\PHPStanRules\Rules\CognitiveComplexityRule;
 use Haspadar\PHPStanRules\Rules\CyclomaticComplexityRule;
 use Haspadar\PHPStanRules\Rules\FileLengthRule;
 use Haspadar\PHPStanRules\Rules\FinalClassRule;
@@ -52,6 +53,7 @@ final class RulesTest extends TestCase
                 TooManyMethodsRule::class,
                 ParameterNumberRule::class,
                 CyclomaticComplexityRule::class,
+                CognitiveComplexityRule::class,
                 CouplingBetweenObjectsRule::class,
                 BooleanExpressionComplexityRule::class,
                 StatementCountRule::class,
