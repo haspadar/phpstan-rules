@@ -8,7 +8,9 @@ override:
     phpmetrics.complexity.max_cyclomatic_per_method: [12]
     phpmetrics.structure.max_methods_per_class: [11]
     phpmd.cyclomatic: [12]
-    sonar.exclusions: ["../../tests/**"]
+    sonar.organization: haspadar-org
+    sonar.projectKey: haspadar_phpstan-rules
+    sonar.exclusions: ["tests/**"]
     psalm.suppress.possibly_unused: ["../../src"]
 
 append:
