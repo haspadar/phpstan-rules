@@ -21,6 +21,7 @@
 | `CognitiveComplexityRule`         | 10      | Method cognitive complexity must not exceed N (nesting is penalised)       |
 | `CouplingBetweenObjectsRule`      | 15      | Class must not depend on more than N unique types                          |
 | `BooleanExpressionComplexityRule` | 3       | Method must not have more than N boolean operators in a single expression  |
+| `ClassLengthRule`                 | 500     | Class body must not exceed N lines                                         |
 | `StatementCountRule`              | 30      | Method must not have more than N executable statements                     |
 
 ### Design
@@ -89,6 +90,10 @@ parameters:
                 - Symfony\Component\HttpFoundation\Request
         booleanExpressionComplexity:
             maxOperators: 2
+        classLength:
+            maxLines: 250
+            skipBlankLines: true
+            skipComments: true
         statementCount:
             maxStatements: 20
         returnCount:
