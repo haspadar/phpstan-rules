@@ -14,6 +14,9 @@ defaults:
   exclude: ["vendor", "tests", ".git"]
   php.versions: ["8.3"]
 
+  check.default: "fast"
+  check.slow: ["infection", "sonar"]
+
   ci.piqule_bin: "vendor/bin/piqule"
   ci.pr.max_lines_changed: 250
 
@@ -22,7 +25,7 @@ defaults:
   coverage.project.target: 80
   coverage.project.threshold: 2
 
-  docker.image: "ghcr.io/haspadar/piqule-infra@sha256:a7d41e9fef08156778df6f9172145970a617962bee9e17f1484ebc9b41f6ac29"
+  docker.image: "ghcr.io/haspadar/piqule-infra@sha256:589bb437680b08653feefa47f3b8c76573d71f8a1c3aa102bfd69e5b17289b48"
 
   actionlint.enabled: true
 
