@@ -8,6 +8,10 @@ parameters:
             maxLines: 1000
             skipBlankLines: false
             skipComments: false
+        classLength:
+            maxLines: 500
+            skipBlankLines: false
+            skipComments: false
         tooManyMethods:
             maxMethods: 20
             onlyPublic: false
@@ -62,6 +66,11 @@ parametersSchema:
             skipComments: bool(),
         ]),
         fileLength: structure([
+            maxLines: int(),
+            skipBlankLines: bool(),
+            skipComments: bool(),
+        ]),
+        classLength: structure([
             maxLines: int(),
             skipBlankLines: bool(),
             skipComments: bool(),
@@ -135,6 +144,15 @@ services:
             options:
                 skipBlankLines: %haspadar.fileLength.skipBlankLines%
                 skipComments: %haspadar.fileLength.skipComments%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\ClassLengthRule
+        arguments:
+            maxLines: %haspadar.classLength.maxLines%
+            options:
+                skipBlankLines: %haspadar.classLength.skipBlankLines%
+                skipComments: %haspadar.classLength.skipComments%
         tags:
             - phpstan.rules.rule
     -
