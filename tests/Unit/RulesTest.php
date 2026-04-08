@@ -31,6 +31,7 @@ use Haspadar\PHPStanRules\Rules\PhpDocMissingClassRule;
 use Haspadar\PHPStanRules\Rules\PhpDocMissingMethodRule;
 use Haspadar\PHPStanRules\Rules\PhpDocMissingPropertyRule;
 use Haspadar\PHPStanRules\Rules\ClassConstantTypeHintRule;
+use Haspadar\PHPStanRules\Rules\NoInlineCommentRule;
 use Haspadar\PHPStanRules\Rules\NoLineCommentBeforeDeclarationRule;
 use Haspadar\PHPStanRules\Rules\NoPhpDocForOverriddenRule;
 use Haspadar\PHPStanRules\Rules\ParamDescriptionCapitalRule;
@@ -83,6 +84,7 @@ final class RulesTest extends TestCase
                 NoPhpDocForOverriddenRule::class,
                 ClassConstantTypeHintRule::class,
                 NoLineCommentBeforeDeclarationRule::class,
+                NoInlineCommentRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',
