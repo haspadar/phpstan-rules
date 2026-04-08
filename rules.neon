@@ -323,3 +323,7 @@ services:
         class: Haspadar\PHPStanRules\Rules\NoLineCommentBeforeDeclarationRule
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\NoInlineCommentRule
+        tags:
+            - phpstan.rules.rule

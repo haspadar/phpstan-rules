@@ -51,6 +51,7 @@ final class Rules
             Rules\NoPhpDocForOverriddenRule::class,
             Rules\ClassConstantTypeHintRule::class,
             Rules\NoLineCommentBeforeDeclarationRule::class,
+            Rules\NoInlineCommentRule::class,
         ];
     }
 }
