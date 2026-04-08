@@ -14,7 +14,8 @@ defaults:
   exclude: ["vendor", "tests", ".git"]
   php.versions: ["8.3"]
 
-  check.default: "fast"
+  check.full: false
+  check.parallel: true
   check.slow: ["infection", "sonar"]
 
   ci.piqule_bin: "vendor/bin/piqule"
@@ -25,11 +26,17 @@ defaults:
   coverage.project.target: 80
   coverage.project.threshold: 2
 
-  docker.image: "ghcr.io/haspadar/piqule-infra@sha256:589bb437680b08653feefa47f3b8c76573d71f8a1c3aa102bfd69e5b17289b48"
+  codecov.cloud: true
+  codecov.cli: false
 
-  actionlint.enabled: true
+  coderabbit.cloud: true
+  coderabbit.cli: false
 
-  hadolint.enabled: true
+  docker.image: "ghcr.io/haspadar/piqule-infra@sha256:e88f74183c5daf1c422006307b04222db8cd524f250330e83aa667c5ce919c23"
+
+  actionlint.cli: true
+
+  hadolint.cli: true
   hadolint.failure_threshold: "error"
   hadolint.ignore: ["vendor", "tests", ".git"]
   hadolint.ignored_yaml: "[]"
@@ -37,27 +44,27 @@ defaults:
   hadolint.override.warning_yaml: "[]"
   hadolint.patterns: ["Dockerfile*"]
 
-  jsonlint.enabled: true
+  jsonlint.cli: true
   jsonlint.compact: true
   jsonlint.continue: true
   jsonlint.duplicate_keys: false
   jsonlint.mode: ["json5"]
   jsonlint.patterns: ["**/*.json", "**/*.json5", "**/*.jsonc", "!vendor/**", "!tests/**", "!.git/**"]
 
-  markdownlint.enabled: true
+  markdownlint.cli: true
   markdownlint.ignores: ["vendor/**", "tests/**", ".git/**"]
 
-  php-cs-fixer.enabled: true
+  php-cs-fixer.cli: true
   php_cs_fixer.allow_unsupported: ["true"]
   php_cs_fixer.exclude: ["vendor", "tests", ".git"]
   php_cs_fixer.paths: ["../.."]
 
-  phpcs.enabled: true
+  phpcs.cli: true
   phpcs.excludes: ["vendor/*", "tests/*", ".git/*"]
   phpcs.files: ["../../src"]
   phpcs.root_namespace: ""
 
-  phpmd.enabled: true
+  phpmd.cli: true
   phpmd.paths: ["src"]
   phpmd.class_complexity: 50
   phpmd.class_length: 200
@@ -68,7 +75,7 @@ defaults:
   phpmd.method_length: 50
   phpmd.npath: 200
 
-  phpmetrics.enabled: true
+  phpmetrics.cli: true
   phpmetrics.includes: ["../../src"]
   phpmetrics.excludes: ["vendor", "tests", ".git"]
   phpmetrics.extensions: ["php"]
@@ -88,32 +95,32 @@ defaults:
   phpmetrics.size.max_logical_loc_per_method: 20
   phpmetrics.structure.max_methods_per_class: 10
 
-  phpstan.enabled: true
+  phpstan.cli: true
   phpstan.level: 9
   phpstan.memory: "1G"
   phpstan.paths: ["../../src"]
   phpstan.checked_exceptions: ['\Throwable']
-  phpstan.neon_includes: ["../../vendor/phpstan/phpstan-strict-rules/rules.neon"]
+  phpstan.neon_includes: ["../../vendor/phpstan/phpstan-strict-rules/rules.neon", "../../vendor/haspadar/phpstan-rules/rules.neon"]
 
-  phpunit.enabled: true
+  phpunit.cli: true
   phpunit.php_options: "-d memory_limit=1G"
   phpunit.source.include: ["../../src"]
   phpunit.testsuites.unit: ["../../tests/Unit"]
   phpunit.testsuites.integration: ["../../tests/Integration"]
 
-  psalm.enabled: true
+  psalm.cli: true
   psalm.error_level: 1
   psalm.project.directories: ["../../src"]
   psalm.project.files: []
   psalm.project.ignore: ["../../vendor", "../../tests", "../../.git"]
   psalm.suppress.possibly_unused: []
 
-  infection.enabled: true
+  infection.cli: true
   infection.php_options: "-d memory_limit=1G"
   infection.source.directories: ["../../src"]
   infection.timeout: 30
 
-  shellcheck.enabled: true
+  shellcheck.cli: true
   shellcheck.exclude: []
   shellcheck.external_sources: true
   shellcheck.ignore_dirs: ["vendor", "tests", ".git"]
@@ -121,7 +128,8 @@ defaults:
   shellcheck.shell: "bash"
   shellcheck.source_path: "."
 
-  sonar.enabled: true
+  sonar.cloud: true
+  sonar.cli: false
   sonar.organization: []
   sonar.projectKey: []
   sonar.sources: ["src"]
@@ -129,9 +137,9 @@ defaults:
   sonar.exclusions: []
   sonar.php.coverage.reportPaths: [".piqule/codecov/coverage.xml"]
 
-  typos.enabled: true
+  typos.cli: true
   typos.exclude: ["vendor/", "tests/", ".git/"]
 
-  yamllint.enabled: true
+  yamllint.cli: true
   yamllint.ignore: ["vendor/**", "tests/**", ".git/**", ".piqule/**/html/**", ".piqule/**/coverage-report/**"]
   yamllint.line_length.max: 120
