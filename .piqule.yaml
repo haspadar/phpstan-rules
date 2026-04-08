@@ -12,8 +12,7 @@ override:
     sonar.projectKey: haspadar_phpstan-rules
     sonar.exclusions: ["tests/**"]
     psalm.suppress.possibly_unused: ["../../src"]
-
-append:
     phpstan.neon_includes:
+        - "../../vendor/phpstan/phpstan-strict-rules/rules.neon"
         - "../../rules.neon"
         - "../../rules-ignore.neon"

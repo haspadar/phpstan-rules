@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  COMPOSER_ROOT_VERSION: 0.30.1
+
 jobs:
 
   # ============================================================
@@ -138,7 +141,7 @@ jobs:
       # Upload coverage to Codecov (if coverage exists)
       # ------------------------------------------------------------
       - name: Upload coverage to Codecov
-        if: hashFiles('.piqule/codecov/coverage.xml') != ''
+        if: true == true && hashFiles('.piqule/codecov/coverage.xml') != ''
         uses: codecov/codecov-action@57e3a136b779b570ffcdbf80b3bdc90e7fab3de2
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
