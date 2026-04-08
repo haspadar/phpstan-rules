@@ -107,7 +107,10 @@ final readonly class NoInlineCommentRule implements Rule
         }
 
         if (str_starts_with($text, '/*')) {
-            return str_starts_with(ltrim(substr($text, 2)), '@');
+            $inner = preg_replace('#^/\*+\s*#', '', $text) ?? $text;
+            $inner = preg_replace('#^\*\s?#m', '', $inner) ?? $inner;
+
+            return str_starts_with($inner, '@');
         }
 
         return false;

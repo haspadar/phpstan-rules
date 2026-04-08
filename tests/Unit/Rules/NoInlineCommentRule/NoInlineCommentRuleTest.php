@@ -165,4 +165,13 @@ final class NoInlineCommentRuleTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function passesWhenMultilineBlockSuppressComment(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NoInlineCommentRule/MethodWithMultilineBlockSuppressComment.php'],
+            [],
+        );
+    }
 }
