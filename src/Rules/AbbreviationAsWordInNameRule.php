@@ -75,11 +75,9 @@ final readonly class AbbreviationAsWordInNameRule implements Rule
      */
     private function checkClassName(Class_ $node): array
     {
-        if ($node->name === null) {
-            return [];
-        }
-
-        return $this->buildError($node->name->toString(), $node->getStartLine());
+        return $node->name !== null
+            ? $this->buildError($node->name->toString(), $node->getStartLine())
+            : [];
     }
 
     /**

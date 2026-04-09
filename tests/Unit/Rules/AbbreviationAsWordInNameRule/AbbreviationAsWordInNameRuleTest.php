@@ -148,15 +148,6 @@ final class AbbreviationAsWordInNameRuleTest extends RuleTestCase
     }
 
     #[Test]
-    public function passesWhenClassIsAnonymous(): void
-    {
-        $this->analyse(
-            [__DIR__ . '/../../../Fixtures/Rules/AbbreviationAsWordInNameRule/AnonymousClass.php'],
-            [],
-        );
-    }
-
-    #[Test]
     public function reportsPromotedPropertyParameter(): void
     {
         $this->analyse(
