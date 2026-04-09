@@ -45,6 +45,12 @@
 | `InnerAssignmentRule`         | Assignment inside conditions (`if ($x = foo())`) is forbidden                 |
 | `ModifiedControlVariableRule` | Loop control variable must not be modified inside the loop body               |
 
+### Naming
+
+| Rule                              | Default | Description                                                                |
+|-----------------------------------|---------|----------------------------------------------------------------------------|
+| `AbbreviationAsWordInNameRule`    | 4       | Identifier must not contain more than N consecutive capital letters         |
+
 ### PHPDoc style
 
 | Rule                          | Description                                                                             |
@@ -122,6 +128,11 @@ parameters:
             skipOverridden: true
         phpDocMissingProperty:
             checkPublicOnly: true
+        abbreviation:
+            maxAllowedConsecutiveCapitals: 3
+            allowedAbbreviations:
+                - JSON
+                - HTTP
 ```
 
 Default values match the defaults described in the rules table above. Omitting a parameter keeps the default. Diagnostic identifier for `AtclauseOrderRule`: `haspadar.atclauseOrder` (for targeted ignores, e.g. `@phpstan-ignore haspadar.atclauseOrder`).

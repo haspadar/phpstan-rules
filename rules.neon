@@ -57,6 +57,9 @@ parameters:
             skipOverridden: true
         phpDocMissingProperty:
             checkPublicOnly: true
+        abbreviation:
+            maxAllowedConsecutiveCapitals: 4
+            allowedAbbreviations: []
 
 parametersSchema:
     haspadar: structure([
@@ -124,6 +127,10 @@ parametersSchema:
         ]),
         phpDocMissingProperty: structure([
             checkPublicOnly: bool(),
+        ]),
+        abbreviation: structure([
+            maxAllowedConsecutiveCapitals: int(),
+            allowedAbbreviations: listOf(string()),
         ]),
     ])
 
@@ -325,5 +332,13 @@ services:
             - phpstan.rules.rule
     -
         class: Haspadar\PHPStanRules\Rules\NoInlineCommentRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\AbbreviationAsWordInNameRule
+        arguments:
+            maxAllowedConsecutiveCapitals: %haspadar.abbreviation.maxAllowedConsecutiveCapitals%
+            options:
+                allowedAbbreviations: %haspadar.abbreviation.allowedAbbreviations%
         tags:
             - phpstan.rules.rule
