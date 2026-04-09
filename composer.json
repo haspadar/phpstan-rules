@@ -36,6 +36,9 @@
             ]
         }
     },
+    "scripts": {
+        "update-piqule": "bash -c 'COMPOSER_ROOT_VERSION=$(git describe --tags --abbrev=0 | sed s/^v//) composer update haspadar/piqule -W'"
+    },
     "config": {
         "allow-plugins": {
             "infection/extension-installer": true,

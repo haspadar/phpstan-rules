@@ -16,3 +16,6 @@ override:
         - "../../vendor/phpstan/phpstan-strict-rules/rules.neon"
         - "../../rules.neon"
         - "../../rules-ignore.neon"
+
+envs:
+    COMPOSER_ROOT_VERSION: "git describe --tags --abbrev=0 | sed 's/^v//'"

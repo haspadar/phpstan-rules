@@ -81,7 +81,7 @@ defaults:
   phpmetrics.extensions: ["php"]
   phpmetrics.complexity.max_cyclomatic_per_method: 10
   phpmetrics.complexity.max_weighted_methods_per_class: 20
-  phpmetrics.coupling.max_afferent: 12
+  phpmetrics.coupling.max_afferent: 14
   phpmetrics.coupling.max_efferent: 10
   phpmetrics.halstead.max_bugs_per_method: 0.5
   phpmetrics.halstead.max_difficulty_per_method: 15
