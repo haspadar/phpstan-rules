@@ -137,12 +137,32 @@ final class AbbreviationAsWordInNameRuleTest extends RuleTestCase
     }
 
     #[Test]
-    public function reportsSecondCapitalRunInName(): void
+    public function reportsFirstViolatingRunInNameWithMultipleCapitalGroups(): void
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/AbbreviationAsWordInNameRule/ClassWithMultipleCapitalRuns.php'],
             [
                 ["Abbreviation in name 'loadHTTPSandParseXMLAPI' must contain no more than 2 consecutive capital letters.", 9],
+            ],
+        );
+    }
+
+    #[Test]
+    public function passesWhenClassIsAnonymous(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/AbbreviationAsWordInNameRule/AnonymousClass.php'],
+            [],
+        );
+    }
+
+    #[Test]
+    public function reportsPromotedPropertyParameter(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/AbbreviationAsWordInNameRule/PromotedProperty.php'],
+            [
+                ["Abbreviation in name 'HTTPSConnection' must contain no more than 2 consecutive capital letters.", 10],
             ],
         );
     }

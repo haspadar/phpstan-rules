@@ -198,16 +198,16 @@ final readonly class AbbreviationAsWordInNameRule implements Rule
     }
 
     /**
-     * Checks if the uppercase run matches any allowed abbreviation.
+     * Strips allowed abbreviations from the run and checks if the remainder still violates.
      */
     private function isAllowedRun(string $run): bool
     {
+        $remainder = $run;
+
         foreach ($this->allowedAbbreviations as $abbreviation) {
-            if (strcasecmp($run, $abbreviation) === 0) {
-                return true;
-            }
+            $remainder = str_ireplace(strtoupper($abbreviation), '', $remainder);
         }
 
-        return false;
+        return strlen($remainder) <= $this->maxAllowedConsecutiveCapitals;
     }
 }

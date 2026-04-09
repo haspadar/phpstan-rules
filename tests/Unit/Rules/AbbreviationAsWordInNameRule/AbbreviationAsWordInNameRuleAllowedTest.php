@@ -25,4 +25,13 @@ final class AbbreviationAsWordInNameRuleAllowedTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function passesWhenAllowedAbbreviationFollowedByCamelCase(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/AbbreviationAsWordInNameRule/AllowedAbbreviationCamelCase.php'],
+            [],
+        );
+    }
 }
