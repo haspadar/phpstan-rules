@@ -52,6 +52,7 @@ final class Rules
             Rules\ClassConstantTypeHintRule::class,
             Rules\NoLineCommentBeforeDeclarationRule::class,
             Rules\NoInlineCommentRule::class,
+            Rules\AbbreviationAsWordInNameRule::class,
         ];
     }
 }
