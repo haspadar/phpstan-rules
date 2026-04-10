@@ -16,6 +16,7 @@ final class VariableNameRuleInvalidPatternTest extends TestCase
     public function throwsExceptionWhenPatternIsInvalid(): void
     {
         $this->expectException(ShouldNotHappenException::class);
+        $this->expectExceptionMessage('Invalid variable name pattern "[invalid".');
 
         new VariableNameRule('[invalid');
     }

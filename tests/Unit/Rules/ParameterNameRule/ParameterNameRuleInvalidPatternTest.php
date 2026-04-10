@@ -16,6 +16,7 @@ final class ParameterNameRuleInvalidPatternTest extends TestCase
     public function throwsExceptionWhenPatternIsInvalid(): void
     {
         $this->expectException(ShouldNotHappenException::class);
+        $this->expectExceptionMessage('Invalid parameter name pattern "[invalid".');
 
         new ParameterNameRule('[invalid');
     }
