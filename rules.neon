@@ -60,6 +60,12 @@ parameters:
         abbreviation:
             maxAllowedConsecutiveCapitals: 4
             allowedAbbreviations: []
+        variableName:
+            pattern: '^[a-z][a-zA-Z]{2,19}$'
+            allowedNames:
+                - id
+                - i
+                - j
 
 parametersSchema:
     haspadar: structure([
@@ -131,6 +137,10 @@ parametersSchema:
         abbreviation: structure([
             maxAllowedConsecutiveCapitals: int(),
             allowedAbbreviations: listOf(string()),
+        ]),
+        variableName: structure([
+            pattern: string(),
+            allowedNames: listOf(string()),
         ]),
     ])
 
@@ -340,5 +350,13 @@ services:
             maxAllowedConsecutiveCapitals: %haspadar.abbreviation.maxAllowedConsecutiveCapitals%
             options:
                 allowedAbbreviations: %haspadar.abbreviation.allowedAbbreviations%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\VariableNameRule
+        arguments:
+            pattern: %haspadar.variableName.pattern%
+            options:
+                allowedNames: %haspadar.variableName.allowedNames%
         tags:
             - phpstan.rules.rule
