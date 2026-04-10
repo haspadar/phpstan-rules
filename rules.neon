@@ -68,6 +68,8 @@ parameters:
                 - j
         parameterName:
             pattern: '^(id|[a-z]{3,})$'
+        catchParamName:
+            pattern: '^(e|ex|[a-z]{3,12})$'
 
 parametersSchema:
     haspadar: structure([
@@ -145,6 +147,9 @@ parametersSchema:
             allowedNames: listOf(string()),
         ]),
         parameterName: structure([
+            pattern: string(),
+        ]),
+        catchParamName: structure([
             pattern: string(),
         ]),
     ])
@@ -369,5 +374,11 @@ services:
         class: Haspadar\PHPStanRules\Rules\ParameterNameRule
         arguments:
             pattern: %haspadar.parameterName.pattern%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\CatchParameterNameRule
+        arguments:
+            pattern: %haspadar.catchParamName.pattern%
         tags:
             - phpstan.rules.rule

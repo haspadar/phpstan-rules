@@ -55,6 +55,7 @@ final class Rules
             Rules\AbbreviationAsWordInNameRule::class,
             Rules\VariableNameRule::class,
             Rules\ParameterNameRule::class,
+            Rules\CatchParameterNameRule::class,
         ];
     }
 }

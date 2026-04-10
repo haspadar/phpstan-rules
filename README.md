@@ -52,6 +52,7 @@
 | `AbbreviationAsWordInNameRule`    | 4       | Identifier must not contain more than N consecutive capital letters         |
 | `VariableNameRule`                | `^[a-z][a-zA-Z]{2,19}$` | Local variable name must match the configured pattern         |
 | `ParameterNameRule`               | `^(id\|[a-z]{3,})$` | Method parameter name must match the configured pattern           |
+| `CatchParameterNameRule`          | `^(e\|ex\|[a-z]{3,12})$` | Catch parameter name must match the configured pattern       |
 
 ### PHPDoc style
 
@@ -144,6 +145,8 @@ parameters:
                 - db
         parameterName:
             pattern: '^(id|[a-z]{3,})$'
+        catchParamName:
+            pattern: '^(e|ex|[a-z]{3,12})$'
 ```
 
 Default values match the defaults described in the rules table above. Omitting a parameter keeps the default. Diagnostic identifier for `AtclauseOrderRule`: `haspadar.atclauseOrder` (for targeted ignores, e.g. `@phpstan-ignore haspadar.atclauseOrder`).
