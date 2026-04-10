@@ -13,7 +13,6 @@ use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Static_;
@@ -21,7 +20,7 @@ use PhpParser\NodeFinder;
 
 /**
  * Collects local variable names with line numbers from a method body.
- * Handles assignments, foreach, for, destructuring, and static variables.
+ * Handles assignments, foreach, destructuring, and static variables.
  * Excludes variables inside nested scopes (closures, arrow functions,
  * anonymous classes, nested functions).
  */
@@ -40,7 +39,6 @@ final class VariableCollector
             static fn(Node $n): bool => ($n instanceof Assign
                 || $n instanceof AssignRef
                 || $n instanceof Foreach_
-                || $n instanceof For_
                 || $n instanceof Static_)
                 && !self::isInsideScopeBoundary($n, $node),
         );
@@ -69,10 +67,6 @@ final class VariableCollector
             return $this->variablesFromForeach($found);
         }
 
-        if ($found instanceof For_) {
-            return $this->variablesFromFor($found);
-        }
-
         if ($found instanceof Static_) {
             return $this->variablesFromStatic($found);
         }
@@ -92,24 +86,6 @@ final class VariableCollector
             : [];
 
         return array_merge($result, $this->variablesFromTarget($node->valueVar));
-    }
-
-    /**
-     * Extracts variables from for-loop init expressions.
-     *
-     * @return list<array{string, int}>
-     */
-    private function variablesFromFor(For_ $node): array
-    {
-        $result = [];
-
-        foreach ($node->init as $init) {
-            if (($init instanceof Assign || $init instanceof AssignRef) && $init->var instanceof Variable) {
-                $result = array_merge($result, $this->toNameLine($init->var));
-            }
-        }
-
-        return $result;
     }
 
     /**
