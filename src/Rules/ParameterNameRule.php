@@ -33,13 +33,7 @@ final readonly class ParameterNameRule implements Rule
      */
     public function __construct(private string $pattern = '^(id|[a-z]{3,})$')
     {
-        $this->compiledPattern = '~' . str_replace('~', '\~', $this->pattern) . '~';
-
-        if (@preg_match($this->compiledPattern, '') === false) {
-            throw new ShouldNotHappenException(
-                sprintf('Invalid parameter name pattern "%s".', $this->pattern),
-            );
-        }
+        $this->compiledPattern = (new CompiledPattern())->from($this->pattern, 'parameter name');
     }
 
     #[Override]

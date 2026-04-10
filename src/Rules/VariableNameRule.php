@@ -40,13 +40,7 @@ final readonly class VariableNameRule implements Rule
         array $options = [],
     ) {
         $this->allowedNames = $options['allowedNames'] ?? ['id', 'i', 'j'];
-        $this->compiledPattern = '~' . str_replace('~', '\~', $this->pattern) . '~';
-
-        if (@preg_match($this->compiledPattern, '') === false) {
-            throw new ShouldNotHappenException(
-                sprintf('Invalid variable name pattern "%s".', $this->pattern),
-            );
-        }
+        $this->compiledPattern = (new CompiledPattern())->from($this->pattern, 'variable name');
     }
 
     #[Override]

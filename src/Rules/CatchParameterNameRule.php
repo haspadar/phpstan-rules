@@ -32,13 +32,7 @@ final readonly class CatchParameterNameRule implements Rule
      */
     public function __construct(private string $pattern = '^(e|ex|[a-z]{3,12})$')
     {
-        $this->compiledPattern = '~' . str_replace('~', '\~', $this->pattern) . '~';
-
-        if (@preg_match($this->compiledPattern, '') === false) {
-            throw new ShouldNotHappenException(
-                sprintf('Invalid catch parameter name pattern "%s".', $this->pattern),
-            );
-        }
+        $this->compiledPattern = (new CompiledPattern())->from($this->pattern, 'catch parameter name');
     }
 
     #[Override]
