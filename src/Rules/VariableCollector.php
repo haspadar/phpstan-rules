@@ -87,11 +87,11 @@ final class VariableCollector
      */
     private function variablesFromForeach(Foreach_ $node): array
     {
-        $result = $this->toNameLine($node->valueVar);
+        $result = $node->keyVar !== null
+            ? $this->variablesFromTarget($node->keyVar)
+            : [];
 
-        return $node->keyVar !== null
-            ? array_merge($result, $this->toNameLine($node->keyVar))
-            : $result;
+        return array_merge($result, $this->variablesFromTarget($node->valueVar));
     }
 
     /**

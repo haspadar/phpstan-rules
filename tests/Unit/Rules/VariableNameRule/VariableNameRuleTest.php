@@ -132,4 +132,15 @@ final class VariableNameRuleTest extends RuleTestCase
             ],
         );
     }
+
+    #[Test]
+    public function reportsErrorForDestructuredForeachVariable(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/VariableNameRule/ForeachDestructuring.php'],
+            [
+                ['Variable $x does not match pattern /^[a-z][a-zA-Z]{2,9}$/.', 14],
+            ],
+        );
+    }
 }
