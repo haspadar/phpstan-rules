@@ -6,9 +6,9 @@ namespace Haspadar\PHPStanRules\Tests\Fixtures\Rules\VariableNameRule;
 
 final class ParameterReassignment
 {
-    public function run(string $name): void
+    public function run(string $n): void
     {
-        $name = strtoupper($name);
-        echo $name;
+        $n = strtoupper($n);
+        echo $n;
     }
 }
