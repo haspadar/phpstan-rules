@@ -33,6 +33,7 @@ use Haspadar\PHPStanRules\Rules\PhpDocMissingPropertyRule;
 use Haspadar\PHPStanRules\Rules\ClassConstantTypeHintRule;
 use Haspadar\PHPStanRules\Rules\AbbreviationAsWordInNameRule;
 use Haspadar\PHPStanRules\Rules\NoInlineCommentRule;
+use Haspadar\PHPStanRules\Rules\ParameterNameRule;
 use Haspadar\PHPStanRules\Rules\VariableNameRule;
 use Haspadar\PHPStanRules\Rules\NoLineCommentBeforeDeclarationRule;
 use Haspadar\PHPStanRules\Rules\NoPhpDocForOverriddenRule;
@@ -89,6 +90,7 @@ final class RulesTest extends TestCase
                 NoInlineCommentRule::class,
                 AbbreviationAsWordInNameRule::class,
                 VariableNameRule::class,
+                ParameterNameRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',

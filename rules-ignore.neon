@@ -12,3 +12,5 @@ parameters:
             identifier: haspadar.returnCount
         -
             identifier: haspadar.cyclomaticComplexity
+        -
+            identifier: haspadar.parameterName

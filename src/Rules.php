@@ -54,6 +54,7 @@ final class Rules
             Rules\NoInlineCommentRule::class,
             Rules\AbbreviationAsWordInNameRule::class,
             Rules\VariableNameRule::class,
+            Rules\ParameterNameRule::class,
         ];
     }
 }
