@@ -137,7 +137,7 @@ final class VariableCollector
      */
     private function toNameLine(Node\Expr $expr): array
     {
-        return $expr instanceof Variable && is_string($expr->name)
+        return $expr instanceof Variable && is_string($expr->name) && $expr->name !== 'this'
             ? [[$expr->name, $expr->getStartLine()]]
             : [];
     }

@@ -134,6 +134,24 @@ final class VariableNameRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function skipsVariablesInsideArrowFunction(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/VariableNameRule/ArrowFunctionVariable.php'],
+            [],
+        );
+    }
+
+    #[Test]
+    public function skipsVariablesInsideCatch(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/VariableNameRule/CatchVariable.php'],
+            [],
+        );
+    }
+
+    #[Test]
     public function reportsErrorForDestructuredForeachVariable(): void
     {
         $this->analyse(
