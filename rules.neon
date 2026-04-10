@@ -66,6 +66,8 @@ parameters:
                 - id
                 - i
                 - j
+        parameterName:
+            pattern: '^(id|[a-z]{3,})$'
 
 parametersSchema:
     haspadar: structure([
@@ -141,6 +143,9 @@ parametersSchema:
         variableName: structure([
             pattern: string(),
             allowedNames: listOf(string()),
+        ]),
+        parameterName: structure([
+            pattern: string(),
         ]),
     ])
 
@@ -358,5 +363,11 @@ services:
             pattern: %haspadar.variableName.pattern%
             options:
                 allowedNames: %haspadar.variableName.allowedNames%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\ParameterNameRule
+        arguments:
+            pattern: %haspadar.parameterName.pattern%
         tags:
             - phpstan.rules.rule
