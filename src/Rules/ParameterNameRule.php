@@ -46,13 +46,7 @@ final readonly class ParameterNameRule implements Rule
     {
         $errors = [];
 
-        foreach ($node->params as $param) {
-            if (!$param->var instanceof Variable || !is_string($param->var->name)) {
-                continue;
-            }
-
-            $name = $param->var->name;
-
+        foreach ($this->parameterNames($node) as [$name, $line]) {
             if (preg_match('/' . $this->pattern . '/', $name) === 1) {
                 continue;
             }
@@ -61,10 +55,28 @@ final readonly class ParameterNameRule implements Rule
                 sprintf('Parameter $%s does not match pattern /%s/.', $name, $this->pattern),
             )
                 ->identifier('haspadar.parameterName')
-                ->line($param->getStartLine())
+                ->line($line)
                 ->build();
         }
 
         return $errors;
+    }
+
+    /**
+     * Extracts parameter names and their line numbers from a method node.
+     *
+     * @return list<array{string, int}>
+     */
+    private function parameterNames(ClassMethod $node): array
+    {
+        $names = [];
+
+        foreach ($node->params as $param) {
+            if ($param->var instanceof Variable && is_string($param->var->name)) {
+                $names[] = [$param->var->name, $param->getStartLine()];
+            }
+        }
+
+        return $names;
     }
 }
