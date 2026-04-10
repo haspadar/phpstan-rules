@@ -59,19 +59,12 @@ final class VariableCollector
      */
     private function variablesFromNode(Node $found): array
     {
-        if ($found instanceof Assign || $found instanceof AssignRef) {
-            return $this->variablesFromTarget($found->var);
-        }
-
-        if ($found instanceof Foreach_) {
-            return $this->variablesFromForeach($found);
-        }
-
-        if ($found instanceof Static_) {
-            return $this->variablesFromStatic($found);
-        }
-
-        return [];
+        return match (true) {
+            $found instanceof Assign, $found instanceof AssignRef => $this->variablesFromTarget($found->var),
+            $found instanceof Foreach_ => $this->variablesFromForeach($found),
+            $found instanceof Static_ => $this->variablesFromStatic($found),
+            default => [],
+        };
     }
 
     /**

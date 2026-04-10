@@ -161,4 +161,33 @@ final class VariableNameRuleTest extends RuleTestCase
             ],
         );
     }
+
+    #[Test]
+    public function skipsParameterReassignment(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/VariableNameRule/ParameterReassignment.php'],
+            [],
+        );
+    }
+
+    #[Test]
+    public function reportsErrorOnceForDuplicateAssignment(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/VariableNameRule/DuplicateAssignment.php'],
+            [
+                ['Variable $x does not match pattern /^[a-z][a-zA-Z]{2,9}$/.', 11],
+            ],
+        );
+    }
+
+    #[Test]
+    public function skipsPropertyAssignment(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/VariableNameRule/PropertyAssignment.php'],
+            [],
+        );
+    }
 }
