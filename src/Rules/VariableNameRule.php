@@ -26,16 +26,27 @@ final readonly class VariableNameRule implements Rule
     /** @var list<string> */
     private array $allowedNames;
 
+    /** @var non-empty-string */
+    private string $compiledPattern;
+
     /**
      * Constructs the rule with the given pattern and options.
      *
      * @param array{allowedNames?: list<string>} $options
+     * @throws ShouldNotHappenException
      */
     public function __construct(
         private string $pattern = '^[a-z][a-zA-Z]{2,19}$',
         array $options = [],
     ) {
         $this->allowedNames = $options['allowedNames'] ?? ['id', 'i', 'j'];
+        $this->compiledPattern = '~' . str_replace('~', '\~', $this->pattern) . '~';
+
+        if (@preg_match($this->compiledPattern, '') === false) {
+            throw new ShouldNotHappenException(
+                sprintf('Invalid variable name pattern "%s".', $this->pattern),
+            );
+        }
     }
 
     #[Override]
@@ -73,7 +84,7 @@ final readonly class VariableNameRule implements Rule
                 continue;
             }
 
-            if (preg_match('/' . $this->pattern . '/', $name) === 1) {
+            if (preg_match($this->compiledPattern, $name) === 1) {
                 continue;
             }
 

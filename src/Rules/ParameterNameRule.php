@@ -23,10 +23,24 @@ use PHPStan\ShouldNotHappenException;
  */
 final readonly class ParameterNameRule implements Rule
 {
+    /** @var non-empty-string */
+    private string $compiledPattern;
+
     /**
      * Constructs the rule with the given pattern.
+     *
+     * @throws ShouldNotHappenException
      */
-    public function __construct(private string $pattern = '^(id|[a-z]{3,})$') {}
+    public function __construct(private string $pattern = '^(id|[a-z]{3,})$')
+    {
+        $this->compiledPattern = '~' . str_replace('~', '\~', $this->pattern) . '~';
+
+        if (@preg_match($this->compiledPattern, '') === false) {
+            throw new ShouldNotHappenException(
+                sprintf('Invalid parameter name pattern "%s".', $this->pattern),
+            );
+        }
+    }
 
     #[Override]
     public function getNodeType(): string
@@ -47,7 +61,7 @@ final readonly class ParameterNameRule implements Rule
         $errors = [];
 
         foreach ($this->parameterNames($node) as [$name, $line]) {
-            if (preg_match('/' . $this->pattern . '/', $name) === 1) {
+            if (preg_match($this->compiledPattern, $name) === 1) {
                 continue;
             }
 

@@ -22,10 +22,24 @@ use PHPStan\ShouldNotHappenException;
  */
 final readonly class CatchParameterNameRule implements Rule
 {
+    /** @var non-empty-string */
+    private string $compiledPattern;
+
     /**
      * Constructs the rule with the given pattern.
+     *
+     * @throws ShouldNotHappenException
      */
-    public function __construct(private string $pattern = '^(e|ex|[a-z]{3,12})$') {}
+    public function __construct(private string $pattern = '^(e|ex|[a-z]{3,12})$')
+    {
+        $this->compiledPattern = '~' . str_replace('~', '\~', $this->pattern) . '~';
+
+        if (@preg_match($this->compiledPattern, '') === false) {
+            throw new ShouldNotHappenException(
+                sprintf('Invalid catch parameter name pattern "%s".', $this->pattern),
+            );
+        }
+    }
 
     #[Override]
     public function getNodeType(): string
@@ -49,7 +63,7 @@ final readonly class CatchParameterNameRule implements Rule
             return [];
         }
 
-        if (preg_match('/' . $this->pattern . '/', $name) === 1) {
+        if (preg_match($this->compiledPattern, $name) === 1) {
             return [];
         }
 
