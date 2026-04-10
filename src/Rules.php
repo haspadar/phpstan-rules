@@ -53,6 +53,7 @@ final class Rules
             Rules\NoLineCommentBeforeDeclarationRule::class,
             Rules\NoInlineCommentRule::class,
             Rules\AbbreviationAsWordInNameRule::class,
+            Rules\VariableNameRule::class,
         ];
     }
 }
