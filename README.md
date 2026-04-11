@@ -44,6 +44,7 @@
 | `IllegalThrowsRule`           | Declaring `@throws Exception` or other broad types in PHPDoc is forbidden     |
 | `InnerAssignmentRule`         | Assignment inside conditions (`if ($x = foo())`) is forbidden                 |
 | `ModifiedControlVariableRule` | Loop control variable must not be modified inside the loop body               |
+| `UnnecessaryLocalRule`        | Local variable assigned and immediately returned/thrown must be inlined        |
 
 ### Naming
 
