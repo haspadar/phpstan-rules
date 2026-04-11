@@ -94,4 +94,22 @@ final class UnnecessaryLocalRuleTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function passesWhenMethodReturnsByReference(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/UnnecessaryLocalRule/ByReferenceMethod.php'],
+            [],
+        );
+    }
+
+    #[Test]
+    public function passesWhenVariableVariableIsUsed(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/UnnecessaryLocalRule/VariableVariable.php'],
+            [],
+        );
+    }
 }

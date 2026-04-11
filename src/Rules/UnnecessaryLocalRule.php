@@ -45,6 +45,10 @@ final readonly class UnnecessaryLocalRule implements Rule
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
+        if ($node->byRef) {
+            return [];
+        }
+
         if ($node->stmts === null) {
             return [];
         }
