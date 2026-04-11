@@ -112,4 +112,13 @@ final class UnnecessaryLocalRuleTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function passesWhenMethodIsAbstract(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/UnnecessaryLocalRule/AbstractMethod.php'],
+            [],
+        );
+    }
 }
