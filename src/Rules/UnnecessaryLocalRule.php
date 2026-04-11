@@ -136,14 +136,16 @@ final readonly class UnnecessaryLocalRule implements Rule
      */
     private function matchesReturnOrThrow(Node\Stmt $stmt, string $name): ?string
     {
-        if ($stmt instanceof Return_ && $stmt->expr instanceof Variable) {
+        if ($stmt instanceof Return_ && $stmt->expr instanceof Variable && is_string($stmt->expr->name)) {
             if ($stmt->expr->name === $name) {
                 return 'returned';
             }
         }
 
         if ($stmt instanceof Expression && $stmt->expr instanceof Throw_) {
-            if ($stmt->expr->expr instanceof Variable && $stmt->expr->expr->name === $name) {
+            if ($stmt->expr->expr instanceof Variable && is_string(
+                $stmt->expr->expr->name,
+            ) && $stmt->expr->expr->name === $name) {
                 return 'thrown';
             }
         }
