@@ -34,6 +34,7 @@ use Haspadar\PHPStanRules\Rules\ClassConstantTypeHintRule;
 use Haspadar\PHPStanRules\Rules\AbbreviationAsWordInNameRule;
 use Haspadar\PHPStanRules\Rules\NoInlineCommentRule;
 use Haspadar\PHPStanRules\Rules\CatchParameterNameRule;
+use Haspadar\PHPStanRules\Rules\UnnecessaryLocalRule;
 use Haspadar\PHPStanRules\Rules\ParameterNameRule;
 use Haspadar\PHPStanRules\Rules\VariableNameRule;
 use Haspadar\PHPStanRules\Rules\NoLineCommentBeforeDeclarationRule;
@@ -93,6 +94,7 @@ final class RulesTest extends TestCase
                 VariableNameRule::class,
                 ParameterNameRule::class,
                 CatchParameterNameRule::class,
+                UnnecessaryLocalRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',

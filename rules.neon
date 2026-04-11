@@ -382,3 +382,7 @@ services:
             pattern: %haspadar.catchParamName.pattern%
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\UnnecessaryLocalRule
+        tags:
+            - phpstan.rules.rule

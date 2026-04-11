@@ -56,6 +56,7 @@ final class Rules
             Rules\VariableNameRule::class,
             Rules\ParameterNameRule::class,
             Rules\CatchParameterNameRule::class,
+            Rules\UnnecessaryLocalRule::class,
         ];
     }
 }
