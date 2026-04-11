@@ -121,4 +121,13 @@ final class UnnecessaryLocalRuleTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function passesWhenAssignAndReturnAreInsideNestedBlock(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/UnnecessaryLocalRule/InsideIfBlock.php'],
+            [],
+        );
+    }
 }
