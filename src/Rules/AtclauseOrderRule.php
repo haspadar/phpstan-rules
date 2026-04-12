@@ -23,6 +23,10 @@ use PHPStan\ShouldNotHappenException;
  */
 final readonly class AtclauseOrderRule implements Rule
 {
+    private const int MINIMUM_TAGS_TO_CHECK = 2;
+
+    private const int NOT_FOUND = -1;
+
     /** @var list<string> */
     private array $tagOrder;
 
@@ -66,7 +70,7 @@ final readonly class AtclauseOrderRule implements Rule
 
         $relevant = $this->relevantTags($docComment->getText());
 
-        if (count($relevant) < 2) {
+        if (count($relevant) < self::MINIMUM_TAGS_TO_CHECK) {
             return [];
         }
 
@@ -96,7 +100,7 @@ final readonly class AtclauseOrderRule implements Rule
     private function detectViolations(array $tags, string $methodName): array
     {
         $errors = [];
-        $lastIndex = -1;
+        $lastIndex = self::NOT_FOUND;
         $lastTag = '';
 
         foreach ($tags as $tag) {

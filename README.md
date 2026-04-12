@@ -45,6 +45,7 @@
 | `InnerAssignmentRule`         | Assignment inside conditions (`if ($x = foo())`) is forbidden                 |
 | `ModifiedControlVariableRule` | Loop control variable must not be modified inside the loop body               |
 | `UnnecessaryLocalRule`        | Local variable assigned and immediately returned/thrown must be inlined        |
+| `ConstantUsageRule`           | Magic numbers and strings must be defined as named constants                  |
 
 ### Naming
 
@@ -148,6 +149,13 @@ parameters:
             pattern: '^(id|[a-z]{3,})$'
         catchParamName:
             pattern: '^(e|ex|[a-z]{3,12})$'
+        constantUsage:
+            ignoreNumbers:
+                - 0
+                - 1
+            checkStrings: false
+            ignoreStrings:
+                - ''
 ```
 
 Default values match the defaults described in the rules table above. Omitting a parameter keeps the default. Diagnostic identifier for `AtclauseOrderRule`: `haspadar.atclauseOrder` (for targeted ignores, e.g. `@phpstan-ignore haspadar.atclauseOrder`).
