@@ -21,7 +21,7 @@ final class CompiledPattern
      */
     public function from(string $pattern, string $context): string
     {
-        $compiled = '~' . str_replace('~', '\~', $pattern) . '~';
+        $compiled = sprintf('~%s~', str_replace('~', '\~', $pattern));
 
         if (@preg_match($compiled, '') === false) {
             throw new ShouldNotHappenException(
