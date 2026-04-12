@@ -58,6 +58,7 @@ final class Rules
             Rules\CatchParameterNameRule::class,
             Rules\UnnecessaryLocalRule::class,
             Rules\ConstantUsageRule::class,
+            Rules\StringLiteralsConcatenationRule::class,
         ];
     }
 }

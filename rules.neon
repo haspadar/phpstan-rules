@@ -77,6 +77,8 @@ parameters:
             checkStrings: false
             ignoreStrings:
                 - ''
+        stringConcat:
+            allowMixed: false
 
 parametersSchema:
     haspadar: structure([
@@ -163,6 +165,9 @@ parametersSchema:
             ignoreNumbers: listOf(anyOf(int(), float())),
             checkStrings: bool(),
             ignoreStrings: listOf(string()),
+        ]),
+        stringConcat: structure([
+            allowMixed: bool(),
         ]),
     ])
 
@@ -405,5 +410,12 @@ services:
                 ignoreNumbers: %haspadar.constantUsage.ignoreNumbers%
                 checkStrings: %haspadar.constantUsage.checkStrings%
                 ignoreStrings: %haspadar.constantUsage.ignoreStrings%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\StringLiteralsConcatenationRule
+        arguments:
+            options:
+                allowMixed: %haspadar.stringConcat.allowMixed%
         tags:
             - phpstan.rules.rule

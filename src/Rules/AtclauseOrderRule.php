@@ -39,7 +39,7 @@ final readonly class AtclauseOrderRule implements Rule
     {
         $tags = $options['tagOrder'] ?? ['@param', '@return', '@throws'];
         $this->tagOrder = array_map(
-            static fn(string $tag): string => str_starts_with($tag, '@') ? $tag : '@' . $tag,
+            static fn(string $tag): string => str_starts_with($tag, '@') ? $tag : sprintf('@%s', $tag),
             $tags,
         );
     }
