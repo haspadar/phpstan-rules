@@ -26,6 +26,8 @@ use PHPStan\Rules\RuleErrorBuilder;
  */
 final readonly class NoInlineCommentRule implements Rule
 {
+    private const int DOUBLE_SLASH_LENGTH = 2;
+
     #[Override]
     public function getNodeType(): string
     {
@@ -99,7 +101,7 @@ final readonly class NoInlineCommentRule implements Rule
         $text = $comment->getText();
 
         if (str_starts_with($text, '//')) {
-            return str_starts_with(ltrim(substr($text, 2)), '@');
+            return str_starts_with(ltrim(substr($text, self::DOUBLE_SLASH_LENGTH)), '@');
         }
 
         if (str_starts_with($text, '#')) {
