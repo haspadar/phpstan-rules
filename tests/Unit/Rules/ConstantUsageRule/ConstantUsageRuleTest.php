@@ -98,4 +98,24 @@ final class ConstantUsageRuleTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function passesWhenLiteralsAreParameterDefaults(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/ConstantUsageRule/ClassWithParameterDefaults.php'],
+            [],
+        );
+    }
+
+    #[Test]
+    public function reportsErrorWhenNegativeMagicNumberFound(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/ConstantUsageRule/ClassWithNegativeNumber.php'],
+            [
+                ['Magic number -42 found. Define a named constant instead.', 11],
+            ],
+        );
+    }
 }
