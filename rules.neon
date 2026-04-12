@@ -79,6 +79,11 @@ parameters:
                 - ''
         stringConcat:
             allowMixed: false
+        todoComment:
+            keywords:
+                - TODO
+                - FIXME
+                - XXX
 
 parametersSchema:
     haspadar: structure([
@@ -168,6 +173,9 @@ parametersSchema:
         ]),
         stringConcat: structure([
             allowMixed: bool(),
+        ]),
+        todoComment: structure([
+            keywords: listOf(string()),
         ]),
     ])
 
@@ -417,5 +425,12 @@ services:
         arguments:
             options:
                 allowMixed: %haspadar.stringConcat.allowMixed%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\TodoCommentRule
+        arguments:
+            options:
+                keywords: %haspadar.todoComment.keywords%
         tags:
             - phpstan.rules.rule

@@ -59,6 +59,7 @@ final class Rules
             Rules\UnnecessaryLocalRule::class,
             Rules\ConstantUsageRule::class,
             Rules\StringLiteralsConcatenationRule::class,
+            Rules\TodoCommentRule::class,
         ];
     }
 }
