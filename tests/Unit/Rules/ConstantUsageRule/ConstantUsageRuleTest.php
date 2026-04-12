@@ -118,4 +118,13 @@ final class ConstantUsageRuleTest extends RuleTestCase
             ],
         );
     }
+
+    #[Test]
+    public function passesWhenNegativeNumberIsParameterDefault(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/ConstantUsageRule/ClassWithNegativeParameterDefault.php'],
+            [],
+        );
+    }
 }

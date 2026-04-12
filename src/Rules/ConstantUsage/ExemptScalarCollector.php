@@ -6,6 +6,7 @@ namespace Haspadar\PHPStanRules\Rules\ConstantUsage;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\UnaryMinus;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Break_;
@@ -68,6 +69,12 @@ final class ExemptScalarCollector
 
         if ($default instanceof Scalar\Int_ || $default instanceof Scalar\Float_ || $default instanceof Scalar\String_) {
             return [$default];
+        }
+
+        if ($default instanceof UnaryMinus && self::isScalarLiteral($default->expr)) {
+            assert($default->expr instanceof Scalar\Int_ || $default->expr instanceof Scalar\Float_);
+
+            return [$default->expr];
         }
 
         if (!$default instanceof Array_) {
