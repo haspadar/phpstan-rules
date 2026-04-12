@@ -60,6 +60,7 @@ final class Rules
             Rules\ConstantUsageRule::class,
             Rules\StringLiteralsConcatenationRule::class,
             Rules\TodoCommentRule::class,
+            Rules\ForbiddenClassSuffixRule::class,
         ];
     }
 }
