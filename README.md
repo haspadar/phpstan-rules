@@ -47,6 +47,7 @@
 | `UnnecessaryLocalRule`        | Local variable assigned and immediately returned/thrown must be inlined        |
 | `ConstantUsageRule`           | Magic numbers and strings must be defined as named constants                  |
 | `StringLiteralsConcatenationRule` | String literal concatenation via `.` or `.=` is forbidden                |
+| `TodoCommentRule`             | TODO, FIXME, and XXX comments are forbidden in method bodies                  |
 
 ### Naming
 
@@ -159,6 +160,11 @@ parameters:
                 - ''
         stringConcat:
             allowMixed: false
+        todoComment:
+            keywords:
+                - TODO
+                - FIXME
+                - XXX
 ```
 
 Default values match the defaults described in the rules table above. Omitting a parameter keeps the default. Diagnostic identifier for `AtclauseOrderRule`: `haspadar.atclauseOrder` (for targeted ignores, e.g. `@phpstan-ignore haspadar.atclauseOrder`).

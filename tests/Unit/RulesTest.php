@@ -47,6 +47,7 @@ use Haspadar\PHPStanRules\Rules\StatementCountRule;
 use Haspadar\PHPStanRules\Rules\TooManyMethodsRule;
 use Haspadar\PHPStanRules\Rules\ConstantUsageRule;
 use Haspadar\PHPStanRules\Rules\StringLiteralsConcatenationRule;
+use Haspadar\PHPStanRules\Rules\TodoCommentRule;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -99,6 +100,7 @@ final class RulesTest extends TestCase
                 UnnecessaryLocalRule::class,
                 ConstantUsageRule::class,
                 StringLiteralsConcatenationRule::class,
+                TodoCommentRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',
