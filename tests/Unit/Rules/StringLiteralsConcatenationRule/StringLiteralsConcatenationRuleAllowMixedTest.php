@@ -36,4 +36,13 @@ final class StringLiteralsConcatenationRuleAllowMixedTest extends RuleTestCase
             ],
         );
     }
+
+    #[Test]
+    public function passesWhenConcatAssignMixedAllowed(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/StringLiteralsConcatenationRule/ClassWithConcatAssignMixed.php'],
+            [],
+        );
+    }
 }

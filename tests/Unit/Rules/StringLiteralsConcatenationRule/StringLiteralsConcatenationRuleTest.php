@@ -87,4 +87,24 @@ final class StringLiteralsConcatenationRuleTest extends RuleTestCase
             [],
         );
     }
+
+    #[Test]
+    public function passesWhenMethodIsAbstract(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/StringLiteralsConcatenationRule/ClassWithAbstractMethod.php'],
+            [],
+        );
+    }
+
+    #[Test]
+    public function reportsOneErrorForRightNestedConcat(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/StringLiteralsConcatenationRule/ClassWithRightNestedConcat.php'],
+            [
+                ['String literal concatenation found on line 16. Use sprintf() or string interpolation instead.', 16],
+            ],
+        );
+    }
 }
