@@ -70,6 +70,13 @@ parameters:
             pattern: '^(id|[a-z]{3,})$'
         catchParamName:
             pattern: '^(e|ex|[a-z]{3,12})$'
+        constantUsage:
+            ignoreNumbers:
+                - 0
+                - 1
+            checkStrings: false
+            ignoreStrings:
+                - ''
 
 parametersSchema:
     haspadar: structure([
@@ -151,6 +158,11 @@ parametersSchema:
         ]),
         catchParamName: structure([
             pattern: string(),
+        ]),
+        constantUsage: structure([
+            ignoreNumbers: listOf(anyOf(int(), float())),
+            checkStrings: bool(),
+            ignoreStrings: listOf(string()),
         ]),
     ])
 
@@ -384,5 +396,14 @@ services:
             - phpstan.rules.rule
     -
         class: Haspadar\PHPStanRules\Rules\UnnecessaryLocalRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\ConstantUsageRule
+        arguments:
+            options:
+                ignoreNumbers: %haspadar.constantUsage.ignoreNumbers%
+                checkStrings: %haspadar.constantUsage.checkStrings%
+                ignoreStrings: %haspadar.constantUsage.ignoreStrings%
         tags:
             - phpstan.rules.rule

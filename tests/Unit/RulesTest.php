@@ -45,6 +45,7 @@ use Haspadar\PHPStanRules\Rules\ProhibitPublicStaticMethodsRule;
 use Haspadar\PHPStanRules\Rules\ReturnCountRule;
 use Haspadar\PHPStanRules\Rules\StatementCountRule;
 use Haspadar\PHPStanRules\Rules\TooManyMethodsRule;
+use Haspadar\PHPStanRules\Rules\ConstantUsageRule;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -95,6 +96,7 @@ final class RulesTest extends TestCase
                 ParameterNameRule::class,
                 CatchParameterNameRule::class,
                 UnnecessaryLocalRule::class,
+                ConstantUsageRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',
