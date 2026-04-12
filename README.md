@@ -57,6 +57,7 @@
 | `VariableNameRule`                | `^[a-z][a-zA-Z]{2,19}$` | Local variable name must match the configured pattern         |
 | `ParameterNameRule`               | `^(id\|[a-z]{3,})$` | Method parameter name must match the configured pattern           |
 | `CatchParameterNameRule`          | `^(e\|ex\|[a-z]{3,12})$` | Catch parameter name must match the configured pattern       |
+| `ForbiddenClassSuffixRule`        | 12 suffixes | Class name must not end with a generic suffix (Manager, Helper, Util, ...) |
 
 ### PHPDoc style
 
@@ -165,6 +166,23 @@ parameters:
                 - TODO
                 - FIXME
                 - XXX
+        forbiddenClassSuffix:
+            forbiddenSuffixes:
+                - Manager
+                - Handler
+                - Processor
+                - Coordinator
+                - Helper
+                - Util
+                - Utils
+                - Utility
+                - Data
+                - Info
+                - Information
+                - Wrapper
+            allowedSuffixes:
+                - EventHandler
+                - CommandHandler
 ```
 
 Default values match the defaults described in the rules table above. Omitting a parameter keeps the default. Diagnostic identifier for `AtclauseOrderRule`: `haspadar.atclauseOrder` (for targeted ignores, e.g. `@phpstan-ignore haspadar.atclauseOrder`).
