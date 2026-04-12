@@ -46,6 +46,7 @@ use Haspadar\PHPStanRules\Rules\ReturnCountRule;
 use Haspadar\PHPStanRules\Rules\StatementCountRule;
 use Haspadar\PHPStanRules\Rules\TooManyMethodsRule;
 use Haspadar\PHPStanRules\Rules\ConstantUsageRule;
+use Haspadar\PHPStanRules\Rules\StringLiteralsConcatenationRule;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -97,6 +98,7 @@ final class RulesTest extends TestCase
                 CatchParameterNameRule::class,
                 UnnecessaryLocalRule::class,
                 ConstantUsageRule::class,
+                StringLiteralsConcatenationRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',
