@@ -86,6 +86,8 @@ parameters:
                 - XXX
         beImmutable:
             excludedClasses: []
+        interfaceMethods:
+            maxMethods: 10
         forbiddenClassSuffix:
             forbiddenSuffixes:
                 - Manager
@@ -196,6 +198,9 @@ parametersSchema:
         ]),
         beImmutable: structure([
             excludedClasses: listOf(string()),
+        ]),
+        interfaceMethods: structure([
+            maxMethods: int(),
         ]),
         forbiddenClassSuffix: structure([
             forbiddenSuffixes: listOf(string()),
@@ -471,5 +476,11 @@ services:
             options:
                 forbiddenSuffixes: %haspadar.forbiddenClassSuffix.forbiddenSuffixes%
                 allowedSuffixes: %haspadar.forbiddenClassSuffix.allowedSuffixes%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\KeepInterfacesShortRule
+        arguments:
+            maxMethods: %haspadar.interfaceMethods.maxMethods%
         tags:
             - phpstan.rules.rule
