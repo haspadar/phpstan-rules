@@ -84,6 +84,8 @@ parameters:
                 - TODO
                 - FIXME
                 - XXX
+        beImmutable:
+            excludedClasses: []
         forbiddenClassSuffix:
             forbiddenSuffixes:
                 - Manager
@@ -191,6 +193,9 @@ parametersSchema:
         ]),
         todoComment: structure([
             keywords: listOf(string()),
+        ]),
+        beImmutable: structure([
+            excludedClasses: listOf(string()),
         ]),
         forbiddenClassSuffix: structure([
             forbiddenSuffixes: listOf(string()),
@@ -451,6 +456,13 @@ services:
         arguments:
             options:
                 keywords: %haspadar.todoComment.keywords%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\BeImmutableRule
+        arguments:
+            options:
+                excludedClasses: %haspadar.beImmutable.excludedClasses%
         tags:
             - phpstan.rules.rule
     -

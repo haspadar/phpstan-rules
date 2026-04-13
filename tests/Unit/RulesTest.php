@@ -49,6 +49,7 @@ use Haspadar\PHPStanRules\Rules\ConstantUsageRule;
 use Haspadar\PHPStanRules\Rules\StringLiteralsConcatenationRule;
 use Haspadar\PHPStanRules\Rules\TodoCommentRule;
 use Haspadar\PHPStanRules\Rules\ForbiddenClassSuffixRule;
+use Haspadar\PHPStanRules\Rules\BeImmutableRule;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -103,6 +104,7 @@ final class RulesTest extends TestCase
                 StringLiteralsConcatenationRule::class,
                 TodoCommentRule::class,
                 ForbiddenClassSuffixRule::class,
+                BeImmutableRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',
