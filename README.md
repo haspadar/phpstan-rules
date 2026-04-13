@@ -34,6 +34,7 @@
 | `ProtectedMethodInFinalClassRule` | Final classes must not have `protected` methods                                    |
 | `ProhibitPublicStaticMethodsRule` | Classes must not have `public static` methods                                      |
 | `ConstructorInitializationRule`   | Constructor must only assign `$this->property` or call `parent::__construct()`     |
+| `BeImmutableRule`                | All non-static properties must be `readonly`                                       |
 
 ### Error-prone patterns
 
@@ -166,6 +167,10 @@ parameters:
                 - TODO
                 - FIXME
                 - XXX
+        beImmutable:
+            excludedClasses:
+                - App\Entity\User
+                - App\Entity\Order
         forbiddenClassSuffix:
             forbiddenSuffixes:
                 - Manager
