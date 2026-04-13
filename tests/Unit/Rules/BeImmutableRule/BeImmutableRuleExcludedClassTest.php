@@ -16,7 +16,7 @@ final class BeImmutableRuleExcludedClassTest extends RuleTestCase
     {
         return new BeImmutableRule([
             'excludedClasses' => [
-                'Haspadar\PHPStanRules\Tests\Fixtures\Rules\BeImmutableRule\ClassWithExcludedFqcn',
+                '\Haspadar\PHPStanRules\Tests\Fixtures\Rules\BeImmutableRule\ClassWithExcludedFqcn',
             ],
         ]);
     }

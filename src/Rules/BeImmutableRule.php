@@ -39,7 +39,10 @@ final readonly class BeImmutableRule implements Rule
      */
     public function __construct(array $options = [])
     {
-        $this->excludedClasses = $options['excludedClasses'] ?? [];
+        $this->excludedClasses = array_map(
+            static fn(string $class): string => ltrim($class, '\\'),
+            $options['excludedClasses'] ?? [],
+        );
     }
 
     #[Override]
