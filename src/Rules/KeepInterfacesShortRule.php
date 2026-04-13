@@ -11,7 +11,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use PHPStan\ShouldNotHappenException;
 
 /**
  * Reports an interface that declares more methods than the configured maximum.
@@ -39,20 +38,19 @@ final readonly class KeepInterfacesShortRule implements Rule
      * Analyses the node and returns a list of errors.
      *
      * @psalm-param Interface_ $node
-     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
+        if ($node->name === null) {
+            return [];
+        }
+
         $count = count($node->getMethods());
 
         if ($count <= $this->maxMethods) {
             return [];
-        }
-
-        if ($node->name === null) {
-            throw new ShouldNotHappenException();
         }
 
         return [
