@@ -84,6 +84,21 @@ parameters:
                 - TODO
                 - FIXME
                 - XXX
+        forbiddenClassSuffix:
+            forbiddenSuffixes:
+                - Manager
+                - Handler
+                - Processor
+                - Coordinator
+                - Helper
+                - Util
+                - Utils
+                - Utility
+                - Data
+                - Info
+                - Information
+                - Wrapper
+            allowedSuffixes: []
 
 parametersSchema:
     haspadar: structure([
@@ -176,6 +191,10 @@ parametersSchema:
         ]),
         todoComment: structure([
             keywords: listOf(string()),
+        ]),
+        forbiddenClassSuffix: structure([
+            forbiddenSuffixes: listOf(string()),
+            allowedSuffixes: listOf(string()),
         ]),
     ])
 
@@ -432,5 +451,13 @@ services:
         arguments:
             options:
                 keywords: %haspadar.todoComment.keywords%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\ForbiddenClassSuffixRule
+        arguments:
+            options:
+                forbiddenSuffixes: %haspadar.forbiddenClassSuffix.forbiddenSuffixes%
+                allowedSuffixes: %haspadar.forbiddenClassSuffix.allowedSuffixes%
         tags:
             - phpstan.rules.rule
