@@ -40,21 +40,27 @@ final readonly class ForbiddenClassSuffixRule implements Rule
      */
     public function __construct(array $options = [])
     {
-        $this->forbiddenSuffixes = $options['forbiddenSuffixes'] ?? [
-            'Manager',
-            'Handler',
-            'Processor',
-            'Coordinator',
-            'Helper',
-            'Util',
-            'Utils',
-            'Utility',
-            'Data',
-            'Info',
-            'Information',
-            'Wrapper',
-        ];
-        $this->allowedSuffixes = $options['allowedSuffixes'] ?? [];
+        $this->forbiddenSuffixes = array_values(array_filter(
+            $options['forbiddenSuffixes'] ?? [
+                'Manager',
+                'Handler',
+                'Processor',
+                'Coordinator',
+                'Helper',
+                'Util',
+                'Utils',
+                'Utility',
+                'Data',
+                'Info',
+                'Information',
+                'Wrapper',
+            ],
+            static fn(string $suffix): bool => $suffix !== '',
+        ));
+        $this->allowedSuffixes = array_values(array_filter(
+            $options['allowedSuffixes'] ?? [],
+            static fn(string $suffix): bool => $suffix !== '',
+        ));
     }
 
     #[Override]
