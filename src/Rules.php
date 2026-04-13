@@ -55,6 +55,7 @@ final class Rules
         Rules\TodoCommentRule::class,
         Rules\ForbiddenClassSuffixRule::class,
         Rules\BeImmutableRule::class,
+        Rules\KeepInterfacesShortRule::class,
     ];
 
     /**
