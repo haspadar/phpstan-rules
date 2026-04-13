@@ -12,7 +12,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use PHPStan\ShouldNotHappenException;
 
 /**
  * Enforces immutability by requiring all non-static properties to be readonly.
@@ -55,13 +54,12 @@ final readonly class BeImmutableRule implements Rule
      * Analyses the node and returns a list of errors.
      *
      * @psalm-param Class_ $node
-     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
-        if ($node->isAbstract() || $node->isAnonymous() || $node->namespacedName === null) {
+        if ($node->isAbstract() || $node->isAnonymous() || $node->namespacedName === null || $node->name === null) {
             return [];
         }
 
@@ -73,10 +71,6 @@ final readonly class BeImmutableRule implements Rule
 
         if (in_array($className, $this->excludedClasses, true)) {
             return [];
-        }
-
-        if ($node->name === null) {
-            throw new ShouldNotHappenException();
         }
 
         $shortName = $node->name->toString();
@@ -94,7 +88,6 @@ final readonly class BeImmutableRule implements Rule
     /**
      * Returns errors for each non-readonly property in the given property node.
      *
-     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     private function errorsForProperty(Property $property, string $className): array
