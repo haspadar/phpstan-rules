@@ -16,7 +16,7 @@ use PhpParser\NodeFinder;
  */
 final class MethodBodyTypeCollector
 {
-    private NodeFinder $finder;
+    private readonly NodeFinder $finder;
 
     /** Initializes the shared NodeFinder instance. */
     public function __construct()
