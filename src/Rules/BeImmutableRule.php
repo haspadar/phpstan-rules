@@ -75,11 +75,16 @@ final readonly class BeImmutableRule implements Rule
             return [];
         }
 
+        if ($node->name === null) {
+            throw new ShouldNotHappenException();
+        }
+
+        $shortName = $node->name->toString();
         $errors = [];
 
         foreach ($node->stmts as $stmt) {
             if ($stmt instanceof Property && !$stmt->isStatic() && !$stmt->isReadonly()) {
-                $errors = [...$errors, ...$this->errorsForProperty($stmt, $node)];
+                $errors = [...$errors, ...$this->errorsForProperty($stmt, $shortName)];
             }
         }
 
@@ -92,13 +97,8 @@ final readonly class BeImmutableRule implements Rule
      * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
-    private function errorsForProperty(Property $property, Class_ $class): array
+    private function errorsForProperty(Property $property, string $className): array
     {
-        if ($class->name === null) {
-            throw new ShouldNotHappenException();
-        }
-
-        $className = $class->name->toString();
         $errors = [];
 
         foreach ($property->props as $prop) {
