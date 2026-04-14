@@ -35,6 +35,7 @@
 | `ProhibitPublicStaticMethodsRule` | Classes must not have `public static` methods                                      |
 | `ConstructorInitializationRule`   | Constructor must only assign `$this->property` or call `parent::__construct()`     |
 | `BeImmutableRule`                | All non-static properties must be `readonly`                                       |
+| `KeepInterfacesShortRule`        | Interfaces must not declare too many methods (default: 10)                         |
 
 ### Error-prone patterns
 
@@ -171,6 +172,8 @@ parameters:
             excludedClasses:
                 - App\Entity\User
                 - App\Entity\Order
+        interfaceMethods:
+            maxMethods: 5
         forbiddenClassSuffix:
             forbiddenSuffixes:
                 - Manager
