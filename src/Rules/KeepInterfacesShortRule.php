@@ -43,9 +43,7 @@ final readonly class KeepInterfacesShortRule implements Rule
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
-        if ($node->name === null) {
-            return [];
-        }
+        assert($node->name !== null);
 
         $count = count($node->getMethods());
 
