@@ -28,6 +28,5 @@
                 <directory name="../../src" />
             </errorLevel>
         </PossiblyUnusedMethod>
-
     </issueHandlers>
 </psalm>

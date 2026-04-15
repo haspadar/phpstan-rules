@@ -1,5 +1,6 @@
 php-cs-fixer/.php-cs-fixer.cache
 codecov/coverage-report/
+codecov/coverage.xml
 infection/*.log
 ast-metrics/reports/
 phpmetrics/phpmetrics.json
