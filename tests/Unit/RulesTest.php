@@ -51,6 +51,7 @@ use Haspadar\PHPStanRules\Rules\TodoCommentRule;
 use Haspadar\PHPStanRules\Rules\ForbiddenClassSuffixRule;
 use Haspadar\PHPStanRules\Rules\BeImmutableRule;
 use Haspadar\PHPStanRules\Rules\KeepInterfacesShortRule;
+use Haspadar\PHPStanRules\Rules\NeverAcceptNullArgumentsRule;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -107,6 +108,7 @@ final class RulesTest extends TestCase
                 ForbiddenClassSuffixRule::class,
                 BeImmutableRule::class,
                 KeepInterfacesShortRule::class,
+                NeverAcceptNullArgumentsRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',
