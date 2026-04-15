@@ -56,6 +56,7 @@ final class Rules
         Rules\ForbiddenClassSuffixRule::class,
         Rules\BeImmutableRule::class,
         Rules\KeepInterfacesShortRule::class,
+        Rules\NeverAcceptNullArgumentsRule::class,
     ];
 
     /**
