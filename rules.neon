@@ -484,3 +484,7 @@ services:
             maxMethods: %haspadar.interfaceMethods.maxMethods%
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\NeverAcceptNullArgumentsRule
+        tags:
+            - phpstan.rules.rule
