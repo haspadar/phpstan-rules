@@ -20,7 +20,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use PHPStan\ShouldNotHappenException;
 
 /**
  * Reports nullable parameters in methods and standalone functions.
@@ -47,7 +46,6 @@ final readonly class NeverAcceptNullArgumentsRule implements Rule
      * Analyses the node and returns a list of errors.
      *
      * @param Stmt $node
-     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
@@ -101,14 +99,10 @@ final readonly class NeverAcceptNullArgumentsRule implements Rule
 
     /**
      * Extracts the parameter name as a string.
-     *
-     * @throws ShouldNotHappenException
      */
     private function parameterName(Param $param): string
     {
-        if (!$param->var instanceof Variable || !is_string($param->var->name)) {
-            throw new ShouldNotHappenException();
-        }
+        assert($param->var instanceof Variable && is_string($param->var->name));
 
         return $param->var->name;
     }
@@ -117,16 +111,12 @@ final readonly class NeverAcceptNullArgumentsRule implements Rule
      * Returns a human-readable label for the enclosing function or method.
      *
      * @param ClassMethod|Function_ $node
-     * @throws ShouldNotHappenException
      */
     private function functionLabel(FunctionLike $node, Scope $scope): string
     {
         if ($node instanceof ClassMethod) {
             $classReflection = $scope->getClassReflection();
-
-            if ($classReflection === null) {
-                throw new ShouldNotHappenException();
-            }
+            assert($classReflection !== null);
 
             return sprintf('method %s::%s()', $classReflection->getName(), $node->name->toString());
         }
