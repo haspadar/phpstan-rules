@@ -93,7 +93,7 @@ final class ExemptScalarCollector
     /**
      * Checks whether a node is a scalar literal (int, float, or string).
      */
-    private static function isScalarLiteral(?Node $node): bool
+    private static function isScalarLiteral(Node $node): bool
     {
         return $node instanceof Scalar\Int_
             || $node instanceof Scalar\Float_
