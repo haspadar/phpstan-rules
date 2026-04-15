@@ -80,6 +80,15 @@ final class NeverAcceptNullArgumentsRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function passesForArrowFunctionWithNullableParam(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NeverAcceptNullArgumentsRule/ArrowFunctionWithNullableParam.php'],
+            [],
+        );
+    }
+
+    #[Test]
     public function suppressesErrorWhenPhpstanIgnorePresent(): void
     {
         $this->analyse(
