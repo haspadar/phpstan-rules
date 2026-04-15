@@ -89,6 +89,26 @@ final class NeverReturnNullRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function passesForUnionReturnTypeWithoutNull(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NeverReturnNullRule/MethodWithUnionWithoutNull.php'],
+            [],
+        );
+    }
+
+    #[Test]
+    public function reportsErrorForAbstractMethodWithNullableReturn(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NeverReturnNullRule/AbstractMethodWithNullableReturn.php'],
+            [
+                ['Method Haspadar\PHPStanRules\Tests\Fixtures\Rules\NeverReturnNullRule\AbstractMethodWithNullableReturn::greet() must not have a nullable return type.', 9],
+            ],
+        );
+    }
+
+    #[Test]
     public function suppressesErrorWhenPhpstanIgnorePresent(): void
     {
         $this->analyse(
