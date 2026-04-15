@@ -52,6 +52,7 @@ use Haspadar\PHPStanRules\Rules\ForbiddenClassSuffixRule;
 use Haspadar\PHPStanRules\Rules\BeImmutableRule;
 use Haspadar\PHPStanRules\Rules\KeepInterfacesShortRule;
 use Haspadar\PHPStanRules\Rules\NeverAcceptNullArgumentsRule;
+use Haspadar\PHPStanRules\Rules\NeverReturnNullRule;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -109,6 +110,7 @@ final class RulesTest extends TestCase
                 BeImmutableRule::class,
                 KeepInterfacesShortRule::class,
                 NeverAcceptNullArgumentsRule::class,
+                NeverReturnNullRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',

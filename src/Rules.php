@@ -57,6 +57,7 @@ final class Rules
         Rules\BeImmutableRule::class,
         Rules\KeepInterfacesShortRule::class,
         Rules\NeverAcceptNullArgumentsRule::class,
+        Rules\NeverReturnNullRule::class,
     ];
 
     /**

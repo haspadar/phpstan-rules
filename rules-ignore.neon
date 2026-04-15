@@ -14,3 +14,5 @@ parameters:
             identifier: haspadar.cyclomaticComplexity
         -
             identifier: haspadar.parameterName
+        -
+            identifier: haspadar.noNullReturn

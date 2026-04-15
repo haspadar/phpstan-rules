@@ -488,3 +488,7 @@ services:
         class: Haspadar\PHPStanRules\Rules\NeverAcceptNullArgumentsRule
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\NeverReturnNullRule
+        tags:
+            - phpstan.rules.rule
