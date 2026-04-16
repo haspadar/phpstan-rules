@@ -47,6 +47,17 @@ final class WeightedMethodsPerClassRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function reportsErrorWhenAllBranchTypesExceedLimit(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/WeightedMethodsPerClassRule/AllBranchTypesClass.php'],
+            [
+                ['Class AllBranchTypesClass has weighted method complexity of 23. Maximum allowed is 5.', 7],
+            ],
+        );
+    }
+
+    #[Test]
     public function suppressesErrorWhenPhpstanIgnorePresent(): void
     {
         $this->analyse(
