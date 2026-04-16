@@ -29,7 +29,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use PHPStan\ShouldNotHappenException;
 
 /**
  * Reports a class whose weighted method count (sum of cyclomatic complexities) exceeds the configured limit.
@@ -62,7 +61,6 @@ final readonly class WeightedMethodsPerClassRule implements Rule
      * Analyses the node and returns a list of errors.
      *
      * @psalm-param Class_ $node
-     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
@@ -74,8 +72,8 @@ final readonly class WeightedMethodsPerClassRule implements Rule
             return [];
         }
 
-        if ($node->name === null) {
-            throw new ShouldNotHappenException();
+        if ($node->isAnonymous() || $node->name === null) {
+            return [];
         }
 
         return [

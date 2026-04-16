@@ -58,6 +58,15 @@ final class WeightedMethodsPerClassRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function skipsAnonymousClassEvenWhenWmcExceedsLimit(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/WeightedMethodsPerClassRule/AnonymousClassFile.php'],
+            [],
+        );
+    }
+
+    #[Test]
     public function suppressesErrorWhenPhpstanIgnorePresent(): void
     {
         $this->analyse(
