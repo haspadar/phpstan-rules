@@ -23,6 +23,7 @@
 | `BooleanExpressionComplexityRule` | 3       | Method must not have more than N boolean operators in a single expression  |
 | `ClassLengthRule`                 | 500     | Class body must not exceed N lines                                         |
 | `StatementCountRule`              | 30      | Method must not have more than N executable statements                     |
+| `WeightedMethodsPerClassRule`     | 50      | Sum of cyclomatic complexities of all methods must not exceed N            |
 
 ### Design
 
@@ -116,6 +117,8 @@ parameters:
             skipComments: true
         statementCount:
             maxStatements: 20
+        weightedMethods:
+            maxWmc: 30
         returnCount:
             max: 2
         illegalCatch:
