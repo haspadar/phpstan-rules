@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Haspadar\PHPStanRules\Tests\Unit\Rules\WeightedMethodsPerClassRule;
 
 use Haspadar\PHPStanRules\Rules\WeightedMethodsPerClassRule;
+use InvalidArgumentException;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPUnit\Framework\Attributes\Test;
@@ -64,6 +65,20 @@ final class WeightedMethodsPerClassRuleTest extends RuleTestCase
             [__DIR__ . '/../../../Fixtures/Rules/WeightedMethodsPerClassRule/AnonymousClassFile.php'],
             [],
         );
+    }
+
+    #[Test]
+    public function throwsExceptionWhenMaxWmcIsZero(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new WeightedMethodsPerClassRule(0);
+    }
+
+    #[Test]
+    public function throwsExceptionWhenMaxWmcIsNegative(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        new WeightedMethodsPerClassRule(-1);
     }
 
     #[Test]
