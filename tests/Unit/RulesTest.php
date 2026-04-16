@@ -53,6 +53,7 @@ use Haspadar\PHPStanRules\Rules\BeImmutableRule;
 use Haspadar\PHPStanRules\Rules\KeepInterfacesShortRule;
 use Haspadar\PHPStanRules\Rules\NeverAcceptNullArgumentsRule;
 use Haspadar\PHPStanRules\Rules\NeverReturnNullRule;
+use Haspadar\PHPStanRules\Rules\NeverUsePublicConstantsRule;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -111,6 +112,7 @@ final class RulesTest extends TestCase
                 KeepInterfacesShortRule::class,
                 NeverAcceptNullArgumentsRule::class,
                 NeverReturnNullRule::class,
+                NeverUsePublicConstantsRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',

@@ -58,6 +58,7 @@ final class Rules
         Rules\KeepInterfacesShortRule::class,
         Rules\NeverAcceptNullArgumentsRule::class,
         Rules\NeverReturnNullRule::class,
+        Rules\NeverUsePublicConstantsRule::class,
     ];
 
     /**
