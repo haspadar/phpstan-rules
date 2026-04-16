@@ -81,6 +81,44 @@ final class NeverUsePublicConstantsRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function reportsOnlyPublicConstWhenMixedVisibility(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NeverUsePublicConstantsRule/ClassWithMixedVisibilityConsts.php'],
+            [
+                ['Constant PUBLIC_ONE in class ClassWithMixedVisibilityConsts must not be public. Use private or protected visibility.', 9],
+            ],
+        );
+    }
+
+    #[Test]
+    public function passesForInterfaceWithConst(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NeverUsePublicConstantsRule/InterfaceWithConst.php'],
+            [],
+        );
+    }
+
+    #[Test]
+    public function passesForEnumWithConst(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NeverUsePublicConstantsRule/EnumWithConst.php'],
+            [],
+        );
+    }
+
+    #[Test]
+    public function passesForAnonymousClassWithConst(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NeverUsePublicConstantsRule/AnonymousClassWithConst.php'],
+            [],
+        );
+    }
+
+    #[Test]
     public function suppressesErrorWhenPhpstanIgnorePresent(): void
     {
         $this->analyse(
