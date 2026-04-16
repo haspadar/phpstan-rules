@@ -72,9 +72,11 @@ final readonly class WeightedMethodsPerClassRule implements Rule
             return [];
         }
 
-        if ($node->isAnonymous() || $node->name === null) {
+        if ($node->isAnonymous()) {
             return [];
         }
+
+        assert($node->name !== null);
 
         return [
             RuleErrorBuilder::message(
