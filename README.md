@@ -38,7 +38,7 @@
 | `KeepInterfacesShortRule`        | Interfaces must not declare too many methods (default: 10)                         |
 | `NeverAcceptNullArgumentsRule`   | Method and standalone function parameters must not be nullable                     |
 | `NeverReturnNullRule`            | Method and standalone function return types must not be nullable, `return null` is forbidden |
-| `NeverUsePublicConstantsRule`   | Class constants must not be public (explicitly or implicitly)                  |
+| `NeverUsePublicConstantsRule`    | Class constants must not be public (explicitly or implicitly)                      |
 
 ### Error-prone patterns
 

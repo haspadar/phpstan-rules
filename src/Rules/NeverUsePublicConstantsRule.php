@@ -17,9 +17,9 @@ use PHPStan\Rules\RuleErrorBuilder;
  * Forbids public constants in classes.
  *
  * Reports every class constant that is explicitly or implicitly public.
- * Interfaces, enums, traits, anonymous classes, and abstract classes
- * with no namespacedName are skipped. Abstract named classes ARE checked
- * because they still expose public API through their constants.
+ * Only named classes are checked, including abstract ones. Interfaces,
+ * enums, and traits use different AST nodes and are not affected.
+ * Anonymous classes are skipped.
  *
  * @implements Rule<Class_>
  */
