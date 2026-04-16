@@ -59,6 +59,7 @@ final class Rules
         Rules\NeverAcceptNullArgumentsRule::class,
         Rules\NeverReturnNullRule::class,
         Rules\NeverUsePublicConstantsRule::class,
+        Rules\WeightedMethodsPerClassRule::class,
     ];
 
     /**

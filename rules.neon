@@ -88,6 +88,8 @@ parameters:
             excludedClasses: []
         interfaceMethods:
             maxMethods: 10
+        weightedMethods:
+            maxWmc: 50
         forbiddenClassSuffix:
             forbiddenSuffixes:
                 - Manager
@@ -201,6 +203,9 @@ parametersSchema:
         ]),
         interfaceMethods: structure([
             maxMethods: int(),
+        ]),
+        weightedMethods: structure([
+            maxWmc: int(),
         ]),
         forbiddenClassSuffix: structure([
             forbiddenSuffixes: listOf(string()),
@@ -494,5 +499,11 @@ services:
             - phpstan.rules.rule
     -
         class: Haspadar\PHPStanRules\Rules\NeverUsePublicConstantsRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\WeightedMethodsPerClassRule
+        arguments:
+            maxWmc: %haspadar.weightedMethods.maxWmc%
         tags:
             - phpstan.rules.rule
