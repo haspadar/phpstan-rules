@@ -24,7 +24,8 @@ use PHPStan\ShouldNotHappenException;
  * it among their outbound dependencies, and emit an error when the count exceeds `$maxAfferent`.
  *
  * The `ignoreInterfaces` and `ignoreAbstract` option flags skip reporting for interfaces and abstract classes,
- * which are expected to be widely implemented or extended by design.
+ * which are expected to be widely implemented or extended by design. The `excludedClasses` option lists
+ * FQCNs that must never be reported, regardless of their incoming edge count; matching is case-insensitive.
  *
  * @implements Rule<CollectedDataNode>
  */
@@ -34,18 +35,23 @@ final readonly class AfferentCouplingRule implements Rule
 
     private bool $ignoreAbstract;
 
+    /** @var list<string> Lowercased FQCNs that must never be reported. */
+    private array $excludedClasses;
+
     /**
-     * Stores the inclusive upper bound on afferent coupling per class and the skip flags.
+     * Stores the inclusive upper bound on afferent coupling per class, skip flags, and the exclusion list.
      *
      * @param array{
      *     ignoreInterfaces?: bool,
-     *     ignoreAbstract?: bool
+     *     ignoreAbstract?: bool,
+     *     excludedClasses?: list<string>
      * } $options
      */
     public function __construct(private int $maxAfferent = 14, array $options = [])
     {
         $this->ignoreInterfaces = $options['ignoreInterfaces'] ?? false;
         $this->ignoreAbstract = $options['ignoreAbstract'] ?? false;
+        $this->excludedClasses = array_map('strtolower', $options['excludedClasses'] ?? []);
     }
 
     #[Override]
@@ -126,7 +132,7 @@ final readonly class AfferentCouplingRule implements Rule
     }
 
     /**
-     * Returns true when the declaration must be skipped due to configured ignore flags.
+     * Returns true when the declaration must be skipped due to configured ignore flags or exclusion list.
      *
      * @param array{class: string, kind: string, abstract: bool, file: string, line: int} $meta
      */
@@ -136,7 +142,11 @@ final readonly class AfferentCouplingRule implements Rule
             return true;
         }
 
-        return $this->ignoreAbstract && $meta['abstract'];
+        if ($this->ignoreAbstract && $meta['abstract']) {
+            return true;
+        }
+
+        return in_array(strtolower($meta['class']), $this->excludedClasses, true);
     }
 
     /**

@@ -109,6 +109,7 @@ parameters:
             maxAfferent: 14
             ignoreInterfaces: false
             ignoreAbstract: false
+            excludedClasses: []
 
 parametersSchema:
     haspadar: structure([
@@ -219,6 +220,7 @@ parametersSchema:
             maxAfferent: int(),
             ignoreInterfaces: bool(),
             ignoreAbstract: bool(),
+            excludedClasses: listOf(string()),
         ]),
     ])
 
@@ -527,5 +529,6 @@ services:
             options:
                 ignoreInterfaces: %haspadar.afferentCoupling.ignoreInterfaces%
                 ignoreAbstract: %haspadar.afferentCoupling.ignoreAbstract%
+                excludedClasses: %haspadar.afferentCoupling.excludedClasses%
         tags:
             - phpstan.rules.rule
