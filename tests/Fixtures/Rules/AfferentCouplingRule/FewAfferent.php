@@ -79,3 +79,14 @@ final class UserC
         };
     }
 }
+
+enum TargetKind: string implements TargetContract
+{
+    case Primary = 'primary';
+    case Secondary = 'secondary';
+
+    public function tag(): string
+    {
+        return $this->value;
+    }
+}

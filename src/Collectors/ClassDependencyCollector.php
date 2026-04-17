@@ -10,14 +10,15 @@ use Override;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Collectors\Collector;
 
 /**
- * Collects outbound class dependencies for every class and interface in the analysed codebase.
+ * Collects outbound class dependencies for every class, interface, and enum in the analysed codebase.
  *
- * For each class-like declaration, emits a tuple of its FQCN, kind (class/interface),
+ * For each class-like declaration, emits a tuple of its FQCN, kind (class/interface/enum),
  * abstractness flag, and the list of FQCNs it directly references through:
  * property types, method signatures, `extends`, `implements`, `new`, static calls,
  * and `catch` type hints. The data is consumed by a `Rule<CollectedDataNode>` that
@@ -57,7 +58,7 @@ final readonly class ClassDependencyCollector implements Collector
     #[Override]
     public function processNode(Node $node, Scope $scope): ?array
     {
-        if (!$node instanceof Class_ && !$node instanceof Interface_) {
+        if (!$node instanceof Class_ && !$node instanceof Interface_ && !$node instanceof Enum_) {
             return null;
         }
 
@@ -74,11 +75,25 @@ final readonly class ClassDependencyCollector implements Collector
 
         return [
             'class' => $fqcn,
-            'kind' => $node instanceof Interface_ ? 'interface' : 'class',
+            'kind' => $this->kindOf($node),
             'abstract' => $node instanceof Class_ && $node->isAbstract(),
             'line' => $node->getStartLine(),
             'dependencies' => $this->normalize($names, $fqcn),
         ];
+    }
+
+    /** Returns the kind label (class/interface/enum) for the given class-like node. */
+    private function kindOf(Class_|Interface_|Enum_ $node): string
+    {
+        if ($node instanceof Interface_) {
+            return 'interface';
+        }
+
+        if ($node instanceof Enum_) {
+            return 'enum';
+        }
+
+        return 'class';
     }
 
     /**
@@ -86,7 +101,7 @@ final readonly class ClassDependencyCollector implements Collector
      *
      * @return list<string>
      */
-    private function collectHeaderTypes(Class_|Interface_ $node): array
+    private function collectHeaderTypes(Class_|Interface_|Enum_ $node): array
     {
         if ($node instanceof Interface_) {
             return array_values(
@@ -96,7 +111,7 @@ final readonly class ClassDependencyCollector implements Collector
 
         $names = [];
 
-        if ($node->extends !== null) {
+        if ($node instanceof Class_ && $node->extends !== null) {
             $names[] = $node->extends->toString();
         }
 
@@ -136,7 +151,7 @@ final readonly class ClassDependencyCollector implements Collector
     }
 
     /**
-     * Filters scalars and the declaring class itself, then deduplicates.
+     * Filters scalars and the declaring class itself, then deduplicates by lowercased FQCN.
      *
      * @param list<string> $names
      * @return list<string>
@@ -157,7 +172,7 @@ final readonly class ClassDependencyCollector implements Collector
                 continue;
             }
 
-            $result[$lower] = $name;
+            $result[$lower] = $lower;
         }
 
         return array_values($result);
