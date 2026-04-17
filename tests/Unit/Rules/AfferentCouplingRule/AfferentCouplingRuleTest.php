@@ -18,7 +18,7 @@ final class AfferentCouplingRuleTest extends RuleTestCase
     #[Override]
     protected function getRule(): Rule
     {
-        return new AfferentCouplingRule();
+        return new AfferentCouplingRule(maxAfferent: 2);
     }
 
     /**
@@ -33,12 +33,17 @@ final class AfferentCouplingRuleTest extends RuleTestCase
     }
 
     #[Test]
-    public function collectorAndRuleWireUpWithoutErrors(): void
+    public function reportsClassesExceedingExplicitLimit(): void
     {
         $this->analyse(
-            [__DIR__ . '/../../../Fixtures/Rules/AfferentCouplingRule/FewAfferent.php'],
-            [],
-            'Stub rule must not emit errors; pipeline wiring is the only thing being verified',
+            [__DIR__ . '/../../../Fixtures/Rules/AfferentCouplingRule/SmallLimitTooMany.php'],
+            [
+                [
+                    'Class Haspadar\PHPStanRules\Tests\Fixtures\Rules\AfferentCouplingRule\SmallLimitTooMany\HotTarget has afferent coupling 3 which exceeds the allowed 2.',
+                    7,
+                ],
+            ],
+            'Class with three consumers must exceed an explicit maxAfferent=2 limit',
         );
     }
 }
