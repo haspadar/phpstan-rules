@@ -27,8 +27,6 @@ return (new PhpCsFixer\Config())
 
         '@PER-CS2.0' => true,
         '@PHP8x3Migration' => true,
-        '@PHP8x4Migration' => true,
-        '@PHP8x5Migration' => true,
 
         // Arrays
         'array_syntax' => ['syntax' => 'short'],
