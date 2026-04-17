@@ -60,6 +60,7 @@ final class Rules
         Rules\NeverReturnNullRule::class,
         Rules\NeverUsePublicConstantsRule::class,
         Rules\WeightedMethodsPerClassRule::class,
+        Rules\AfferentCouplingRule::class,
     ];
 
     /**

@@ -507,3 +507,11 @@ services:
             maxWmc: %haspadar.weightedMethods.maxWmc%
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Collectors\ClassDependencyCollector
+        tags:
+            - phpstan.collector
+    -
+        class: Haspadar\PHPStanRules\Rules\AfferentCouplingRule
+        tags:
+            - phpstan.rules.rule
