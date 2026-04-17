@@ -51,7 +51,10 @@ final readonly class AfferentCouplingRule implements Rule
     {
         $this->ignoreInterfaces = $options['ignoreInterfaces'] ?? false;
         $this->ignoreAbstract = $options['ignoreAbstract'] ?? false;
-        $this->excludedClasses = array_map('strtolower', $options['excludedClasses'] ?? []);
+        $this->excludedClasses = array_map(
+            static fn(string $class): string => strtolower(ltrim($class, '\\')),
+            $options['excludedClasses'] ?? [],
+        );
     }
 
     #[Override]
@@ -146,7 +149,7 @@ final readonly class AfferentCouplingRule implements Rule
             return true;
         }
 
-        return in_array(strtolower($meta['class']), $this->excludedClasses, true);
+        return in_array(strtolower(ltrim($meta['class'], '\\')), $this->excludedClasses, true);
     }
 
     /**
