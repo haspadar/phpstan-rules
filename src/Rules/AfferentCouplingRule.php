@@ -23,12 +23,30 @@ use PHPStan\ShouldNotHappenException;
  * here into an incoming-edge graph: for every collected declaration we count how many distinct consumers list
  * it among their outbound dependencies, and emit an error when the count exceeds `$maxAfferent`.
  *
+ * The `ignoreInterfaces` and `ignoreAbstract` option flags skip reporting for interfaces and abstract classes,
+ * which are expected to be widely implemented or extended by design.
+ *
  * @implements Rule<CollectedDataNode>
  */
 final readonly class AfferentCouplingRule implements Rule
 {
-    /** Stores the inclusive upper bound on afferent coupling per class. */
-    public function __construct(private int $maxAfferent = 14) {}
+    private bool $ignoreInterfaces;
+
+    private bool $ignoreAbstract;
+
+    /**
+     * Stores the inclusive upper bound on afferent coupling per class and the skip flags.
+     *
+     * @param array{
+     *     ignoreInterfaces?: bool,
+     *     ignoreAbstract?: bool
+     * } $options
+     */
+    public function __construct(private int $maxAfferent = 14, array $options = [])
+    {
+        $this->ignoreInterfaces = $options['ignoreInterfaces'] ?? false;
+        $this->ignoreAbstract = $options['ignoreAbstract'] ?? false;
+    }
 
     #[Override]
     public function getNodeType(): string
@@ -50,6 +68,10 @@ final readonly class AfferentCouplingRule implements Rule
         $errors = [];
 
         foreach ($declarations as $lowerFqcn => $meta) {
+            if ($this->shouldSkip($meta)) {
+                continue;
+            }
+
             $afferent = count($incoming[$lowerFqcn] ?? []);
 
             if ($afferent <= $this->maxAfferent) {
@@ -76,7 +98,7 @@ final readonly class AfferentCouplingRule implements Rule
      * Returns a pair of maps: declarations keyed by lowercased FQCN and incoming edges keyed by target FQCN.
      *
      * @param array<string, list<array{class: string, kind: string, abstract: bool, line: int, dependencies: list<string>}>> $collected
-     * @return array{array<string, array{class: string, file: string, line: int}>, array<string, array<string, true>>}
+     * @return array{array<string, array{class: string, kind: string, abstract: bool, file: string, line: int}>, array<string, array<string, true>>}
      */
     private function buildGraph(array $collected): array
     {
@@ -86,7 +108,13 @@ final readonly class AfferentCouplingRule implements Rule
         foreach ($collected as $file => $entries) {
             foreach ($entries as $entry) {
                 $lowerFqcn = strtolower($entry['class']);
-                $declarations[$lowerFqcn] = ['class' => $entry['class'], 'file' => $file, 'line' => $entry['line']];
+                $declarations[$lowerFqcn] = [
+                    'class' => $entry['class'],
+                    'kind' => $entry['kind'],
+                    'abstract' => $entry['abstract'],
+                    'file' => $file,
+                    'line' => $entry['line'],
+                ];
 
                 foreach ($entry['dependencies'] as $dependency) {
                     $incoming[$dependency][$lowerFqcn] = true;
@@ -98,9 +126,23 @@ final readonly class AfferentCouplingRule implements Rule
     }
 
     /**
+     * Returns true when the declaration must be skipped due to configured ignore flags.
+     *
+     * @param array{class: string, kind: string, abstract: bool, file: string, line: int} $meta
+     */
+    private function shouldSkip(array $meta): bool
+    {
+        if ($this->ignoreInterfaces && $meta['kind'] === 'interface') {
+            return true;
+        }
+
+        return $this->ignoreAbstract && $meta['abstract'];
+    }
+
+    /**
      * Builds the rule error payload for a single target class.
      *
-     * @param array{class: string, file: string, line: int} $meta
+     * @param array{class: string, kind: string, abstract: bool, file: string, line: int} $meta
      * @throws ShouldNotHappenException
      */
     private function buildError(array $meta, int $afferent): IdentifierRuleError
