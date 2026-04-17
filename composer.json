@@ -21,7 +21,7 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": ">=8.3",
+        "php": "~8.3.16 || ~8.4.3 || ~8.5.0",
         "phpstan/phpstan": "^2.0"
     },
     "require-dev": {
@@ -40,6 +40,9 @@
         "update-piqule": "bash -c 'COMPOSER_ROOT_VERSION=$(git describe --tags --abbrev=0 | sed s/^v//) composer update haspadar/piqule -W'"
     },
     "config": {
+        "platform": {
+            "php": "8.3.16"
+        },
         "allow-plugins": {
             "infection/extension-installer": true,
             "dealerdirect/phpcodesniffer-composer-installer": true
