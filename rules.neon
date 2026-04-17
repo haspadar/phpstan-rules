@@ -107,6 +107,8 @@ parameters:
             allowedSuffixes: []
         afferentCoupling:
             maxAfferent: 14
+            ignoreInterfaces: false
+            ignoreAbstract: false
 
 parametersSchema:
     haspadar: structure([
@@ -215,6 +217,8 @@ parametersSchema:
         ]),
         afferentCoupling: structure([
             maxAfferent: int(),
+            ignoreInterfaces: bool(),
+            ignoreAbstract: bool(),
         ]),
     ])
 
@@ -520,5 +524,8 @@ services:
         class: Haspadar\PHPStanRules\Rules\AfferentCouplingRule
         arguments:
             maxAfferent: %haspadar.afferentCoupling.maxAfferent%
+            options:
+                ignoreInterfaces: %haspadar.afferentCoupling.ignoreInterfaces%
+                ignoreAbstract: %haspadar.afferentCoupling.ignoreAbstract%
         tags:
             - phpstan.rules.rule
