@@ -105,6 +105,8 @@ parameters:
                 - Information
                 - Wrapper
             allowedSuffixes: []
+        afferentCoupling:
+            maxAfferent: 14
 
 parametersSchema:
     haspadar: structure([
@@ -210,6 +212,9 @@ parametersSchema:
         forbiddenClassSuffix: structure([
             forbiddenSuffixes: listOf(string()),
             allowedSuffixes: listOf(string()),
+        ]),
+        afferentCoupling: structure([
+            maxAfferent: int(),
         ]),
     ])
 
@@ -513,5 +518,7 @@ services:
             - phpstan.collector
     -
         class: Haspadar\PHPStanRules\Rules\AfferentCouplingRule
+        arguments:
+            maxAfferent: %haspadar.afferentCoupling.maxAfferent%
         tags:
             - phpstan.rules.rule
