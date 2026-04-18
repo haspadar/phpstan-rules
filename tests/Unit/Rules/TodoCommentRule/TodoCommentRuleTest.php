@@ -12,6 +12,9 @@ use PHPUnit\Framework\Attributes\Test;
 /** @extends RuleTestCase<TodoCommentRule> */
 final class TodoCommentRuleTest extends RuleTestCase
 {
+    private const string ERROR_LINE_11 = "Unresolved TODO comment on line 11. Use '@todo #ISSUE description' format linked to an issue.";
+    private const string ERROR_LINE_9 = "Unresolved TODO comment on line 9. Use '@todo #ISSUE description' format linked to an issue.";
+
     protected function getRule(): Rule
     {
         return new TodoCommentRule();
@@ -22,9 +25,7 @@ final class TodoCommentRuleTest extends RuleTestCase
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithTodoComment.php'],
-            [
-                ['TODO comment found on line 11. Resolve the issue or create a ticket instead.', 11],
-            ],
+            [[self::ERROR_LINE_11, 11]],
         );
     }
 
@@ -33,9 +34,7 @@ final class TodoCommentRuleTest extends RuleTestCase
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithFixmeComment.php'],
-            [
-                ['TODO comment found on line 11. Resolve the issue or create a ticket instead.', 11],
-            ],
+            [[self::ERROR_LINE_11, 11]],
         );
     }
 
@@ -44,20 +43,16 @@ final class TodoCommentRuleTest extends RuleTestCase
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithXxxComment.php'],
-            [
-                ['TODO comment found on line 11. Resolve the issue or create a ticket instead.', 11],
-            ],
+            [[self::ERROR_LINE_11, 11]],
         );
     }
 
     #[Test]
-    public function reportsErrorWhenTodoInPhpDoc(): void
+    public function reportsErrorWhenTodoInPhpDocWithoutIssue(): void
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithTodoInPhpDoc.php'],
-            [
-                ['TODO comment found on line 9. Resolve the issue or create a ticket instead.', 9],
-            ],
+            [[self::ERROR_LINE_9, 9]],
         );
     }
 
@@ -66,9 +61,7 @@ final class TodoCommentRuleTest extends RuleTestCase
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithHashTodo.php'],
-            [
-                ['TODO comment found on line 11. Resolve the issue or create a ticket instead.', 11],
-            ],
+            [[self::ERROR_LINE_11, 11]],
         );
     }
 
@@ -77,9 +70,25 @@ final class TodoCommentRuleTest extends RuleTestCase
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithBlockTodo.php'],
-            [
-                ['TODO comment found on line 11. Resolve the issue or create a ticket instead.', 11],
-            ],
+            [[self::ERROR_LINE_11, 11]],
+        );
+    }
+
+    #[Test]
+    public function reportsErrorWhenTodoWithoutIssueNumber(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithTodoWithoutIssue.php'],
+            [[self::ERROR_LINE_11, 11]],
+        );
+    }
+
+    #[Test]
+    public function passesWhenTodoLinkedToIssue(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithPuzzleTodo.php'],
+            [],
         );
     }
 

@@ -18,18 +18,28 @@ final class TodoCommentRuleDefaultTest extends RuleTestCase
     }
 
     #[Test]
-    public function reportsErrorWithDefaultKeywords(): void
+    public function reportsErrorWhenMarkerPresentWithoutIssue(): void
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithTodoComment.php'],
-            [
-                ['TODO comment found on line 11. Resolve the issue or create a ticket instead.', 11],
-            ],
+            [[
+                "Unresolved TODO comment on line 11. Use '@todo #ISSUE description' format linked to an issue.",
+                11,
+            ]],
         );
     }
 
     #[Test]
-    public function passesWhenNoTodoComments(): void
+    public function passesWhenPuzzleTodoLinksToIssue(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithPuzzleTodo.php'],
+            [],
+        );
+    }
+
+    #[Test]
+    public function passesWhenNoMarkersPresent(): void
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithCleanComments.php'],

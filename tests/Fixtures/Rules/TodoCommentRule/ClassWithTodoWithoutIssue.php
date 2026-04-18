@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Haspadar\PHPStanRules\Tests\Fixtures\Rules\TodoCommentRule;
 
-final class ClassWithCustomKeyword
+final class ClassWithTodoWithoutIssue
 {
     public function execute(): void
     {
-        // HACK: workaround for upstream bug
+        // @todo refactor this method
         $value = 1;
     }
 }
