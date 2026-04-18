@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
+use InvalidArgumentException;
 use Override;
 use PhpParser\Comment;
 use PhpParser\Node;
@@ -13,20 +14,22 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Forbids task-tracking comments unless they follow the puzzle-driven format linked to an issue.
  *
  * Scans every comment attached to a node inside a ClassMethod body and the
- * method's own PHPDoc for generic task markers (TODO, FIXME, XXX, todo, fixme, xxx).
+ * method's own PHPDoc for generic task markers (TODO, FIXME, XXX) in any case.
  * A comment containing such a marker is allowed only when every line carrying
- * a marker also matches the configured issue format (default: `@todo #NUMBER ...`).
+ * a marker matches the configured issue format (default: `@todo #NUMBER ...`)
+ * and leaves no extra marker on the same line once the allowed match is removed.
  *
  * @implements Rule<ClassMethod>
  */
 final readonly class TodoCommentRule implements Rule
 {
-    private const string MARKER_PATTERN = '/\b(TODO|FIXME|XXX|todo|fixme|xxx)\b/';
+    private const string MARKER_PATTERN = '/\b(?:TODO|FIXME|XXX)\b/i';
 
     /** @var non-empty-string */
     private string $issueFormat;
@@ -37,12 +40,24 @@ final readonly class TodoCommentRule implements Rule
      * @param array{
      *     issueFormat?: non-empty-string
      * } $options
+     * @throws InvalidArgumentException when `issueFormat` is not a valid regex
      */
     public function __construct(array $options = [])
     {
-        $this->issueFormat = $options['issueFormat'] ?? '/@todo\s+#\d+\b/i';
+        $format = $options['issueFormat'] ?? '/@todo\s+#\d+\b/i';
+
+        if (@preg_match($format, '') === false) {
+            throw new InvalidArgumentException(
+                sprintf("Invalid 'issueFormat' regex: %s", $format),
+            );
+        }
+
+        $this->issueFormat = $format;
     }
 
+    /**
+     * Returns the AST node type this rule handles.
+     */
     #[Override]
     public function getNodeType(): string
     {
@@ -52,8 +67,8 @@ final readonly class TodoCommentRule implements Rule
     /**
      * Analyses the node and returns a list of errors.
      *
-     * @psalm-param ClassMethod $node
-     * @throws \PHPStan\ShouldNotHappenException
+     * @param ClassMethod $node
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
@@ -84,7 +99,8 @@ final readonly class TodoCommentRule implements Rule
     /**
      * Returns errors for forbidden comments attached to a node.
      *
-     * @throws \PHPStan\ShouldNotHappenException
+     * @param Node $node AST node whose attached comments are inspected
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     private function collectViolations(Node $node): array
@@ -106,7 +122,10 @@ final readonly class TodoCommentRule implements Rule
      * Checks whether a comment text is allowed.
      *
      * A comment passes when it carries no task marker, or when every line
-     * containing a marker also matches the configured issue format.
+     * containing a marker matches the configured issue format and contains
+     * no further marker once the allowed match is stripped.
+     *
+     * @param string $text Raw comment text including delimiters
      */
     private function isAllowed(string $text): bool
     {
@@ -121,8 +140,17 @@ final readonly class TodoCommentRule implements Rule
         }
 
         foreach ($lines as $line) {
-            if (preg_match(self::MARKER_PATTERN, $line) === 1
-                && preg_match($this->issueFormat, $line) !== 1) {
+            if (preg_match(self::MARKER_PATTERN, $line) !== 1) {
+                continue;
+            }
+
+            if (preg_match($this->issueFormat, $line) !== 1) {
+                return false;
+            }
+
+            $stripped = preg_replace($this->issueFormat, '', $line);
+
+            if ($stripped === null || preg_match(self::MARKER_PATTERN, $stripped) === 1) {
                 return false;
             }
         }
@@ -133,7 +161,8 @@ final readonly class TodoCommentRule implements Rule
     /**
      * Builds an error for a comment at the given line.
      *
-     * @throws \PHPStan\ShouldNotHappenException
+     * @param int $line One-based line number where the offending comment starts
+     * @throws ShouldNotHappenException
      */
     private function buildError(int $line): IdentifierRuleError
     {
