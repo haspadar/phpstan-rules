@@ -25,6 +25,7 @@
 | `StatementCountRule`              | 30      | Method must not have more than N executable statements                     |
 | `WeightedMethodsPerClassRule`     | 50      | Sum of cyclomatic complexities of all methods must not exceed N            |
 | `AfferentCouplingRule`            | 14      | Class must not be referenced by more than N other classes in the codebase  |
+| `InheritanceDepthRule`            | 3       | Class must not extend a chain of more than N ancestors                     |
 
 ### Design
 
@@ -204,6 +205,10 @@ parameters:
             ignoreAbstract: true
             excludedClasses:
                 - App\Kernel
+        inheritanceDepth:
+            maxDepth: 2
+            excludedClasses:
+                - Symfony\Bundle\FrameworkBundle\Controller\AbstractController
 ```
 
 Default values match the defaults described in the rules table above. Omitting a parameter keeps the default. Diagnostic identifier for `AtclauseOrderRule`: `haspadar.atclauseOrder` (for targeted ignores, e.g. `@phpstan-ignore haspadar.atclauseOrder`).
