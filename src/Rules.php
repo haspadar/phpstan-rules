@@ -61,6 +61,7 @@ final class Rules
         Rules\NeverUsePublicConstantsRule::class,
         Rules\WeightedMethodsPerClassRule::class,
         Rules\AfferentCouplingRule::class,
+        Rules\InheritanceDepthRule::class,
     ];
 
     /**
