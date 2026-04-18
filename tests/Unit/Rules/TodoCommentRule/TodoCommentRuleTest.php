@@ -13,7 +13,7 @@ use PHPUnit\Framework\Attributes\Test;
 /** @extends RuleTestCase<TodoCommentRule> */
 final class TodoCommentRuleTest extends RuleTestCase
 {
-    private const string ERROR_TEMPLATE = "Unresolved TODO comment on line %d. Use '@todo #ISSUE description' format linked to an issue.";
+    private const string ERROR_TEMPLATE = 'Unresolved TODO comment on line %d. Use a comment matching /@todo\s+#\d+\b/i linked to an issue.';
 
     protected function getRule(): Rule
     {

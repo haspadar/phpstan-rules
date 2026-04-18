@@ -23,7 +23,7 @@ final class TodoCommentRuleDefaultTest extends RuleTestCase
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithTodoComment.php'],
             [[
-                "Unresolved TODO comment on line 11. Use '@todo #ISSUE description' format linked to an issue.",
+                'Unresolved TODO comment on line 11. Use a comment matching /@todo\s+#\d+\b/i linked to an issue.',
                 11,
             ]],
         );

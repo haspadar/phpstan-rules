@@ -32,7 +32,7 @@ final class TodoCommentRuleCustomFormatTest extends RuleTestCase
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithPuzzleTodo.php'],
             [[
-                "Unresolved TODO comment on line 11. Use '@todo #ISSUE description' format linked to an issue.",
+                'Unresolved TODO comment on line 11. Use a comment matching /\bTODO\s+JIRA-\d+\b/ linked to an issue.',
                 11,
             ]],
         );

@@ -162,8 +162,9 @@ final readonly class TodoCommentRule implements Rule
     {
         return RuleErrorBuilder::message(
             sprintf(
-                "Unresolved TODO comment on line %d. Use '@todo #ISSUE description' format linked to an issue.",
+                'Unresolved TODO comment on line %d. Use a comment matching %s linked to an issue.',
                 $line,
+                $this->issueFormat,
             ),
         )
             ->identifier('haspadar.todoComment')
