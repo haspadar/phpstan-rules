@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Haspadar\PHPStanRules\Tests\Unit\Rules\TodoCommentRule;
 
 use Haspadar\PHPStanRules\Rules\TodoCommentRule;
+use InvalidArgumentException;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPUnit\Framework\Attributes\Test;
@@ -12,8 +13,7 @@ use PHPUnit\Framework\Attributes\Test;
 /** @extends RuleTestCase<TodoCommentRule> */
 final class TodoCommentRuleTest extends RuleTestCase
 {
-    private const string ERROR_LINE_11 = "Unresolved TODO comment on line 11. Use '@todo #ISSUE description' format linked to an issue.";
-    private const string ERROR_LINE_9 = "Unresolved TODO comment on line 9. Use '@todo #ISSUE description' format linked to an issue.";
+    private const string ERROR_TEMPLATE = "Unresolved TODO comment on line %d. Use '@todo #ISSUE description' format linked to an issue.";
 
     protected function getRule(): Rule
     {
@@ -25,7 +25,7 @@ final class TodoCommentRuleTest extends RuleTestCase
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithTodoComment.php'],
-            [[self::ERROR_LINE_11, 11]],
+            [[sprintf(self::ERROR_TEMPLATE, 11), 11]],
         );
     }
 
@@ -34,7 +34,7 @@ final class TodoCommentRuleTest extends RuleTestCase
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithFixmeComment.php'],
-            [[self::ERROR_LINE_11, 11]],
+            [[sprintf(self::ERROR_TEMPLATE, 11), 11]],
         );
     }
 
@@ -43,7 +43,7 @@ final class TodoCommentRuleTest extends RuleTestCase
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithXxxComment.php'],
-            [[self::ERROR_LINE_11, 11]],
+            [[sprintf(self::ERROR_TEMPLATE, 11), 11]],
         );
     }
 
@@ -52,7 +52,7 @@ final class TodoCommentRuleTest extends RuleTestCase
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithTodoInPhpDoc.php'],
-            [[self::ERROR_LINE_9, 9]],
+            [[sprintf(self::ERROR_TEMPLATE, 9), 9]],
         );
     }
 
@@ -61,7 +61,7 @@ final class TodoCommentRuleTest extends RuleTestCase
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithHashTodo.php'],
-            [[self::ERROR_LINE_11, 11]],
+            [[sprintf(self::ERROR_TEMPLATE, 11), 11]],
         );
     }
 
@@ -70,7 +70,7 @@ final class TodoCommentRuleTest extends RuleTestCase
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithBlockTodo.php'],
-            [[self::ERROR_LINE_11, 11]],
+            [[sprintf(self::ERROR_TEMPLATE, 11), 11]],
         );
     }
 
@@ -79,7 +79,34 @@ final class TodoCommentRuleTest extends RuleTestCase
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithTodoWithoutIssue.php'],
-            [[self::ERROR_LINE_11, 11]],
+            [[sprintf(self::ERROR_TEMPLATE, 11), 11]],
+        );
+    }
+
+    #[Test]
+    public function reportsErrorWhenMarkerUsesMixedCase(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithMixedCaseTodo.php'],
+            [[sprintf(self::ERROR_TEMPLATE, 11), 11]],
+        );
+    }
+
+    #[Test]
+    public function reportsErrorWhenBlockContainsMixedMarkerLines(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithMixedBlockTodo.php'],
+            [[sprintf(self::ERROR_TEMPLATE, 11), 11]],
+        );
+    }
+
+    #[Test]
+    public function reportsErrorWhenIssueFormatCoexistsWithOtherMarker(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithExtraMarkerTodo.php'],
+            [[sprintf(self::ERROR_TEMPLATE, 11), 11]],
         );
     }
 
@@ -88,6 +115,15 @@ final class TodoCommentRuleTest extends RuleTestCase
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithPuzzleTodo.php'],
+            [],
+        );
+    }
+
+    #[Test]
+    public function passesWhenMultilinePuzzleTodoIsLinked(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/ClassWithMultilinePuzzleTodo.php'],
             [],
         );
     }
@@ -117,5 +153,13 @@ final class TodoCommentRuleTest extends RuleTestCase
             [__DIR__ . '/../../../Fixtures/Rules/TodoCommentRule/SuppressedClass.php'],
             [],
         );
+    }
+
+    #[Test]
+    public function throwsWhenIssueFormatIsNotAValidRegex(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        new TodoCommentRule(['issueFormat' => 'not-a-regex']);
     }
 }
