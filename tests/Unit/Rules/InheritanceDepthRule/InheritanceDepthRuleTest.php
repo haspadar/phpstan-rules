@@ -33,9 +33,9 @@ final class InheritanceDepthRuleTest extends RuleTestCase
     public function passesWhenClassIsExactlyAtLimit(): void
     {
         $this->analyse(
-            [__DIR__ . '/../../../Fixtures/Rules/InheritanceDepthRule/OneLevel/OneLevelLeaf.php'],
+            [__DIR__ . '/../../../Fixtures/Rules/InheritanceDepthRule/AtLimit/AtLimitLevelTwo.php'],
             [],
-            'Class with one parent must have depth 1 and must not be reported under limit 2',
+            'Class whose depth equals the limit must not be reported',
         );
     }
 
