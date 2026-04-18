@@ -133,13 +133,9 @@ final readonly class TodoCommentRule implements Rule
             return true;
         }
 
-        $lines = preg_split('/\R/', $text);
+        $normalised = str_replace(["\r\n", "\r"], "\n", $text);
 
-        if ($lines === false) {
-            return false;
-        }
-
-        foreach ($lines as $line) {
+        foreach (explode("\n", $normalised) as $line) {
             if (preg_match(self::MARKER_PATTERN, $line) !== 1) {
                 continue;
             }
@@ -148,9 +144,7 @@ final readonly class TodoCommentRule implements Rule
                 return false;
             }
 
-            $stripped = preg_replace($this->issueFormat, '', $line);
-
-            if ($stripped === null || preg_match(self::MARKER_PATTERN, $stripped) === 1) {
+            if (preg_match(self::MARKER_PATTERN, (string) preg_replace($this->issueFormat, '', $line)) === 1) {
                 return false;
             }
         }
