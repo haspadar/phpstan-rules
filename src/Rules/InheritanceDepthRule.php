@@ -12,6 +12,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\ShouldNotHappenException;
 
 /**
  * Reports classes exceeding the configured inheritance depth (DIT).
@@ -32,11 +33,13 @@ final readonly class InheritanceDepthRule implements Rule
     private array $excludedClasses;
 
     /**
-     * Stores the inclusive upper bound on inheritance depth and the exclusion list.
+     * Stores the reflection provider, the inclusive upper bound on inheritance depth, and the exclusion list.
      *
+     * @param ReflectionProvider $reflectionProvider Resolves each analysed class to its inheritance chain
+     * @param int $maxDepth Inclusive upper bound on DIT; classes with depth greater than this are reported
      * @param array{
      *     excludedClasses?: list<string>
-     * } $options
+     * } $options FQCNs listed under `excludedClasses` are never reported
      */
     public function __construct(
         private ReflectionProvider $reflectionProvider,
@@ -49,6 +52,9 @@ final readonly class InheritanceDepthRule implements Rule
         );
     }
 
+    /**
+     * Returns the PHP-Parser node type this rule reacts to.
+     */
     #[Override]
     public function getNodeType(): string
     {
@@ -56,9 +62,10 @@ final readonly class InheritanceDepthRule implements Rule
     }
 
     /**
-     * Analyses the node and returns a list of errors.
+     * Computes the inheritance depth of the class declared by `$node` and reports it when the depth exceeds the configured limit.
      *
-     * @psalm-param Class_ $node
+     * @param Class_ $node
+     * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
