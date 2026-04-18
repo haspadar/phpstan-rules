@@ -110,6 +110,9 @@ parameters:
             ignoreInterfaces: false
             ignoreAbstract: false
             excludedClasses: []
+        inheritanceDepth:
+            maxDepth: 3
+            excludedClasses: []
 
 parametersSchema:
     haspadar: structure([
@@ -220,6 +223,10 @@ parametersSchema:
             maxAfferent: int(),
             ignoreInterfaces: bool(),
             ignoreAbstract: bool(),
+            excludedClasses: listOf(string()),
+        ]),
+        inheritanceDepth: structure([
+            maxDepth: int(),
             excludedClasses: listOf(string()),
         ]),
     ])
@@ -530,5 +537,13 @@ services:
                 ignoreInterfaces: %haspadar.afferentCoupling.ignoreInterfaces%
                 ignoreAbstract: %haspadar.afferentCoupling.ignoreAbstract%
                 excludedClasses: %haspadar.afferentCoupling.excludedClasses%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\InheritanceDepthRule
+        arguments:
+            maxDepth: %haspadar.inheritanceDepth.maxDepth%
+            options:
+                excludedClasses: %haspadar.inheritanceDepth.excludedClasses%
         tags:
             - phpstan.rules.rule
