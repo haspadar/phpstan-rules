@@ -81,9 +81,7 @@ final readonly class InheritanceDepthRule implements Rule
             return [];
         }
 
-        if (!$this->reflectionProvider->hasClass($fqcn)) {
-            return [];
-        }
+        assert($this->reflectionProvider->hasClass($fqcn));
 
         $depth = count($this->reflectionProvider->getClass($fqcn)->getParents());
 
