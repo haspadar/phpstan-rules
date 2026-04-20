@@ -7,6 +7,7 @@ namespace Haspadar\PHPStanRules\Rules\LackOfCohesionRule;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
@@ -18,12 +19,16 @@ use PhpParser\NodeFinder;
  * Collects property accesses and method calls performed by a class method.
  *
  * Both `$this->x` instance fetches and `self::$x` / `static::$x` static fetches are
- * treated as references to the same "property" for cohesion analysis.
+ * treated as references to the same "property" for cohesion analysis. Method names are
+ * normalised to lowercase because PHP method names are case-insensitive.
  */
 final readonly class MethodTouches
 {
     /**
      * Returns property names and called method names referenced from the method body.
+     *
+     * Method names are lowercased; property names keep their original case (PHP property
+     * names are case-sensitive).
      *
      * @return array{properties: list<string>, calls: list<string>}
      */
@@ -76,7 +81,7 @@ final readonly class MethodTouches
     }
 
     /**
-     * Returns the names of methods called via `$this->method()`.
+     * Returns the lowercased names of methods called via `$this->method()`, `self::method()` or `static::method()`.
      *
      * @param list<Node> $statements
      * @return list<string>
@@ -85,11 +90,27 @@ final readonly class MethodTouches
     {
         $names = [];
 
-        foreach ($finder->find($statements, static fn(Node $inner): bool => $inner instanceof MethodCall) as $call) {
+        foreach ($finder->find(
+            $statements,
+            static fn(Node $inner): bool => $inner instanceof MethodCall,
+        ) as $call) {
             assert($call instanceof MethodCall);
+            $name = $this->instanceCallName($call);
 
-            if ($call->var instanceof Variable && $call->var->name === 'this' && $call->name instanceof Identifier) {
-                $names[] = $call->name->toString();
+            if ($name !== null) {
+                $names[] = $name;
+            }
+        }
+
+        foreach ($finder->find(
+            $statements,
+            static fn(Node $inner): bool => $inner instanceof StaticCall,
+        ) as $call) {
+            assert($call instanceof StaticCall);
+            $name = $this->staticCallName($call);
+
+            if ($name !== null) {
+                $names[] = $name;
             }
         }
 
@@ -118,6 +139,33 @@ final readonly class MethodTouches
             && $fetch->name instanceof Identifier
         ) {
             return $fetch->name->toString();
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the lowercased method name if the call is `$this->method()`, otherwise null.
+     */
+    private function instanceCallName(MethodCall $call): ?string
+    {
+        if ($call->var instanceof Variable && $call->var->name === 'this' && $call->name instanceof Identifier) {
+            return strtolower($call->name->toString());
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the lowercased method name if the call is `self::method()` / `static::method()`, otherwise null.
+     */
+    private function staticCallName(StaticCall $call): ?string
+    {
+        if ($call->class instanceof Name
+            && in_array($call->class->toLowerString(), ['self', 'static'], true)
+            && $call->name instanceof Identifier
+        ) {
+            return strtolower($call->name->toString());
         }
 
         return null;

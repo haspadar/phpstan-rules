@@ -37,7 +37,10 @@ final readonly class AdjacencyBuilder
     }
 
     /**
-     * Returns a map from method name to its index in `$methods`.
+     * Returns a map from lowercased method name to its index in `$methods`.
+     *
+     * PHP method names are case-insensitive, so keys are lowercased to match
+     * callee names collected by `MethodTouches`.
      *
      * @param list<ClassMethod> $methods
      * @return array<string, int>
@@ -47,7 +50,7 @@ final readonly class AdjacencyBuilder
         $index = [];
 
         foreach ($methods as $i => $method) {
-            $index[$method->name->toString()] = $i;
+            $index[strtolower($method->name->toString())] = $i;
         }
 
         return $index;
