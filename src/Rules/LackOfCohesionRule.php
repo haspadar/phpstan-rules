@@ -6,6 +6,7 @@ namespace Haspadar\PHPStanRules\Rules;
 
 use Haspadar\PHPStanRules\Rules\LackOfCohesionRule\CohesionGraph;
 use Override;
+use PhpParser\Modifiers;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -20,13 +21,15 @@ use PHPStan\ShouldNotHappenException;
  *
  * Builds an undirected graph over the class's own non-magic methods: two methods are connected
  * when they touch at least one common instance or static property, or one calls the other via
- * `$this->method()`. The number of connected components is the LCOM4 value. A cohesive class
- * has exactly one component; a class exceeding `$maxLcom` is reported as lacking cohesion.
+ * `$this->method()`, `self::method()` or `static::method()`. The number of connected components
+ * is the LCOM4 value. A cohesive class has exactly one component; a class exceeding `$maxLcom`
+ * is reported as lacking cohesion.
  *
  * Abstract, anonymous and excluded classes are skipped. Classes with fewer methods than
  * `$minMethods` or fewer properties than `$minProperties` are skipped — on such classes LCOM
- * degenerates and carries no signal. Constructors, destructors and PHP magic methods are
- * excluded from the graph.
+ * degenerates and carries no signal. Both regular properties and promoted constructor parameters
+ * count toward `$minProperties`. Constructors, destructors and PHP magic methods are excluded
+ * from the graph.
  *
  * @implements Rule<Class_>
  */
@@ -43,16 +46,16 @@ final readonly class LackOfCohesionRule implements Rule
         '__set',
         '__isset',
         '__unset',
-        '__toString',
+        '__tostring',
         '__invoke',
         '__clone',
         '__call',
-        '__callStatic',
+        '__callstatic',
         '__sleep',
         '__wakeup',
         '__serialize',
         '__unserialize',
-        '__debugInfo',
+        '__debuginfo',
         '__set_state',
     ];
 
@@ -110,7 +113,7 @@ final readonly class LackOfCohesionRule implements Rule
 
         $methods = $this->eligibleMethods($node);
 
-        if (count($methods) < $this->minMethods || count($node->getProperties()) < $this->minProperties) {
+        if (count($methods) < $this->minMethods || $this->propertyCount($node) < $this->minProperties) {
             return [];
         }
 
@@ -123,9 +126,8 @@ final readonly class LackOfCohesionRule implements Rule
         return [
             RuleErrorBuilder::message(
                 sprintf(
-                    'Class %s has lack of cohesion %d (methods split into %d disjoint groups). Maximum allowed is %d.',
+                    'Class %s splits into %d disjoint method groups (LCOM4). Maximum allowed is %d.',
                     $className,
-                    $lcom,
                     $lcom,
                     $this->maxLcom,
                 ),
@@ -136,15 +138,13 @@ final readonly class LackOfCohesionRule implements Rule
     }
 
     /**
-     * Tells whether the class is listed in `excludedClasses` under its short name or its FQCN.
+     * Tells whether the class's FQCN is listed in `excludedClasses`.
      */
     private function isExcluded(string $className, string $namespace): bool
     {
-        $shortName = strtolower($className);
         $fqcn = strtolower(ltrim(sprintf('%s\\%s', $namespace, $className), '\\'));
 
-        return in_array($shortName, $this->excludedClasses, true)
-            || in_array($fqcn, $this->excludedClasses, true);
+        return in_array($fqcn, $this->excludedClasses, true);
     }
 
     /**
@@ -161,7 +161,7 @@ final readonly class LackOfCohesionRule implements Rule
                 continue;
             }
 
-            if (in_array($method->name->toString(), self::EXCLUDED_METHOD_NAMES, true)) {
+            if (in_array(strtolower($method->name->toString()), self::EXCLUDED_METHOD_NAMES, true)) {
                 continue;
             }
 
@@ -169,5 +169,28 @@ final readonly class LackOfCohesionRule implements Rule
         }
 
         return $methods;
+    }
+
+    /**
+     * Counts regular properties plus promoted constructor parameters.
+     */
+    private function propertyCount(Class_ $node): int
+    {
+        $count = count($node->getProperties());
+        $constructor = $node->getMethod('__construct');
+
+        if ($constructor === null) {
+            return $count;
+        }
+
+        $visibilityMask = Modifiers::PUBLIC | Modifiers::PROTECTED | Modifiers::PRIVATE;
+
+        foreach ($constructor->params as $param) {
+            if (($param->flags & $visibilityMask) !== 0) {
+                $count++;
+            }
+        }
+
+        return $count;
     }
 }
