@@ -9,8 +9,9 @@ use PhpParser\Node\Stmt\ClassMethod;
 /**
  * Counts connected components (LCOM4) in the cohesion graph of class methods.
  *
- * Edges connect methods that either share a touched property or call one another via
- * `$this->method()`. The number of connected components is the LCOM4 value of the class.
+ * Vertices are all given methods; edges connect methods that either share a touched
+ * property or call one another via `$this->method()`, `self::method()` or `static::method()`.
+ * The number of connected components is the LCOM4 value of the class.
  */
 final readonly class CohesionGraph
 {
@@ -21,33 +22,10 @@ final readonly class CohesionGraph
      */
     public function componentCount(array $methods): int
     {
-        $stateful = $this->statefulMethods($methods);
-        $touches = $this->touchesFor($stateful);
-        $adjacency = (new AdjacencyBuilder())->build($stateful, $touches);
+        $touches = $this->touchesFor($methods);
+        $adjacency = (new AdjacencyBuilder())->build($methods, $touches);
 
         return $this->countComponents($adjacency);
-    }
-
-    /**
-     * Returns only methods that touch class state via a property access or a `$this->method()` call.
-     *
-     * @param list<ClassMethod> $methods
-     * @return list<ClassMethod>
-     */
-    private function statefulMethods(array $methods): array
-    {
-        $collector = new MethodTouches();
-        $stateful = [];
-
-        foreach ($methods as $method) {
-            $data = $collector->collect($method);
-
-            if ($data['properties'] !== [] || $data['calls'] !== []) {
-                $stateful[] = $method;
-            }
-        }
-
-        return $stateful;
     }
 
     /**
