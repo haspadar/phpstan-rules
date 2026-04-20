@@ -32,7 +32,7 @@ final class LackOfCohesionRuleTest extends RuleTestCase
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/LackOfCohesionRule/DisjointClass.php'],
             [
-                ['Class DisjointClass has lack of cohesion 2 (methods split into 2 disjoint groups). Maximum allowed is 1.', 7],
+                ['Class DisjointClass splits into 2 disjoint method groups (LCOM4). Maximum allowed is 1.', 7],
             ],
         );
     }
