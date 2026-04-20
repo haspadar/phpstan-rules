@@ -26,6 +26,7 @@
 | `WeightedMethodsPerClassRule`     | 50      | Sum of cyclomatic complexities of all methods must not exceed N            |
 | `AfferentCouplingRule`            | 14      | Class must not be referenced by more than N other classes in the codebase  |
 | `InheritanceDepthRule`            | 3       | Class must not extend a chain of more than N ancestors                     |
+| `LackOfCohesionRule`              | 1       | Methods must not split into more than N disjoint groups (LCOM4)            |
 
 ### Design
 
@@ -209,6 +210,12 @@ parameters:
             maxDepth: 2
             excludedClasses:
                 - Symfony\Bundle\FrameworkBundle\Controller\AbstractController
+        lackOfCohesion:
+            maxLcom: 1
+            minMethods: 10
+            minProperties: 3
+            excludedClasses:
+                - App\Dto\ConfigBag
 ```
 
 Default values match the defaults described in the rules table above. Omitting a parameter keeps the default. Diagnostic identifier for `AtclauseOrderRule`: `haspadar.atclauseOrder` (for targeted ignores, e.g. `@phpstan-ignore haspadar.atclauseOrder`).
