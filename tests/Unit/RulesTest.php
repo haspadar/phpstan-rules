@@ -57,6 +57,7 @@ use Haspadar\PHPStanRules\Rules\NeverUsePublicConstantsRule;
 use Haspadar\PHPStanRules\Rules\WeightedMethodsPerClassRule;
 use Haspadar\PHPStanRules\Rules\AfferentCouplingRule;
 use Haspadar\PHPStanRules\Rules\InheritanceDepthRule;
+use Haspadar\PHPStanRules\Rules\LackOfCohesionRule;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -119,6 +120,7 @@ final class RulesTest extends TestCase
                 WeightedMethodsPerClassRule::class,
                 AfferentCouplingRule::class,
                 InheritanceDepthRule::class,
+                LackOfCohesionRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',
