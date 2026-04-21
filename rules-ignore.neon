@@ -16,3 +16,8 @@ parameters:
             identifier: haspadar.parameterName
         -
             identifier: haspadar.noNullReturn
+        -
+            identifier: haspadar.lackOfCohesion
+            paths:
+                - src/Rules/CouplingBetweenObjectsRule.php
+                - src/Rules/MethodLengthRule.php

@@ -62,6 +62,7 @@ final class Rules
         Rules\WeightedMethodsPerClassRule::class,
         Rules\AfferentCouplingRule::class,
         Rules\InheritanceDepthRule::class,
+        Rules\LackOfCohesionRule::class,
     ];
 
     /**
