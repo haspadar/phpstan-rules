@@ -104,7 +104,7 @@ final class ProhibitStaticMethodsRuleTest extends RuleTestCase
             [__DIR__ . '/../../../Fixtures/Rules/ProhibitStaticMethodsRule/AnonymousClassWithStaticMethod.php'],
             [
                 [
-                    'Method AnonymousClassddfab24a22309f41108af6ca23a032dc::create() is static. Static methods are prohibited.',
+                    'Method class@anonymous::create() is static. Static methods are prohibited.',
                     12,
                 ],
             ],

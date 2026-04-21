@@ -43,7 +43,10 @@ final readonly class ProhibitStaticMethodsRule implements Rule
             return [];
         }
 
-        $className = $scope->getClassReflection()?->getName() ?? 'anonymous';
+        $reflection = $scope->getClassReflection();
+        $className = $reflection === null || $reflection->isAnonymous()
+            ? 'class@anonymous'
+            : $reflection->getName();
 
         return [
             RuleErrorBuilder::message(
