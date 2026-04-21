@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
-use DivisionByZeroError;
 use Haspadar\PHPStanRules\Collectors\ClassDependencyCollector;
 use Haspadar\PHPStanRules\Rules\InstabilityRule\DependencyGraph;
 use Override;
@@ -73,7 +72,6 @@ final readonly class InstabilityRule implements Rule
      * Computes instability per class from the dependency graph and reports classes above the threshold.
      *
      * @param CollectedDataNode $node
-     * @throws DivisionByZeroError
      * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
@@ -99,7 +97,6 @@ final readonly class InstabilityRule implements Rule
      * Returns a rule error for the declaration when it breaches the configured instability threshold.
      *
      * @param array{class: string, kind: string, abstract: bool, file: string, line: int} $meta
-     * @throws DivisionByZeroError
      * @throws ShouldNotHappenException
      */
     private function evaluate(array $meta, int $afferent, int $efferent): ?IdentifierRuleError
@@ -110,7 +107,7 @@ final readonly class InstabilityRule implements Rule
 
         $total = $afferent + $efferent;
 
-        if ($total < $this->minDependencies) {
+        if ($total === 0 || $total < $this->minDependencies) {
             return null;
         }
 
