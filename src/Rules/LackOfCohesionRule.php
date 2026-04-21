@@ -157,10 +157,6 @@ final readonly class LackOfCohesionRule implements Rule
         $methods = [];
 
         foreach ($node->getMethods() as $method) {
-            if ($method->isAbstract() || $method->stmts === null) {
-                continue;
-            }
-
             if (in_array(strtolower($method->name->toString()), self::EXCLUDED_METHOD_NAMES, true)) {
                 continue;
             }
