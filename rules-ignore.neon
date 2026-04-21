@@ -3,7 +3,7 @@ parameters:
         -
             identifier: haspadar.constructorInit
         -
-            identifier: haspadar.noPublicStatic
+            identifier: haspadar.staticMethod
         -
             identifier: haspadar.noPhpdocOverride
         -

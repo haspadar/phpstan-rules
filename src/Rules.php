@@ -24,7 +24,7 @@ final class Rules
         Rules\MutableExceptionRule::class,
         Rules\ReturnCountRule::class,
         Rules\ProtectedMethodInFinalClassRule::class,
-        Rules\ProhibitPublicStaticMethodsRule::class,
+        Rules\ProhibitStaticMethodsRule::class,
         Rules\ConstructorInitializationRule::class,
         Rules\NoParameterReassignmentRule::class,
         Rules\IllegalCatchRule::class,
