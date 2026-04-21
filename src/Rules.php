@@ -63,6 +63,7 @@ final class Rules
         Rules\AfferentCouplingRule::class,
         Rules\InheritanceDepthRule::class,
         Rules\LackOfCohesionRule::class,
+        Rules\InstabilityRule::class,
     ];
 
     /**

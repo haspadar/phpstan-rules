@@ -27,6 +27,7 @@
 | `AfferentCouplingRule`            | 14      | Class must not be referenced by more than N other classes in the codebase  |
 | `InheritanceDepthRule`            | 3       | Class must not extend a chain of more than N ancestors                     |
 | `LackOfCohesionRule`              | 1       | Class methods must not split into more than N disjoint LCOM4 groups        |
+| `InstabilityRule`                 | 0.8     | Class I = Ce / (Ca + Ce) must not exceed N (Robert C. Martin's metric)     |
 
 ### Design
 
@@ -216,6 +217,13 @@ parameters:
             minProperties: 3
             excludedClasses:
                 - App\Entity\User
+        instability:
+            maxInstability: 0.8
+            minDependencies: 5
+            ignoreInterfaces: true
+            ignoreAbstract: true
+            excludedClasses:
+                - App\Controller\HomeController
 ```
 
 Default values match the defaults described in the rules table above. Omitting a parameter keeps the default. Diagnostic identifier for `AtclauseOrderRule`: `haspadar.atclauseOrder` (for targeted ignores, e.g. `@phpstan-ignore haspadar.atclauseOrder`).
