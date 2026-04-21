@@ -6,14 +6,21 @@ namespace Haspadar\PHPStanRules\Tests\Fixtures\Rules\InstabilityRule\LowInstabil
 
 final class Stable
 {
-    public function ping(): string
+    public function ping(Helper $h): string
     {
-        return 'pong';
+        return 'pong' . $h->tag();
     }
 }
 
-final class C01 { public function use(Stable $s): string { return $s->ping(); } }
-final class C02 { public function use(Stable $s): string { return $s->ping(); } }
-final class C03 { public function use(Stable $s): string { return $s->ping(); } }
-final class C04 { public function use(Stable $s): string { return $s->ping(); } }
-final class C05 { public function use(Stable $s): string { return $s->ping(); } }
+final class Helper
+{
+    public function tag(): string
+    {
+        return '!';
+    }
+}
+
+final class C01 { public function use(Stable $s, Helper $h): string { return $s->ping($h); } }
+final class C02 { public function use(Stable $s, Helper $h): string { return $s->ping($h); } }
+final class C03 { public function use(Stable $s, Helper $h): string { return $s->ping($h); } }
+final class C04 { public function use(Stable $s, Helper $h): string { return $s->ping($h); } }
