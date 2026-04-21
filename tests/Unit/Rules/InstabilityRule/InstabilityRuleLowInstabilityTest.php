@@ -38,7 +38,7 @@ final class InstabilityRuleLowInstabilityTest extends RuleTestCase
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/InstabilityRule/LowInstability.php'],
             [],
-            'Stable class with Ce=0 and Ca=5 must not be reported (I=0)',
+            'Stable class with Ce=1 and Ca=4 (I=0.2) must not be reported under maxInstability=0.5',
         );
     }
 }
