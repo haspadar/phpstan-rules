@@ -118,6 +118,12 @@ parameters:
             minMethods: 7
             minProperties: 3
             excludedClasses: []
+        instability:
+            maxInstability: 0.8
+            minDependencies: 5
+            ignoreInterfaces: true
+            ignoreAbstract: true
+            excludedClasses: []
 
 parametersSchema:
     haspadar: structure([
@@ -238,6 +244,13 @@ parametersSchema:
             maxLcom: int(),
             minMethods: int(),
             minProperties: int(),
+            excludedClasses: listOf(string()),
+        ]),
+        instability: structure([
+            maxInstability: float(),
+            minDependencies: int(),
+            ignoreInterfaces: bool(),
+            ignoreAbstract: bool(),
             excludedClasses: listOf(string()),
         ]),
     ])
@@ -566,5 +579,16 @@ services:
                 minMethods: %haspadar.lackOfCohesion.minMethods%
                 minProperties: %haspadar.lackOfCohesion.minProperties%
                 excludedClasses: %haspadar.lackOfCohesion.excludedClasses%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\InstabilityRule
+        arguments:
+            maxInstability: %haspadar.instability.maxInstability%
+            minDependencies: %haspadar.instability.minDependencies%
+            options:
+                ignoreInterfaces: %haspadar.instability.ignoreInterfaces%
+                ignoreAbstract: %haspadar.instability.ignoreAbstract%
+                excludedClasses: %haspadar.instability.excludedClasses%
         tags:
             - phpstan.rules.rule
