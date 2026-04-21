@@ -113,6 +113,11 @@ parameters:
         inheritanceDepth:
             maxDepth: 3
             excludedClasses: []
+        lackOfCohesion:
+            maxLcom: 1
+            minMethods: 7
+            minProperties: 3
+            excludedClasses: []
 
 parametersSchema:
     haspadar: structure([
@@ -227,6 +232,12 @@ parametersSchema:
         ]),
         inheritanceDepth: structure([
             maxDepth: int(),
+            excludedClasses: listOf(string()),
+        ]),
+        lackOfCohesion: structure([
+            maxLcom: int(),
+            minMethods: int(),
+            minProperties: int(),
             excludedClasses: listOf(string()),
         ]),
     ])
@@ -545,5 +556,15 @@ services:
             maxDepth: %haspadar.inheritanceDepth.maxDepth%
             options:
                 excludedClasses: %haspadar.inheritanceDepth.excludedClasses%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\LackOfCohesionRule
+        arguments:
+            maxLcom: %haspadar.lackOfCohesion.maxLcom%
+            options:
+                minMethods: %haspadar.lackOfCohesion.minMethods%
+                minProperties: %haspadar.lackOfCohesion.minProperties%
+                excludedClasses: %haspadar.lackOfCohesion.excludedClasses%
         tags:
             - phpstan.rules.rule
