@@ -41,7 +41,7 @@ use Haspadar\PHPStanRules\Rules\NoLineCommentBeforeDeclarationRule;
 use Haspadar\PHPStanRules\Rules\NoPhpDocForOverriddenRule;
 use Haspadar\PHPStanRules\Rules\ParamDescriptionCapitalRule;
 use Haspadar\PHPStanRules\Rules\ReturnDescriptionCapitalRule;
-use Haspadar\PHPStanRules\Rules\ProhibitPublicStaticMethodsRule;
+use Haspadar\PHPStanRules\Rules\ProhibitStaticMethodsRule;
 use Haspadar\PHPStanRules\Rules\ReturnCountRule;
 use Haspadar\PHPStanRules\Rules\StatementCountRule;
 use Haspadar\PHPStanRules\Rules\TooManyMethodsRule;
@@ -83,7 +83,7 @@ final class RulesTest extends TestCase
                 MutableExceptionRule::class,
                 ReturnCountRule::class,
                 ProtectedMethodInFinalClassRule::class,
-                ProhibitPublicStaticMethodsRule::class,
+                ProhibitStaticMethodsRule::class,
                 ConstructorInitializationRule::class,
                 NoParameterReassignmentRule::class,
                 IllegalCatchRule::class,

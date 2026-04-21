@@ -350,7 +350,7 @@ services:
         tags:
             - phpstan.rules.rule
     -
-        class: Haspadar\PHPStanRules\Rules\ProhibitPublicStaticMethodsRule
+        class: Haspadar\PHPStanRules\Rules\ProhibitStaticMethodsRule
         tags:
             - phpstan.rules.rule
     -

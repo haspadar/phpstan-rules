@@ -14,14 +14,14 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
 
 /**
- * Detects public static methods in classes and reports an error for each one.
- * Static methods are not polymorphic, cannot work with object state, and create
- * hard dependencies that make code difficult to test. Only public visibility is
- * checked — private static helper methods are permitted.
+ * Detects static method declarations and reports an error for each one regardless of visibility.
+ * Static methods are not polymorphic, cannot work with object state, and create hard dependencies
+ * that make code difficult to test. Private and protected static helpers are treated the same as
+ * public ones because they still encode procedural logic that bypasses the object lifecycle.
  *
  * @implements Rule<ClassMethod>
  */
-final readonly class ProhibitPublicStaticMethodsRule implements Rule
+final readonly class ProhibitStaticMethodsRule implements Rule
 {
     #[Override]
     public function getNodeType(): string
@@ -30,7 +30,7 @@ final readonly class ProhibitPublicStaticMethodsRule implements Rule
     }
 
     /**
-     * Analyses the node and returns a list of errors.
+     * Reports an error when the analysed method declaration is static.
      *
      * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
@@ -39,21 +39,24 @@ final readonly class ProhibitPublicStaticMethodsRule implements Rule
     public function processNode(Node $node, Scope $scope): array
     {
         /** @var ClassMethod $node */
-        if (!$node->isPublic() || !$node->isStatic()) {
+        if (!$node->isStatic()) {
             return [];
         }
 
-        $className = $scope->getClassReflection()?->getName() ?? 'anonymous';
+        $reflection = $scope->getClassReflection();
+        $className = $reflection === null || $reflection->isAnonymous()
+            ? 'class@anonymous'
+            : $reflection->getName();
 
         return [
             RuleErrorBuilder::message(
                 sprintf(
-                    'Method %s::%s() is public static. Static methods are prohibited.',
+                    'Method %s::%s() is static. Static methods are prohibited.',
                     $className,
                     $node->name->toString(),
                 ),
             )
-                ->identifier('haspadar.noPublicStatic')
+                ->identifier('haspadar.staticMethod')
                 ->build(),
         ];
     }
