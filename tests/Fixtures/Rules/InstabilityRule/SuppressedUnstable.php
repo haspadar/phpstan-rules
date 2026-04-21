@@ -15,7 +15,7 @@ final class SuppressedUnstable
 
 final class Consumer
 {
-    public function use(SuppressedUnstable $u): string
+    public function consume(SuppressedUnstable $u): string
     {
         return '';
     }
