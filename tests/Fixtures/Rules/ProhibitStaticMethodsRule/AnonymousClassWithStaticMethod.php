@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Haspadar\PHPStanRules\Tests\Fixtures\Rules\ProhibitPublicStaticMethodsRule;
+namespace Haspadar\PHPStanRules\Tests\Fixtures\Rules\ProhibitStaticMethodsRule;
 
-final class AnonymousClassWithPublicStaticMethod
+final class AnonymousClassWithStaticMethod
 {
     public function make(): object
     {

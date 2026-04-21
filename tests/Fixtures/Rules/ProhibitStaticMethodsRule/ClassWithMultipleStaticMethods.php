@@ -2,17 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Haspadar\PHPStanRules\Tests\Fixtures\Rules\ProhibitPublicStaticMethodsRule;
+namespace Haspadar\PHPStanRules\Tests\Fixtures\Rules\ProhibitStaticMethodsRule;
 
-final class ClassWithMultiplePublicStaticMethods
+class ClassWithMultipleStaticMethods
 {
     public static function create(): self
     {
         return new self();
     }
 
-    public static function empty(): self
+    protected static function middleware(): string
     {
-        return new self();
+        return 'mw';
+    }
+
+    private static function helper(): string
+    {
+        return 'h';
     }
 }

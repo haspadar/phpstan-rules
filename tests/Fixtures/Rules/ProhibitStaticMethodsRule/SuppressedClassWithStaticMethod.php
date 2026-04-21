@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Haspadar\PHPStanRules\Tests\Fixtures\Rules\ProhibitPublicStaticMethodsRule;
+namespace Haspadar\PHPStanRules\Tests\Fixtures\Rules\ProhibitStaticMethodsRule;
 
-final class SuppressedClassWithPublicStaticMethod
+final class SuppressedClassWithStaticMethod
 {
-    /** @phpstan-ignore haspadar.noPublicStatic */
-    public static function create(): self
+    /** @phpstan-ignore haspadar.staticMethod */
+    private static function helper(): string
     {
-        return new self();
+        return 'ok';
     }
 }
