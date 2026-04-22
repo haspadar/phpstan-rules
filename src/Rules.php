@@ -41,6 +41,7 @@ final class Rules
         Rules\PhpDocMissingMethodRule::class,
         Rules\PhpDocMissingPropertyRule::class,
         Rules\PhpDocMissingParamRule::class,
+        Rules\PhpDocParamDescriptionRule::class,
         Rules\ReturnDescriptionCapitalRule::class,
         Rules\ParamDescriptionCapitalRule::class,
         Rules\NoPhpDocForOverriddenRule::class,
