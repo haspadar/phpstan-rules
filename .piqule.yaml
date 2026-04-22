@@ -1,4 +1,6 @@
 override:
+    coverage.patch.target: 85
+    coverage.project.target: 85
     ci.pr.max_lines_changed: 1500
     ci.php.matrix: ["8.3", "8.4", "8.5"]
     typos.exclude: ["docs/"]
