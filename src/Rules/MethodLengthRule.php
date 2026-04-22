@@ -27,6 +27,7 @@ final readonly class MethodLengthRule implements Rule
     /**
      * Constructs the rule with the given line limit and filtering options.
      *
+     * @param int $maxLines Maximum physical line count per method body.
      * @param array{
      *     skipBlankLines?: bool,
      *     skipComments?: bool

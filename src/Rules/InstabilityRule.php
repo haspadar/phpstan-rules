@@ -43,6 +43,8 @@ final readonly class InstabilityRule implements Rule
     /**
      * Stores the instability upper bound, minimum dependency threshold, skip flags, and exclusion list.
      *
+     * @param float $maxInstability Inclusive upper bound on I = Ce / (Ca + Ce); classes above the threshold are reported.
+     * @param int $minDependencies Minimum total coupling (Ca + Ce) required before the class is evaluated.
      * @param array{
      *     ignoreInterfaces?: bool,
      *     ignoreAbstract?: bool,

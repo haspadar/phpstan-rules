@@ -44,6 +44,7 @@ final readonly class CognitiveComplexityRule implements Rule
     /**
      * Constructs the rule with the given complexity limit.
      *
+     * @param int $maxComplexity Maximum cognitive complexity per method.
      * @throws InvalidArgumentException
      */
     public function __construct(private int $maxComplexity = 10)

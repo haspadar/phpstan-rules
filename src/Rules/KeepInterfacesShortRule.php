@@ -25,6 +25,8 @@ final readonly class KeepInterfacesShortRule implements Rule
 {
     /**
      * Constructs the rule with the given method limit.
+     *
+     * @param int $maxMethods Maximum number of methods per interface.
      */
     public function __construct(private int $maxMethods = 10) {}
 

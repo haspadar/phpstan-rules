@@ -41,6 +41,7 @@ final readonly class AfferentCouplingRule implements Rule
     /**
      * Stores the inclusive upper bound on afferent coupling per class, skip flags, and the exclusion list.
      *
+     * @param int $maxAfferent Maximum number of incoming class references allowed per class.
      * @param array{
      *     ignoreInterfaces?: bool,
      *     ignoreAbstract?: bool,

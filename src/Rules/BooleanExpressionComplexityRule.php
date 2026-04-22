@@ -36,6 +36,7 @@ final readonly class BooleanExpressionComplexityRule implements Rule
     /**
      * Constructs the rule with the given boolean operator limit.
      *
+     * @param int $maxOperators Maximum boolean operators per expression.
      * @throws InvalidArgumentException when maxOperators is not a positive integer
      */
     public function __construct(private int $maxOperators = 3)

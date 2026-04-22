@@ -34,6 +34,7 @@ final readonly class AbbreviationAsWordInNameRule implements Rule
     /**
      * Constructs the rule with the given limit and options.
      *
+     * @param int $maxAllowedConsecutiveCapitals Maximum consecutive capital letters before an identifier must be split.
      * @param array{
      *     allowedAbbreviations?: list<string>
      * } $options

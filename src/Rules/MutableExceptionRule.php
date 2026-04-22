@@ -27,6 +27,8 @@ final readonly class MutableExceptionRule implements Rule
 {
     /**
      * Constructs the rule with the given reflection provider.
+     *
+     * @param ReflectionProvider $reflectionProvider PHPStan reflection provider used to resolve ancestor classes.
      */
     public function __construct(private ReflectionProvider $reflectionProvider) {}
 

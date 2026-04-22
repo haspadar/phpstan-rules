@@ -24,6 +24,8 @@ final class ExemptScalarCollector
     /**
      * Returns all scalar nodes inside exempt contexts for the given class.
      *
+     * @param NodeFinder $finder PhpParser finder used to traverse the AST.
+     * @param Class_ $node Class whose children are scanned for exempt scalars.
      * @return list<Scalar\Int_|Scalar\Float_|Scalar\String_>
      */
     public static function collect(NodeFinder $finder, Class_ $node): array

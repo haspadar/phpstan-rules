@@ -33,6 +33,7 @@ final readonly class StatementCountRule implements Rule
     /**
      * Constructs the rule with the given statement limit.
      *
+     * @param int $maxStatements Maximum number of executable statements per method.
      * @throws InvalidArgumentException when maxStatements is not a positive integer
      */
     public function __construct(private int $maxStatements = 30)

@@ -40,6 +40,7 @@ final readonly class WeightedMethodsPerClassRule implements Rule
     /**
      * Constructs the rule with the given WMC limit.
      *
+     * @param int $maxWmc Maximum Weighted Methods per Class — sum of cyclomatic complexities of all methods.
      * @throws InvalidArgumentException
      */
     public function __construct(private int $maxWmc = 50)
