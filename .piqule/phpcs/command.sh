@@ -10,4 +10,5 @@ fi
 
 BIN="$(.piqule/_composer.sh phpcs)"
 
-"$BIN" --standard="$CONFIG"
+exec .piqule/_skip_if_empty.sh src '*.php' PHPCS -- \
+  "$BIN" --standard="$CONFIG"
