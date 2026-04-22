@@ -29,6 +29,7 @@ use Haspadar\PHPStanRules\Rules\AtclauseOrderRule;
 use Haspadar\PHPStanRules\Rules\PhpDocEmptyMethodRule;
 use Haspadar\PHPStanRules\Rules\PhpDocMissingClassRule;
 use Haspadar\PHPStanRules\Rules\PhpDocMissingMethodRule;
+use Haspadar\PHPStanRules\Rules\PhpDocMissingParamRule;
 use Haspadar\PHPStanRules\Rules\PhpDocMissingPropertyRule;
 use Haspadar\PHPStanRules\Rules\ClassConstantTypeHintRule;
 use Haspadar\PHPStanRules\Rules\AbbreviationAsWordInNameRule;
@@ -100,6 +101,7 @@ final class RulesTest extends TestCase
                 PhpDocMissingClassRule::class,
                 PhpDocMissingMethodRule::class,
                 PhpDocMissingPropertyRule::class,
+                PhpDocMissingParamRule::class,
                 ReturnDescriptionCapitalRule::class,
                 ParamDescriptionCapitalRule::class,
                 NoPhpDocForOverriddenRule::class,
