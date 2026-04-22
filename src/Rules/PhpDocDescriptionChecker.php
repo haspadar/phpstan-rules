@@ -41,6 +41,7 @@ final readonly class PhpDocDescriptionChecker
     /**
      * Extracts the description text from the first @return tag, or null if absent or empty.
      *
+     * @param string $docText Raw PHPDoc block text with the opening and closing delimiters.
      * @throws ShouldNotHappenException
      */
     public function extractReturnDescription(string $docText): ?string
@@ -60,6 +61,7 @@ final readonly class PhpDocDescriptionChecker
     /**
      * Returns all @param tag descriptions that are non-empty, keyed by parameter name.
      *
+     * @param string $docText Raw PHPDoc block text with the opening and closing delimiters.
      * @throws ShouldNotHappenException
      * @return array<string, string>
      */
@@ -80,7 +82,30 @@ final readonly class PhpDocDescriptionChecker
     }
 
     /**
+     * Returns the parameter names (with leading `$`) documented by `@param` tags in the PHPDoc block.
+     *
+     * @param string $docText Raw PHPDoc block text with the opening and closing delimiters.
+     * @throws ShouldNotHappenException
+     * @return list<string>
+     */
+    public function extractParamNames(string $docText): array
+    {
+        $tokens = new TokenIterator($this->lexer->tokenize($docText));
+        $phpDocNode = $this->phpDocParser->parse($tokens);
+
+        $names = [];
+
+        foreach ($phpDocNode->getParamTagValues() as $paramTag) {
+            $names[] = $paramTag->parameterName;
+        }
+
+        return $names;
+    }
+
+    /**
      * Returns true if the string starts with an uppercase Unicode letter.
+     *
+     * @param string $text Text to inspect.
      */
     public function startsWithCapital(string $text): bool
     {
