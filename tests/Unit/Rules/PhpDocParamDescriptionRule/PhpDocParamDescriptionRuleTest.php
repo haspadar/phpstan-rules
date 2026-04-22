@@ -102,6 +102,18 @@ final class PhpDocParamDescriptionRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function reportsEmptyDescriptionForVariadicParameter(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/PhpDocParamDescriptionRule/ClassWithVariadicParam.php'],
+            [
+                ['@param $parts for concat() is missing a description.', 14],
+            ],
+            'Variadic @param tags must require a description like any other parameter',
+        );
+    }
+
+    #[Test]
     public function passesWhenErrorIsSuppressed(): void
     {
         $this->analyse(

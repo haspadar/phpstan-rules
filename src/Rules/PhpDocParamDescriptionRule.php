@@ -68,11 +68,9 @@ final readonly class PhpDocParamDescriptionRule implements Rule
             return [];
         }
 
-        $docText = $docComment->getText();
-        $allTags = $this->checker->extractParamNames($docText);
-        $withDescription = array_keys($this->checker->extractParamDescriptions($docText));
+        $emptyTags = $this->checker->extractEmptyParamNames($docComment->getText());
 
-        return $this->collectEmpty(array_values(array_diff($allTags, $withDescription)), $node->name->toString());
+        return $this->collectEmpty($emptyTags, $node->name->toString());
     }
 
     /**
