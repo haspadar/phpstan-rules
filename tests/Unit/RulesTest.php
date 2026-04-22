@@ -42,6 +42,7 @@ use Haspadar\PHPStanRules\Rules\NoPhpDocForOverriddenRule;
 use Haspadar\PHPStanRules\Rules\ParamDescriptionCapitalRule;
 use Haspadar\PHPStanRules\Rules\ReturnDescriptionCapitalRule;
 use Haspadar\PHPStanRules\Rules\ProhibitStaticMethodsRule;
+use Haspadar\PHPStanRules\Rules\ProhibitStaticPropertiesRule;
 use Haspadar\PHPStanRules\Rules\ReturnCountRule;
 use Haspadar\PHPStanRules\Rules\StatementCountRule;
 use Haspadar\PHPStanRules\Rules\TooManyMethodsRule;
@@ -84,6 +85,7 @@ final class RulesTest extends TestCase
                 ReturnCountRule::class,
                 ProtectedMethodInFinalClassRule::class,
                 ProhibitStaticMethodsRule::class,
+                ProhibitStaticPropertiesRule::class,
                 ConstructorInitializationRule::class,
                 NoParameterReassignmentRule::class,
                 IllegalCatchRule::class,
