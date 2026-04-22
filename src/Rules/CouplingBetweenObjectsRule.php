@@ -36,7 +36,7 @@ final readonly class CouplingBetweenObjectsRule implements Rule
      * @param int $maximum Maximum number of unique dependent types allowed per class
      * @param array{
      *     excludedClasses?: list<string>
-     * } $options
+     * } $options Classes to exclude from the coupling count (case-insensitive FQCN match).
      */
     public function __construct(private int $maximum = 15, array $options = [])
     {

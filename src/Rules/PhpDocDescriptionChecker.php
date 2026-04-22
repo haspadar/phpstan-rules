@@ -103,6 +103,32 @@ final readonly class PhpDocDescriptionChecker
     }
 
     /**
+     * Returns parameter names (with leading `$`) whose `@param` tag has an empty description.
+     *
+     * Each occurrence is reported independently, so duplicate parameter names with mixed
+     * descriptions appear once per empty-description tag.
+     *
+     * @param string $docText Raw PHPDoc block text with the opening and closing delimiters.
+     * @throws ShouldNotHappenException
+     * @return list<string>
+     */
+    public function extractEmptyParamNames(string $docText): array
+    {
+        $tokens = new TokenIterator($this->lexer->tokenize($docText));
+        $phpDocNode = $this->phpDocParser->parse($tokens);
+
+        $empty = [];
+
+        foreach ($phpDocNode->getParamTagValues() as $paramTag) {
+            if ($paramTag->description === '' && $paramTag->parameterName !== '') {
+                $empty[] = $paramTag->parameterName;
+            }
+        }
+
+        return $empty;
+    }
+
+    /**
      * Returns true if the string starts with an uppercase Unicode letter.
      *
      * @param string $text Text to inspect.

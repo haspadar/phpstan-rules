@@ -36,7 +36,7 @@ final readonly class ForbiddenClassSuffixRule implements Rule
      * @param array{
      *     forbiddenSuffixes?: list<string>,
      *     allowedSuffixes?: list<string>
-     * } $options
+     * } $options Forbidden and allow-listed class name suffixes.
      */
     public function __construct(array $options = [])
     {

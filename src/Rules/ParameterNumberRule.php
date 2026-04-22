@@ -28,7 +28,7 @@ final readonly class ParameterNumberRule implements Rule
      * @param int $maxParameters Maximum number of parameters per method or function.
      * @param array{
      *     ignoreOverridden?: bool
-     * } $options
+     * } $options Filter that skips methods carrying the `#[Override]` attribute when enabled.
      */
     public function __construct(private int $maxParameters = 3, array $options = [])
     {

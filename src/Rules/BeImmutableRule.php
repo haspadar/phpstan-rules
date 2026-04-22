@@ -34,7 +34,7 @@ final readonly class BeImmutableRule implements Rule
      *
      * @param array{
      *     excludedClasses?: list<string>
-     * } $options
+     * } $options Classes to exclude from the immutability check (case-insensitive FQCN match).
      */
     public function __construct(array $options = [])
     {

@@ -31,7 +31,7 @@ final readonly class MethodLengthRule implements Rule
      * @param array{
      *     skipBlankLines?: bool,
      *     skipComments?: bool
-     * } $options
+     * } $options Flags controlling which lines are counted towards the limit.
      */
     public function __construct(private int $maxLines = 100, array $options = [])
     {

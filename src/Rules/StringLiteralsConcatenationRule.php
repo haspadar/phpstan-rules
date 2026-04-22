@@ -31,7 +31,7 @@ final readonly class StringLiteralsConcatenationRule implements Rule
     /**
      * Constructs the rule with the given options.
      *
-     * @param array{allowMixed?: bool} $options
+     * @param array{allowMixed?: bool} $options Toggle that allows concatenation between a literal and a non-literal operand.
      */
     public function __construct(array $options = [])
     {

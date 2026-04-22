@@ -35,7 +35,7 @@ final readonly class IllegalThrowsRule implements Rule
      * Constructs the rule with the given list of forbidden throws class names and options.
      *
      * @param list<string> $illegalClassNames Class names (with or without leading backslash) that are forbidden in @throws
-     * @param array{ignoreOverriddenMethods?: bool} $options
+     * @param array{ignoreOverriddenMethods?: bool} $options Filter that skips `#[Override]` methods when enabled.
      */
     public function __construct(
         array $illegalClassNames = ['Error', 'RuntimeException', 'Throwable'],

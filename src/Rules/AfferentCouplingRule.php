@@ -46,7 +46,7 @@ final readonly class AfferentCouplingRule implements Rule
      *     ignoreInterfaces?: bool,
      *     ignoreAbstract?: bool,
      *     excludedClasses?: list<string>
-     * } $options
+     * } $options Filters that skip interfaces, abstract classes, and explicit FQCNs.
      */
     public function __construct(private int $maxAfferent = 14, array $options = [])
     {

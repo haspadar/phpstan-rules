@@ -30,7 +30,7 @@ final readonly class PhpDocMissingMethodRule implements Rule
     /**
      * Constructs the rule with the given visibility and override options.
      *
-     * @param array{checkPublicOnly?: bool, skipOverridden?: bool} $options
+     * @param array{checkPublicOnly?: bool, skipOverridden?: bool} $options Visibility filter and `#[Override]` skip flag.
      */
     public function __construct(array $options = [])
     {

@@ -19,8 +19,8 @@ final readonly class AdjacencyBuilder
     /**
      * Builds the adjacency list: each index maps to the list of connected indices.
      *
-     * @param list<ClassMethod> $methods
-     * @param list<array{properties: list<string>, calls: list<string>}> $touches
+     * @param list<ClassMethod> $methods Methods that form the nodes of the graph.
+     * @param list<array{properties: list<string>, calls: list<string>}> $touches Property and call references collected per method, indexed the same as $methods.
      * @return array<int, list<int>>
      */
     public function build(array $methods, array $touches): array

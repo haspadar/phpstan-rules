@@ -44,7 +44,7 @@ final readonly class ConstantUsageRule implements Rule
      *     ignoreNumbers?: list<int|float>,
      *     checkStrings?: bool,
      *     ignoreStrings?: list<string>
-     * } $options
+     * } $options Scalars treated as non-magic and toggle for string-literal checking.
      */
     public function __construct(array $options = [])
     {

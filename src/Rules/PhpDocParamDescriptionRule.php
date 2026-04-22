@@ -6,7 +6,6 @@ namespace Haspadar\PHPStanRules\Rules;
 
 use Override;
 use PhpParser\Node;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
@@ -15,17 +14,18 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
 
 /**
- * Checks that every parameter of a method with a PHPDoc block has a matching `@param` tag.
- * If a method has no PHPDoc, the rule reports nothing — the absence of the block itself is
- * handled by PhpDocMissingMethodRule. When a block is present, each parameter of the signature
- * must be documented by a matching `@param` tag; otherwise the contract is incomplete.
+ * Checks that every `@param` tag in a method PHPDoc block has a non-empty description.
+ * The rule does not require `@param` tags to be present — that is the job of
+ * PhpDocMissingParamRule. When a tag is present, the text after the parameter name must
+ * carry meaning; empty descriptions reduce a tag to a duplicate of the native signature
+ * and leave the reader without the semantic information the tag is meant to provide.
  * Non-public methods are skipped when checkPublicOnly is true (default). Methods with the
- * #[Override] attribute are skipped when skipOverridden is true (default) because the param
- * contract is inherited from the base method.
+ * #[Override] attribute are skipped when skipOverridden is true (default) because the
+ * description is inherited from the overridden method.
  *
  * @implements Rule<ClassMethod>
  */
-final readonly class PhpDocMissingParamRule implements Rule
+final readonly class PhpDocParamDescriptionRule implements Rule
 {
     private bool $checkPublicOnly;
 
@@ -53,7 +53,7 @@ final readonly class PhpDocMissingParamRule implements Rule
     }
 
     /**
-     * Analyses the node and returns a list of errors, one per undocumented parameter.
+     * Analyses the node and returns a list of errors, one per `@param` tag without a description.
      *
      * @psalm-param ClassMethod $node
      * @throws ShouldNotHappenException
@@ -64,13 +64,13 @@ final readonly class PhpDocMissingParamRule implements Rule
     {
         $docComment = $node->getDocComment();
 
-        if ($this->shouldSkip($node, $scope) || $docComment === null || $node->params === []) {
+        if ($this->shouldSkip($node, $scope) || $docComment === null) {
             return [];
         }
 
-        $documented = $this->checker->extractParamNames($docComment->getText());
+        $emptyTags = $this->checker->extractEmptyParamNames($docComment->getText());
 
-        return $this->collectMissing($node, $documented);
+        return $this->collectEmpty($emptyTags, $node->name->toString());
     }
 
     /**
@@ -87,39 +87,26 @@ final readonly class PhpDocMissingParamRule implements Rule
     }
 
     /**
-     * Builds one error per parameter of the method that is not listed in the documented set.
+     * Builds one error per `@param` tag that has an empty description.
      *
-     * @param ClassMethod $node Method whose parameters are validated against documented tags.
-     * @param list<string> $documented Parameter names (with leading `$`) already present in @param tags.
+     * @param list<string> $emptyTags Parameter names (with leading `$`) whose description is empty.
+     * @param string $methodName Method name used in the error message.
      * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
-    private function collectMissing(ClassMethod $node, array $documented): array
+    private function collectEmpty(array $emptyTags, string $methodName): array
     {
-        $methodName = $node->name->toString();
         $errors = [];
 
-        foreach ($node->params as $param) {
-            $var = $param->var;
-
-            if (!$var instanceof Variable || !is_string($var->name)) {
-                continue;
-            }
-
-            $paramName = sprintf('$%s', $var->name);
-
-            if (in_array($paramName, $documented, true)) {
-                continue;
-            }
-
+        foreach ($emptyTags as $paramName) {
             $errors[] = RuleErrorBuilder::message(
                 sprintf(
-                    'PHPDoc for %s() is missing @param for parameter %s.',
-                    $methodName,
+                    '@param %s for %s() is missing a description.',
                     $paramName,
+                    $methodName,
                 ),
             )
-                ->identifier('haspadar.phpdocMissingParam')
+                ->identifier('haspadar.phpdocParamDescription')
                 ->build();
         }
 
