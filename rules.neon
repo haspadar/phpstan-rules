@@ -57,6 +57,9 @@ parameters:
             skipOverridden: true
         phpDocMissingProperty:
             checkPublicOnly: true
+        phpDocMissingParam:
+            checkPublicOnly: true
+            skipOverridden: true
         abbreviation:
             maxAllowedConsecutiveCapitals: 4
             allowedAbbreviations: []
@@ -185,6 +188,10 @@ parametersSchema:
         ]),
         phpDocMissingProperty: structure([
             checkPublicOnly: bool(),
+        ]),
+        phpDocMissingParam: structure([
+            checkPublicOnly: bool(),
+            skipOverridden: bool(),
         ]),
         abbreviation: structure([
             maxAllowedConsecutiveCapitals: int(),
@@ -420,6 +427,14 @@ services:
         arguments:
             options:
                 checkPublicOnly: %haspadar.phpDocMissingProperty.checkPublicOnly%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\PhpDocMissingParamRule
+        arguments:
+            options:
+                checkPublicOnly: %haspadar.phpDocMissingParam.checkPublicOnly%
+                skipOverridden: %haspadar.phpDocMissingParam.skipOverridden%
         tags:
             - phpstan.rules.rule
     -
