@@ -18,7 +18,7 @@ use PHPStan\ShouldNotHappenException;
  * Checks that every parameter of a method with a PHPDoc block has a matching `@param` tag.
  * If a method has no PHPDoc, the rule reports nothing — the absence of the block itself is
  * handled by PhpDocMissingMethodRule. When a block is present, each parameter of the signature
- * must be documented by a `@param mixed $name` tag; otherwise the contract is incomplete.
+ * must be documented by a matching `@param` tag; otherwise the contract is incomplete.
  * Non-public methods are skipped when checkPublicOnly is true (default). Methods with the
  * #[Override] attribute are skipped when skipOverridden is true (default) because the param
  * contract is inherited from the base method.

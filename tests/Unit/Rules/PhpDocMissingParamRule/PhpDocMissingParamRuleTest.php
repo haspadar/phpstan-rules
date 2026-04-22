@@ -111,6 +111,30 @@ final class PhpDocMissingParamRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function reportsMissingParamForVariadicParameter(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/PhpDocMissingParamRule/ClassWithVariadicParam.php'],
+            [
+                ['PHPDoc for concat() is missing @param for parameter $parts.', 12],
+            ],
+            'Variadic parameters must be matched by their bare name (without ...) against @param tags',
+        );
+    }
+
+    #[Test]
+    public function reportsMissingParamForByReferenceParameter(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/PhpDocMissingParamRule/ClassWithByReferenceParam.php'],
+            [
+                ['PHPDoc for append() is missing @param for parameter $buffer.', 12],
+            ],
+            'By-reference parameters must be matched by their bare name (without &) against @param tags',
+        );
+    }
+
+    #[Test]
     public function passesWhenErrorIsSuppressed(): void
     {
         $this->analyse(
