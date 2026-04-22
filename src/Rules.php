@@ -25,6 +25,7 @@ final class Rules
         Rules\ReturnCountRule::class,
         Rules\ProtectedMethodInFinalClassRule::class,
         Rules\ProhibitStaticMethodsRule::class,
+        Rules\ProhibitStaticPropertiesRule::class,
         Rules\ConstructorInitializationRule::class,
         Rules\NoParameterReassignmentRule::class,
         Rules\IllegalCatchRule::class,

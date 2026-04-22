@@ -354,6 +354,10 @@ services:
         tags:
             - phpstan.rules.rule
     -
+        class: Haspadar\PHPStanRules\Rules\ProhibitStaticPropertiesRule
+        tags:
+            - phpstan.rules.rule
+    -
         class: Haspadar\PHPStanRules\Rules\ConstructorInitializationRule
         tags:
             - phpstan.rules.rule
