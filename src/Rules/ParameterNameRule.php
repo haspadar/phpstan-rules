@@ -29,6 +29,7 @@ final readonly class ParameterNameRule implements Rule
     /**
      * Constructs the rule with the given pattern.
      *
+     * @param string $pattern Regex (without delimiters) that every parameter name must match.
      * @throws ShouldNotHappenException
      */
     public function __construct(private string $pattern = '^(id|[a-z]{3,})$')

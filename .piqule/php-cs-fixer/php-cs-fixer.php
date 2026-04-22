@@ -102,5 +102,9 @@ return (new PhpCsFixer\Config())
         'full_opening_tag' => true,
         'single_quote' => true,
         'ternary_operator_spaces' => true,
+
+        // PHP 8.4 compatibility: keep parentheses around `new` expressions
+        // so tools based on pdepend (phpmd) can still parse the code
+        'new_expression_parentheses' => ['use_parentheses' => true],
     ]))
     ->setUnsupportedPhpVersionAllowed(true);

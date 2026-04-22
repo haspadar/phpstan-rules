@@ -69,6 +69,7 @@ final readonly class LackOfCohesionRule implements Rule
     /**
      * Constructs the rule with the LCOM threshold and filter options.
      *
+     * @param int $maxLcom Maximum number of disjoint LCOM4 method groups allowed per class.
      * @param array{
      *     minMethods?: int,
      *     minProperties?: int,

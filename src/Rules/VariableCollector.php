@@ -29,6 +29,7 @@ final class VariableCollector
     /**
      * Returns all local variable name-line pairs from the method body.
      *
+     * @param ClassMethod $node Method whose body is scanned for local variables.
      * @return list<array{string, int}>
      */
     public function collect(ClassMethod $node): array

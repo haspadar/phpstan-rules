@@ -138,13 +138,7 @@ jobs:
       # ------------------------------------------------------------
       - name: PHPUnit (coverage)
         if: hashFiles('.piqule/phpunit/phpunit.xml') != ''
-        run: |
-          XDEBUG_MODE=coverage \
-          php -d memory_limit=1G \
-          vendor/bin/phpunit \
-            -c .piqule/phpunit/phpunit.xml \
-            --path-coverage \
-            --coverage-clover=.piqule/codecov/coverage.xml
+        run: bash .piqule/phpunit/command.sh
 
       # ------------------------------------------------------------
       # Upload coverage to Codecov (if coverage exists)
@@ -155,7 +149,6 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: .piqule/codecov/coverage.xml
-          codecov_yml_path: .piqule/codecov/.codecov.yml
           fail_ci_if_error: true
 
       # ------------------------------------------------------------
@@ -165,9 +158,4 @@ jobs:
         if: hashFiles('.piqule/infection/infection.json5') != ''
         env:
           INFECTION_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
-        run: |
-          XDEBUG_MODE=coverage \
-          php -d memory_limit=1G \
-          vendor/bin/infection \
-            --configuration=.piqule/infection/infection.json5 \
-            --threads=max
+        run: bash .piqule/infection/command.sh

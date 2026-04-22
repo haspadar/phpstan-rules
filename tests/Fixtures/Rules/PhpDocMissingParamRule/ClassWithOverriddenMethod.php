@@ -1,0 +1,32 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Haspadar\PHPStanRules\Tests\Fixtures\Rules\PhpDocMissingParamRule;
+
+use Override;
+
+class ParentGreeterForOverride
+{
+    /**
+     * Greets a person.
+     *
+     * @param string $name The person to greet.
+     */
+    public function greet(string $name): string
+    {
+        return 'hello ' . $name;
+    }
+}
+
+final class ClassWithOverriddenMethod extends ParentGreeterForOverride
+{
+    /**
+     * Greets loudly.
+     */
+    #[Override]
+    public function greet(string $name): string
+    {
+        return strtoupper($name);
+    }
+}

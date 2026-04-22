@@ -21,3 +21,8 @@ parameters:
             missingCheckedExceptionInThrows: true
         checkedExceptionClasses:
             - \Throwable
+
+    haspadar:
+        afferentCoupling:
+            ignoreInterfaces: true
+

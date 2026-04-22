@@ -25,6 +25,7 @@ final readonly class TooManyMethodsRule implements Rule
     /**
      * Constructs the rule with the given method limit and options.
      *
+     * @param int $maxMethods Maximum number of methods per class.
      * @param array{
      *     onlyPublic?: bool
      * } $options

@@ -14,6 +14,8 @@ final class SummaryExtractor
 {
     /**
      * Returns the trimmed summary line from the given PHPDoc text, or null if no summary is present.
+     *
+     * @param string $docText Raw PHPDoc block text with the surrounding delimiters.
      */
     public static function extract(string $docText): ?string
     {

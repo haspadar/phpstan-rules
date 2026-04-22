@@ -28,6 +28,7 @@ final readonly class CatchParameterNameRule implements Rule
     /**
      * Constructs the rule with the given pattern.
      *
+     * @param string $pattern Regex (without delimiters) that every catch parameter name must match.
      * @throws ShouldNotHappenException
      */
     public function __construct(private string $pattern = '^(e|ex|[a-z]{3,12})$')

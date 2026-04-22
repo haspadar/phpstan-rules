@@ -25,6 +25,7 @@ final readonly class ParameterNumberRule implements Rule
     /**
      * Constructs the rule with the given parameter limit and options.
      *
+     * @param int $maxParameters Maximum number of parameters per method or function.
      * @param array{
      *     ignoreOverridden?: bool
      * } $options

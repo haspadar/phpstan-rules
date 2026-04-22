@@ -79,6 +79,7 @@
 | `PhpDocMissingClassRule`      | Every named class must have a PHPDoc comment                                            |
 | `PhpDocMissingMethodRule`     | Every public method in a class must have a PHPDoc comment (configurable)                |
 | `PhpDocMissingPropertyRule`   | Every public property in a class must have a PHPDoc comment (configurable)              |
+| `PhpDocMissingParamRule`      | Every parameter of a method with a PHPDoc block must have a matching `@param` tag       |
 | `ReturnDescriptionCapitalRule` | `@return` tag description must start with a capital letter                             |
 | `ParamDescriptionCapitalRule`  | `@param` tag descriptions must start with a capital letter                             |
 | `NoPhpDocForOverriddenRule`    | Overridden methods (`#[Override]`) must not have a PHPDoc comment                      |
@@ -148,6 +149,9 @@ parameters:
             skipOverridden: true
         phpDocMissingProperty:
             checkPublicOnly: true
+        phpDocMissingParam:
+            checkPublicOnly: true
+            skipOverridden: true
         abbreviation:
             maxAllowedConsecutiveCapitals: 3
             allowedAbbreviations:

@@ -8,13 +8,9 @@ if [ ! -f "$CONFIG" ]; then
   exit 1
 fi
 
-if [ ! -d "src" ]; then
-  echo "No src directory found, skipping PHPStan"
-  exit 0
-fi
-
 BIN="$(.piqule/_composer.sh phpstan)"
 
-"$BIN" analyse \
+exec .piqule/_skip_if_empty.sh src '*.php' PHPStan -- \
+  "$BIN" analyse \
   -c "$CONFIG" \
   --memory-limit=1G

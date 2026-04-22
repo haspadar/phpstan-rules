@@ -27,6 +27,7 @@ final class MethodBodyTypeCollector
     /**
      * Returns all type names found in the method body statements.
      *
+     * @param ClassMethod $method Method whose body statements are inspected.
      * @return list<string>
      */
     public function collect(ClassMethod $method): array

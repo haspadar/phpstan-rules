@@ -30,6 +30,7 @@ final readonly class MethodTouches
      * Method names are lowercased; property names keep their original case (PHP property
      * names are case-sensitive).
      *
+     * @param ClassMethod $method Method whose body is scanned for property and call references.
      * @return array{properties: list<string>, calls: list<string>}
      */
     public function collect(ClassMethod $method): array

@@ -32,6 +32,7 @@ final readonly class VariableNameRule implements Rule
     /**
      * Constructs the rule with the given pattern and options.
      *
+     * @param string $pattern Regex (without delimiters) that every local variable name must match.
      * @param array{allowedNames?: list<string>} $options
      * @throws ShouldNotHappenException
      */

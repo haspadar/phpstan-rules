@@ -16,6 +16,8 @@ final class CompiledPattern
     /**
      * Compiles the given pattern with a safe delimiter.
      *
+     * @param string $pattern Raw regex body without delimiters.
+     * @param string $context Human-readable context used in error messages when compilation fails.
      * @throws ShouldNotHappenException
      * @return non-empty-string
      */

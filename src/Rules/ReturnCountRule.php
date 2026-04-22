@@ -32,6 +32,7 @@ final readonly class ReturnCountRule implements Rule
     /**
      * Constructs the rule with the given return statement limit.
      *
+     * @param int $max Maximum number of `return` statements per method.
      * @throws InvalidArgumentException when max is not a positive integer
      */
     public function __construct(private int $max = 1)

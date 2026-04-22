@@ -16,6 +16,7 @@ final class ChildNodes
     /**
      * Returns all direct child Node instances of the given node.
      *
+     * @param Node $node Parent node whose direct children are returned.
      * @return list<Node>
      */
     public static function of(Node $node): array

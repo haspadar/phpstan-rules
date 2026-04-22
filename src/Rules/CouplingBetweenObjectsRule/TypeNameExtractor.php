@@ -15,6 +15,7 @@ final class TypeNameExtractor
     /**
      * Returns all type names referenced in the given type node.
      *
+     * @param Node $typeNode Type node (Name, NullableType, UnionType, IntersectionType).
      * @return list<string>
      */
     public function extract(Node $typeNode): array

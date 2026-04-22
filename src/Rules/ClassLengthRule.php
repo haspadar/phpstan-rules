@@ -30,6 +30,7 @@ final readonly class ClassLengthRule implements Rule
     /**
      * Constructs the rule with the given line limit and filtering options.
      *
+     * @param int $maxLines Maximum physical line count per class body.
      * @param array{
      *     skipBlankLines?: bool,
      *     skipComments?: bool
