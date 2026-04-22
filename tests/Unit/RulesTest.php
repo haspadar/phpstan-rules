@@ -31,6 +31,7 @@ use Haspadar\PHPStanRules\Rules\PhpDocMissingClassRule;
 use Haspadar\PHPStanRules\Rules\PhpDocMissingMethodRule;
 use Haspadar\PHPStanRules\Rules\PhpDocMissingParamRule;
 use Haspadar\PHPStanRules\Rules\PhpDocMissingPropertyRule;
+use Haspadar\PHPStanRules\Rules\PhpDocParamDescriptionRule;
 use Haspadar\PHPStanRules\Rules\ClassConstantTypeHintRule;
 use Haspadar\PHPStanRules\Rules\AbbreviationAsWordInNameRule;
 use Haspadar\PHPStanRules\Rules\NoInlineCommentRule;
@@ -102,6 +103,7 @@ final class RulesTest extends TestCase
                 PhpDocMissingMethodRule::class,
                 PhpDocMissingPropertyRule::class,
                 PhpDocMissingParamRule::class,
+                PhpDocParamDescriptionRule::class,
                 ReturnDescriptionCapitalRule::class,
                 ParamDescriptionCapitalRule::class,
                 NoPhpDocForOverriddenRule::class,
