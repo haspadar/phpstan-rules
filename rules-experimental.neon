@@ -1,0 +1,32 @@
+parameters:
+    haspadar:
+        instability:
+            maxInstability: 0.8
+            minDependencies: 5
+            ignoreInterfaces: true
+            ignoreAbstract: true
+            excludedClasses: []
+
+parametersSchema:
+    haspadar: structure([
+        instability: structure([
+            maxInstability: float(),
+            minDependencies: int(),
+            ignoreInterfaces: bool(),
+            ignoreAbstract: bool(),
+            excludedClasses: listOf(string()),
+        ]),
+    ])
+
+services:
+    -
+        class: Haspadar\PHPStanRules\Rules\InstabilityRule
+        arguments:
+            maxInstability: %haspadar.instability.maxInstability%
+            minDependencies: %haspadar.instability.minDependencies%
+            options:
+                ignoreInterfaces: %haspadar.instability.ignoreInterfaces%
+                ignoreAbstract: %haspadar.instability.ignoreAbstract%
+                excludedClasses: %haspadar.instability.excludedClasses%
+        tags:
+            - phpstan.rules.rule
