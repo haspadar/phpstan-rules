@@ -27,7 +27,6 @@
 | `AfferentCouplingRule`            | 14      | Class must not be referenced by more than N other classes in the codebase  |
 | `InheritanceDepthRule`            | 3       | Class must not extend a chain of more than N ancestors                     |
 | `LackOfCohesionRule`              | 1       | Class methods must not split into more than N disjoint LCOM4 groups        |
-| `InstabilityRule`                 | 0.8     | Class I = Ce / (Ca + Ce) must not exceed N (Robert C. Martin's metric)     |
 
 ### Design
 
@@ -218,6 +217,33 @@ parameters:
             minProperties: 3
             excludedClasses:
                 - App\Entity\User
+```
+
+Default values match the defaults described in the rules table above. Omitting a parameter keeps the default. Diagnostic identifier for `AtclauseOrderRule`: `haspadar.atclauseOrder` (for targeted ignores, e.g. `@phpstan-ignore haspadar.atclauseOrder`).
+
+---
+
+## Experimental rules
+
+Some rules are not registered by default because their usefulness depends strongly on project topology. They live behind an opt-in include so adopting projects do not fail on legitimate code (for example, entry-point classes that naturally have instability `I = 1`).
+
+To enable them, add `rules-experimental.neon` to your `phpstan.neon`:
+
+```neon
+includes:
+    - vendor/haspadar/phpstan-rules/rules.neon
+    - vendor/haspadar/phpstan-rules/rules-experimental.neon
+```
+
+| Rule              | Why opt-in                                                                       |
+|-------------------|-----------------------------------------------------------------------------------|
+| `InstabilityRule` | Absolute threshold on a relative metric; `I = 1` is normal for entry-point classes |
+
+Once enabled, configure the rule like any other:
+
+```neon
+parameters:
+    haspadar:
         instability:
             maxInstability: 0.8
             minDependencies: 5
@@ -226,8 +252,6 @@ parameters:
             excludedClasses:
                 - App\Controller\HomeController
 ```
-
-Default values match the defaults described in the rules table above. Omitting a parameter keeps the default. Diagnostic identifier for `AtclauseOrderRule`: `haspadar.atclauseOrder` (for targeted ignores, e.g. `@phpstan-ignore haspadar.atclauseOrder`).
 
 ---
 
