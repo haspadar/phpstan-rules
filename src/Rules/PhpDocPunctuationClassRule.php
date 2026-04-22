@@ -29,7 +29,7 @@ final readonly class PhpDocPunctuationClassRule implements Rule
     /**
      * Constructs the rule with the given capitalization option.
      *
-     * @param array{checkCapitalization?: bool} $options
+     * @param array{checkCapitalization?: bool} $options Toggle that also enforces a capital letter at the start of the summary.
      */
     public function __construct(array $options = [])
     {

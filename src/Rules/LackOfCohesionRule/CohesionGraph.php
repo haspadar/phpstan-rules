@@ -18,7 +18,7 @@ final readonly class CohesionGraph
     /**
      * Returns the LCOM4 value for the given methods.
      *
-     * @param list<ClassMethod> $methods
+     * @param list<ClassMethod> $methods Methods that form the nodes of the cohesion graph.
      */
     public function componentCount(array $methods): int
     {

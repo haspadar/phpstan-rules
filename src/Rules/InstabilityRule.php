@@ -49,7 +49,7 @@ final readonly class InstabilityRule implements Rule
      *     ignoreInterfaces?: bool,
      *     ignoreAbstract?: bool,
      *     excludedClasses?: list<string>
-     * } $options
+     * } $options Filters that skip interfaces, abstract classes, and explicit FQCNs.
      */
     public function __construct(
         private float $maxInstability = 0.8,

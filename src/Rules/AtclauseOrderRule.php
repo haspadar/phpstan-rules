@@ -33,7 +33,7 @@ final readonly class AtclauseOrderRule implements Rule
     /**
      * Constructs the rule with the given tag order configuration.
      *
-     * @param array{tagOrder?: list<string>} $options
+     * @param array{tagOrder?: list<string>} $options Expected order of PHPDoc tag names.
      */
     public function __construct(array $options = [])
     {

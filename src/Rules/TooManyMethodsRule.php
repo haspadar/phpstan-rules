@@ -28,7 +28,7 @@ final readonly class TooManyMethodsRule implements Rule
      * @param int $maxMethods Maximum number of methods per class.
      * @param array{
      *     onlyPublic?: bool
-     * } $options
+     * } $options Filter that narrows the count to public methods only when enabled.
      */
     public function __construct(private int $maxMethods = 20, array $options = [])
     {

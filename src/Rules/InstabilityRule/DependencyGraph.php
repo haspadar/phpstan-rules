@@ -17,7 +17,7 @@ final readonly class DependencyGraph
     /**
      * Folds the collector payload into declarations, incoming edges and efferent counts.
      *
-     * @param array<string, list<array{class: string, kind: string, abstract: bool, line: int, dependencies: list<string>}>> $collected
+     * @param array<string, list<array{class: string, kind: string, abstract: bool, line: int, dependencies: list<string>}>> $collected Per-file class data emitted by ClassDependencyCollector.
      * @return array{
      *     array<string, array{class: string, kind: string, abstract: bool, file: string, line: int}>,
      *     array<string, array<string, true>>,

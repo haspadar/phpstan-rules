@@ -27,7 +27,7 @@ final readonly class PhpDocMissingPropertyRule implements Rule
     /**
      * Constructs the rule with the given visibility options.
      *
-     * @param array{checkPublicOnly?: bool} $options
+     * @param array{checkPublicOnly?: bool} $options Visibility filter that narrows the check to public properties when enabled.
      */
     public function __construct(array $options = [])
     {

@@ -74,7 +74,7 @@ final readonly class LackOfCohesionRule implements Rule
      *     minMethods?: int,
      *     minProperties?: int,
      *     excludedClasses?: list<string>
-     * } $options
+     * } $options Gate sizes under which the class is skipped and an FQCN exclusion list.
      */
     public function __construct(private int $maxLcom = 1, array $options = [])
     {

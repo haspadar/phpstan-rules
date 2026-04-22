@@ -39,7 +39,7 @@ final readonly class TodoCommentRule implements Rule
      *
      * @param array{
      *     issueFormat?: non-empty-string
-     * } $options
+     * } $options Regex that a tagged reminder comment must match to be accepted as a tracked reference.
      * @throws InvalidArgumentException when `issueFormat` is not a valid regex
      */
     public function __construct(array $options = [])

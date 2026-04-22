@@ -36,7 +36,7 @@ final readonly class PhpDocMissingParamRule implements Rule
     /**
      * Constructs the rule with visibility and override options, initialising the shared PHPDoc checker.
      *
-     * @param array{checkPublicOnly?: bool, skipOverridden?: bool} $options
+     * @param array{checkPublicOnly?: bool, skipOverridden?: bool} $options Visibility filter and `#[Override]` skip flag.
      * @throws ShouldNotHappenException
      */
     public function __construct(array $options = [])
