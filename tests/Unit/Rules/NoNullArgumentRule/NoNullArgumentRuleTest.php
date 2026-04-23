@@ -57,6 +57,18 @@ final class NoNullArgumentRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function reportsNullArgumentInNullsafeInsideCompoundExpression(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NoNullArgumentRule/ClassWithNullsafeInCompoundExpression.php'],
+            [
+                ['Passing null as argument #0 to method accept() is prohibited. Model absence explicitly (Null Object, Optional).', 11],
+            ],
+            'A nullsafe method call embedded in a larger expression must still produce the error exactly once',
+        );
+    }
+
+    #[Test]
     public function reportsNullArgumentInStaticCall(): void
     {
         $this->analyse(
