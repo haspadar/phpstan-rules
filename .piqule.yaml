@@ -11,6 +11,7 @@ override:
     phpmetrics.structure.max_methods_per_class: [11]
     phpmd.cyclomatic: [12]
     shellcheck.ignore_dirs: ["vendor", "tests", ".git", ".claude"]
+    yamllint.ignore: ["vendor/**", "tests/**", ".git/**", ".piqule/**/html/**", ".piqule/**/coverage-report/**", ".piqule/config.yaml", ".claude/**"]
     sonar.organization: haspadar-org
     sonar.projectKey: haspadar_phpstan-rules
     sonar.exclusions: ["tests/**"]

@@ -6,6 +6,8 @@ ignore: |
   .git/**
   .piqule/**/html/**
   .piqule/**/coverage-report/**
+  .piqule/config.yaml
+  .claude/**
 
 rules:
   document-start: disable
