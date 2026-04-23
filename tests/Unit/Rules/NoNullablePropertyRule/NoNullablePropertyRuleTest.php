@@ -93,6 +93,18 @@ final class NoNullablePropertyRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function reportsPropertyDeclaredAsStandaloneNull(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NoNullablePropertyRule/ClassWithStandaloneNullProperty.php'],
+            [
+                ['Property $value in class Haspadar\PHPStanRules\Tests\Fixtures\Rules\NoNullablePropertyRule\ClassWithStandaloneNullProperty must not be nullable.', 9],
+            ],
+            'A property declared with the PHP 8.2 standalone null type must be reported',
+        );
+    }
+
+    #[Test]
     public function reportsNullableWhenNullAppearsInMiddleOfUnion(): void
     {
         $this->analyse(

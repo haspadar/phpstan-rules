@@ -68,10 +68,14 @@ final readonly class NoNullablePropertyRule implements Rule
     }
 
     /**
-     * Returns true when the property type is nullable via `?Type` or a union containing null.
+     * Returns true when the property type is nullable — standalone `null`, `?Type`, or a union containing null.
      */
     private function hasNullableType(Property $node): bool
     {
+        if ($node->type instanceof Identifier && $node->type->toLowerString() === 'null') {
+            return true;
+        }
+
         if ($node->type instanceof NullableType) {
             return true;
         }
