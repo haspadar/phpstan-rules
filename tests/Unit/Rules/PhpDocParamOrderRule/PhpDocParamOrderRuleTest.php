@@ -110,6 +110,30 @@ final class PhpDocParamOrderRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function reportsWrongOrderForVariadicParameter(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/PhpDocParamOrderRule/ClassWithVariadicParam.php'],
+            [
+                ['@param order for concat() does not match the signature: expected $prefix, $parts, got $parts, $prefix.', 15],
+            ],
+            'Variadic parameters are matched by their bare name and must follow the signature order',
+        );
+    }
+
+    #[Test]
+    public function reportsWrongOrderForPromotedParameters(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/PhpDocParamOrderRule/ClassWithPromotedParameters.php'],
+            [
+                ['@param order for __construct() does not match the signature: expected $name, $age, got $age, $name.', 15],
+            ],
+            'Constructor property promotion parameters must be checked like ordinary parameters',
+        );
+    }
+
+    #[Test]
     public function passesWhenErrorIsSuppressed(): void
     {
         $this->analyse(
