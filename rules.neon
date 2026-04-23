@@ -63,6 +63,9 @@ parameters:
         phpDocParamDescription:
             checkPublicOnly: true
             skipOverridden: true
+        phpdocParamOrder:
+            checkPublicOnly: true
+            skipOverridden: true
         abbreviation:
             maxAllowedConsecutiveCapitals: 4
             allowedAbbreviations: []
@@ -197,6 +200,10 @@ parametersSchema:
             skipOverridden: bool(),
         ]),
         phpDocParamDescription: structure([
+            checkPublicOnly: bool(),
+            skipOverridden: bool(),
+        ]),
+        phpdocParamOrder: structure([
             checkPublicOnly: bool(),
             skipOverridden: bool(),
         ]),
@@ -450,6 +457,14 @@ services:
             options:
                 checkPublicOnly: %haspadar.phpDocParamDescription.checkPublicOnly%
                 skipOverridden: %haspadar.phpDocParamDescription.skipOverridden%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\PhpDocParamOrderRule
+        arguments:
+            options:
+                checkPublicOnly: %haspadar.phpdocParamOrder.checkPublicOnly%
+                skipOverridden: %haspadar.phpdocParamOrder.skipOverridden%
         tags:
             - phpstan.rules.rule
     -
