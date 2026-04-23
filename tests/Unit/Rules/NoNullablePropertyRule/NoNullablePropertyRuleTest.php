@@ -80,6 +80,19 @@ final class NoNullablePropertyRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function reportsEveryPropertyInGroupedDeclaration(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NoNullablePropertyRule/ClassWithGroupedNullableProperties.php'],
+            [
+                ['Property $first in class Haspadar\PHPStanRules\Tests\Fixtures\Rules\NoNullablePropertyRule\ClassWithGroupedNullableProperties must not be nullable.', 10],
+                ['Property $second in class Haspadar\PHPStanRules\Tests\Fixtures\Rules\NoNullablePropertyRule\ClassWithGroupedNullableProperties must not be nullable.', 11],
+            ],
+            'Each property in a grouped declaration must be reported on its own line',
+        );
+    }
+
+    #[Test]
     public function reportsEveryNullablePropertyInTheSameClass(): void
     {
         $this->analyse(

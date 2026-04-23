@@ -60,7 +60,7 @@ final readonly class NoNullablePropertyRule implements Rule
                 ),
             )
                 ->identifier('haspadar.noNullableProperty')
-                ->line($node->getStartLine())
+                ->line($prop->getStartLine())
                 ->build();
         }
 
