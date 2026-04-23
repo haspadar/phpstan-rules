@@ -26,7 +26,7 @@ final class NoNullArgumentRuleTest extends RuleTestCase
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/NoNullArgumentRule/ClassWithNullArgumentInFunctionCall.php'],
             [
-                ['Passing null as argument #0 to function userDefinedGreet() is prohibited. Model absence explicitly (Null Object, Optional).', 16],
+                ['Passing null as argument #1 to function userDefinedGreet() is prohibited. Model absence explicitly (Null Object, Optional).', 16],
             ],
             'Passing null to a user-defined function must be reported',
         );
@@ -38,9 +38,9 @@ final class NoNullArgumentRuleTest extends RuleTestCase
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/NoNullArgumentRule/ClassWithNullArgumentInMethodCall.php'],
             [
-                ['Passing null as argument #0 to method accept() is prohibited. Model absence explicitly (Null Object, Optional).', 11],
+                ['Passing null as argument #1 to method Haspadar\PHPStanRules\Tests\Fixtures\Rules\NoNullArgumentRule\MethodCallTarget::accept() is prohibited. Model absence explicitly (Null Object, Optional).', 11],
             ],
-            'Passing null to an instance method must be reported',
+            'Passing null to an instance method must be reported with the fully qualified class name',
         );
     }
 
@@ -50,7 +50,7 @@ final class NoNullArgumentRuleTest extends RuleTestCase
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/NoNullArgumentRule/ClassWithNullArgumentInNullsafeMethodCall.php'],
             [
-                ['Passing null as argument #0 to method accept() is prohibited. Model absence explicitly (Null Object, Optional).', 11],
+                ['Passing null as argument #1 to method Haspadar\PHPStanRules\Tests\Fixtures\Rules\NoNullArgumentRule\NullsafeMethodCallTarget::accept() is prohibited. Model absence explicitly (Null Object, Optional).', 11],
             ],
             'Passing null to a nullsafe method call must be reported',
         );
@@ -62,7 +62,7 @@ final class NoNullArgumentRuleTest extends RuleTestCase
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/NoNullArgumentRule/ClassWithNullsafeInCompoundExpression.php'],
             [
-                ['Passing null as argument #0 to method accept() is prohibited. Model absence explicitly (Null Object, Optional).', 11],
+                ['Passing null as argument #1 to method Haspadar\PHPStanRules\Tests\Fixtures\Rules\NoNullArgumentRule\NullsafeMethodCallTarget::accept() is prohibited. Model absence explicitly (Null Object, Optional).', 11],
             ],
             'A nullsafe method call embedded in a larger expression must still produce the error exactly once',
         );
@@ -74,7 +74,7 @@ final class NoNullArgumentRuleTest extends RuleTestCase
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/NoNullArgumentRule/ClassWithNullArgumentInStaticCall.php'],
             [
-                ['Passing null as argument #0 to method Haspadar\PHPStanRules\Tests\Fixtures\Rules\NoNullArgumentRule\StaticCallTarget::accept() is prohibited. Model absence explicitly (Null Object, Optional).', 11],
+                ['Passing null as argument #1 to method Haspadar\PHPStanRules\Tests\Fixtures\Rules\NoNullArgumentRule\StaticCallTarget::accept() is prohibited. Model absence explicitly (Null Object, Optional).', 11],
             ],
             'Passing null to a static method call must be reported',
         );
@@ -86,7 +86,7 @@ final class NoNullArgumentRuleTest extends RuleTestCase
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/NoNullArgumentRule/ClassWithNullArgumentInConstructor.php'],
             [
-                ['Passing null as argument #0 to constructor Haspadar\PHPStanRules\Tests\Fixtures\Rules\NoNullArgumentRule\ConstructorTarget is prohibited. Model absence explicitly (Null Object, Optional).', 11],
+                ['Passing null as argument #1 to constructor Haspadar\PHPStanRules\Tests\Fixtures\Rules\NoNullArgumentRule\ConstructorTarget is prohibited. Model absence explicitly (Null Object, Optional).', 11],
             ],
             'Passing null to a user-defined constructor must be reported',
         );
@@ -110,9 +110,9 @@ final class NoNullArgumentRuleTest extends RuleTestCase
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/NoNullArgumentRule/ClassWithMultipleNullArguments.php'],
             [
-                ['Passing null as argument #0 to function multiArgumentTarget() is prohibited. Model absence explicitly (Null Object, Optional).', 16],
                 ['Passing null as argument #1 to function multiArgumentTarget() is prohibited. Model absence explicitly (Null Object, Optional).', 16],
                 ['Passing null as argument #2 to function multiArgumentTarget() is prohibited. Model absence explicitly (Null Object, Optional).', 16],
+                ['Passing null as argument #3 to function multiArgumentTarget() is prohibited. Model absence explicitly (Null Object, Optional).', 16],
             ],
             'Every null argument in the same call must produce a separate error',
         );

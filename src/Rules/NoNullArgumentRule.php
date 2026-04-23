@@ -103,7 +103,7 @@ final readonly class NoNullArgumentRule implements Rule
     }
 
     /**
-     * Produces a quoted name for a named argument or a `#<index>` token for a positional one.
+     * Produces a quoted name for a named argument or a 1-based `#<position>` token for a positional one.
      */
     private function argumentLabel(Arg $arg, int $index): string
     {
@@ -111,7 +111,7 @@ final readonly class NoNullArgumentRule implements Rule
             return sprintf('"%s"', $arg->name->toString());
         }
 
-        return sprintf('#%d', $index);
+        return sprintf('#%d', $index + 1);
     }
 
     /**
@@ -134,7 +134,7 @@ final readonly class NoNullArgumentRule implements Rule
         }
 
         if (($node instanceof MethodCall || $node instanceof NullsafeMethodCall) && $node->name instanceof Identifier) {
-            return sprintf('method %s()', $node->name->toString());
+            return $this->methodCallLabel($node, $scope);
         }
 
         if ($node instanceof StaticCall && $node->class instanceof Name && $node->name instanceof Identifier) {
@@ -146,5 +146,22 @@ final readonly class NoNullArgumentRule implements Rule
         }
 
         return 'call';
+    }
+
+    /**
+     * Resolves the receiver type of an instance or nullsafe method call and builds a FQN-qualified label.
+     */
+    private function methodCallLabel(MethodCall|NullsafeMethodCall $node, Scope $scope): string
+    {
+        assert($node->name instanceof Identifier);
+
+        $methodName = $node->name->toString();
+        $classNames = $scope->getType($node->var)->getObjectClassNames();
+
+        if ($classNames === []) {
+            return sprintf('method %s()', $methodName);
+        }
+
+        return sprintf('method %s::%s()', $classNames[0], $methodName);
     }
 }
