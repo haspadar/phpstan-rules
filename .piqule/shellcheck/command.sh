@@ -25,6 +25,7 @@ done < <(
     ! -path "./vendor/*" \
     ! -path "./tests/*" \
     ! -path "./.git/*" \
+    ! -path "./.claude/*" \
     -print0
 )
 
