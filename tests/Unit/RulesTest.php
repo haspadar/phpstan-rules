@@ -61,6 +61,7 @@ use Haspadar\PHPStanRules\Rules\WeightedMethodsPerClassRule;
 use Haspadar\PHPStanRules\Rules\AfferentCouplingRule;
 use Haspadar\PHPStanRules\Rules\InheritanceDepthRule;
 use Haspadar\PHPStanRules\Rules\InstabilityRule;
+use Haspadar\PHPStanRules\Rules\PhpDocParamOrderRule;
 use Haspadar\PHPStanRules\Rules\LackOfCohesionRule;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -104,6 +105,7 @@ final class RulesTest extends TestCase
                 PhpDocMissingPropertyRule::class,
                 PhpDocMissingParamRule::class,
                 PhpDocParamDescriptionRule::class,
+                PhpDocParamOrderRule::class,
                 ReturnDescriptionCapitalRule::class,
                 ParamDescriptionCapitalRule::class,
                 NoPhpDocForOverriddenRule::class,
