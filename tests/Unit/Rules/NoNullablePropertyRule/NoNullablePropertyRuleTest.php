@@ -93,6 +93,28 @@ final class NoNullablePropertyRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function reportsNullableWhenNullAppearsInMiddleOfUnion(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NoNullablePropertyRule/ClassWithThreePartUnionContainingNull.php'],
+            [
+                ['Property $value in class Haspadar\PHPStanRules\Tests\Fixtures\Rules\NoNullablePropertyRule\ClassWithThreePartUnionContainingNull must not be nullable.', 9],
+            ],
+            'A null at any position in a multi-part union must trigger the rule',
+        );
+    }
+
+    #[Test]
+    public function passesWhenPropertyHasIntersectionType(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NoNullablePropertyRule/ClassWithIntersectionTypeProperty.php'],
+            [],
+            'An intersection type A&B never contains null and must not be reported',
+        );
+    }
+
+    #[Test]
     public function reportsEveryNullablePropertyInTheSameClass(): void
     {
         $this->analyse(
