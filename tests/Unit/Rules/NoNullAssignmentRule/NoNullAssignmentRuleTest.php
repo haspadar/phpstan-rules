@@ -44,6 +44,18 @@ final class NoNullAssignmentRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function reportsNullAssignmentToStaticProperty(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NoNullAssignmentRule/ClassWithNullAssignmentToStaticProperty.php'],
+            [
+                ['Assignment of null to self::$cache is prohibited. Model absence explicitly (Null Object, Optional).', 13],
+            ],
+            'A null literal assigned to a static property must be reported as Class::$name',
+        );
+    }
+
+    #[Test]
     public function reportsNullAssignmentToArrayElement(): void
     {
         $this->analyse(
