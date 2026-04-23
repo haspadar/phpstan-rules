@@ -85,7 +85,13 @@ final readonly class NoNullAssignmentRule implements Rule
         }
 
         if ($target instanceof PropertyFetch && $target->name instanceof Identifier) {
-            return sprintf('$this->%s', $target->name->toString());
+            $property = $target->name->toString();
+
+            if ($target->var instanceof Variable && is_string($target->var->name)) {
+                return sprintf('$%s->%s', $target->var->name, $property);
+            }
+
+            return sprintf('property $%s', $property);
         }
 
         if ($target instanceof StaticPropertyFetch
