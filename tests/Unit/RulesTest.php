@@ -57,6 +57,7 @@ use Haspadar\PHPStanRules\Rules\KeepInterfacesShortRule;
 use Haspadar\PHPStanRules\Rules\NeverAcceptNullArgumentsRule;
 use Haspadar\PHPStanRules\Rules\NeverReturnNullRule;
 use Haspadar\PHPStanRules\Rules\NeverUsePublicConstantsRule;
+use Haspadar\PHPStanRules\Rules\NoNullAssignmentRule;
 use Haspadar\PHPStanRules\Rules\WeightedMethodsPerClassRule;
 use Haspadar\PHPStanRules\Rules\AfferentCouplingRule;
 use Haspadar\PHPStanRules\Rules\InheritanceDepthRule;
@@ -125,6 +126,7 @@ final class RulesTest extends TestCase
                 KeepInterfacesShortRule::class,
                 NeverAcceptNullArgumentsRule::class,
                 NeverReturnNullRule::class,
+                NoNullAssignmentRule::class,
                 NeverUsePublicConstantsRule::class,
                 WeightedMethodsPerClassRule::class,
                 AfferentCouplingRule::class,
