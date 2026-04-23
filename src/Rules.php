@@ -62,6 +62,7 @@ final class Rules
         Rules\KeepInterfacesShortRule::class,
         Rules\NeverAcceptNullArgumentsRule::class,
         Rules\NeverReturnNullRule::class,
+        Rules\NoNullAssignmentRule::class,
         Rules\NeverUsePublicConstantsRule::class,
         Rules\WeightedMethodsPerClassRule::class,
         Rules\AfferentCouplingRule::class,
