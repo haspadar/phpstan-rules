@@ -45,6 +45,7 @@
 | `NeverReturnNullRule`            | Method and standalone function return types must not be nullable, `return null` is forbidden |
 | `NoNullAssignmentRule`           | Plain assignments of the `null` literal (variable, property, array element) are forbidden |
 | `NoNullablePropertyRule`         | Class property types must not be nullable (`?Type`, `Type\|null`, `null\|Type`, `null`) |
+| `NoNullArgumentRule`             | Passing the `null` literal to user-defined functions, methods, or constructors is forbidden |
 | `NeverUsePublicConstantsRule`    | Class constants must not be public (explicitly or implicitly)                      |
 
 ### Error-prone patterns
