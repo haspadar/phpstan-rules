@@ -576,6 +576,10 @@ services:
         tags:
             - phpstan.rules.rule
     -
+        class: Haspadar\PHPStanRules\Rules\NoNullAssignmentRule
+        tags:
+            - phpstan.rules.rule
+    -
         class: Haspadar\PHPStanRules\Rules\NeverUsePublicConstantsRule
         tags:
             - phpstan.rules.rule
