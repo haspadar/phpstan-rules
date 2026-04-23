@@ -24,8 +24,9 @@ use PHPStan\ShouldNotHappenException;
 /**
  * Detects assignments used as subexpressions rather than standalone statements.
  * Reports any Assign, AssignOp, or AssignRef node that is not a direct child of
- * an Expression statement. Loop idioms in while/do-while/for conditions are
- * excluded because the pattern is conventional and unambiguous.
+ * an Expression statement. Loop idioms in while/do-while conditions and in all
+ * three `for` header expressions (init, cond, loop) are excluded because the
+ * pattern is conventional and unambiguous.
  *
  * @implements Rule<ClassMethod>
  */
@@ -99,8 +100,9 @@ final readonly class InnerAssignmentRule implements Rule
     }
 
     /**
-     * Collects all assignment nodes that appear in loop conditions (while, do-while, for).
-     * These are conventional idioms and are excluded from the rule.
+     * Collects all assignment nodes that appear in loop headers (while, do-while, for).
+     * For `for` loops this includes init, cond, and loop expressions — all three parts
+     * are conventional idioms and are excluded from the rule.
      *
      * @return list<Assign|AssignOp|AssignRef>
      */
@@ -120,7 +122,7 @@ final readonly class InnerAssignmentRule implements Rule
             $condNodes = match (true) {
                 $loop instanceof While_ => [$loop->cond],
                 $loop instanceof Do_ => [$loop->cond],
-                $loop instanceof For_ => $loop->cond,
+                $loop instanceof For_ => array_merge($loop->init, $loop->cond, $loop->loop),
             };
 
             foreach ($condNodes as $cond) {
