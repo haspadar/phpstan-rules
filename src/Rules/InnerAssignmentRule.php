@@ -48,7 +48,7 @@ final readonly class InnerAssignmentRule implements Rule
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
-        $loopCondAssigns = $this->collectLoopConditionAssigns($node);
+        $loopHeaderAssigns = $this->collectLoopHeaderAssigns($node);
 
         $errors = [];
 
@@ -65,7 +65,7 @@ final readonly class InnerAssignmentRule implements Rule
                 continue;
             }
 
-            if (in_array($assign, $loopCondAssigns, true)) {
+            if (in_array($assign, $loopHeaderAssigns, true)) {
                 continue;
             }
 
@@ -106,7 +106,7 @@ final readonly class InnerAssignmentRule implements Rule
      *
      * @return list<Assign|AssignOp|AssignRef>
      */
-    private function collectLoopConditionAssigns(ClassMethod $method): array
+    private function collectLoopHeaderAssigns(ClassMethod $method): array
     {
         $result = [];
 
