@@ -71,6 +71,17 @@ final class InnerAssignmentRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function reportsErrorWhenAssignInForBody(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/InnerAssignmentRule/ClassWithAssignInForBody.php'],
+            [
+                ['Inner assignment found. Assignments must not be used as subexpressions.', 15],
+            ],
+        );
+    }
+
+    #[Test]
     public function suppressesErrorWhenPhpstanIgnorePresent(): void
     {
         $this->analyse(
