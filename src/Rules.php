@@ -63,6 +63,7 @@ final class Rules
         Rules\NeverAcceptNullArgumentsRule::class,
         Rules\NeverReturnNullRule::class,
         Rules\NoNullAssignmentRule::class,
+        Rules\NoNullablePropertyRule::class,
         Rules\NeverUsePublicConstantsRule::class,
         Rules\WeightedMethodsPerClassRule::class,
         Rules\AfferentCouplingRule::class,
