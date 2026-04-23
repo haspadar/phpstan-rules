@@ -112,6 +112,28 @@ final class NoNullAssignmentRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function reportsNullAssignmentToForeignProperty(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NoNullAssignmentRule/ClassWithNullAssignmentToForeignProperty.php'],
+            [
+                ['Assignment of null to $service->cache is prohibited. Model absence explicitly (Null Object, Optional).', 16],
+            ],
+            'The error message must include the actual object variable, not a hard-coded $this',
+        );
+    }
+
+    #[Test]
+    public function passesWhenNullAppearsOnlyInNullablePropertyDefault(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NoNullAssignmentRule/ClassWithNullablePropertyDefault.php'],
+            [],
+            'Nullable property defaults are declarations, not runtime assignments, and must not be flagged',
+        );
+    }
+
+    #[Test]
     public function passesWhenErrorIsSuppressed(): void
     {
         $this->analyse(

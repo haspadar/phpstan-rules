@@ -7,11 +7,11 @@ namespace Haspadar\PHPStanRules\Tests\Fixtures\Rules\NoNullAssignmentRule;
 final class ClassWithCoalesceAssignment
 {
     /**
-     * @param array<string, int> $input
+     * @param array<string, int|null> $input
      */
-    public function pickFirst(array $input): int
+    public function normalise(array $input): int
     {
-        $result = $input['first'] ?? 0;
-        return $result;
+        $input['first'] ??= null;
+        return $input['first'] ?? 0;
     }
 }
