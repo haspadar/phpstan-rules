@@ -63,6 +63,7 @@
 | `TodoCommentRule`             | TODO, FIXME, and XXX comments are forbidden in method bodies                  |
 | `MissingThrowsRule`           | Methods must declare `@throws` for every checked exception they throw (overridden methods inherit by default) |
 | `HiddenFieldRule`             | Method parameter or local variable must not shadow a class property (promoted constructors excluded, parameter takes precedence over local of the same name) |
+| `RequireIgnoreReasonRule`     | Every `@phpstan-ignore` and `@psalm-suppress` must carry a justification (default: 5 chars, parens for PHPStan, `--` for Psalm) |
 
 ### Naming
 
@@ -264,6 +265,9 @@ parameters:
             ignoreAbstractMethods: false
             ignoreSetter: false
             ignoreNames: []
+        requireIgnoreReason:
+            minReasonLength: 5
+            allowedBareIdentifiers: []
         afferentCoupling:
             maxAfferent: 10
             ignoreInterfaces: true
@@ -295,6 +299,17 @@ When the rule reports a class like `UserDispatcher`, pick one of three fixes:
 Rule of thumb: if the suffix describes *what the class is*, extend `allowedWords`. If it describes *what the class does*, rename.
 
 `allowedWords` is matched **case-sensitively** against the last PascalCase segment of the class name. PHP class names follow PascalCase convention, so entries must be capitalized (`User`, not `user`).
+
+### RequireIgnoreReasonRule — where to put the reason
+
+Two different delimiters, one per tool:
+
+```php
+/** @phpstan-ignore foo.bar (reason in parentheses — PHPStan 1.11+ native) */
+/** @psalm-suppress FooBar -- reason after double-dash (ESLint convention) */
+```
+
+`minReasonLength` counts **trimmed** characters, so padding does not help. `allowedBareIdentifiers` skips both the reason requirement and length check — use it for self-evident project-wide suppressions.
 
 ### MissingThrowsRule — @throws inheritance for overridden methods
 
