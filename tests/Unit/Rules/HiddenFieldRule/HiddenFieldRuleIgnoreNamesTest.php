@@ -32,4 +32,19 @@ final class HiddenFieldRuleIgnoreNamesTest extends RuleTestCase
             'Names listed in ignoreNames must be skipped even when shadowing a property',
         );
     }
+
+    #[Test]
+    public function reportsWhenNameIsNotInIgnoreList(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/HiddenFieldRule/ParameterShadowsProperty.php'],
+            [
+                [
+                    'Parameter $name in Haspadar\\PHPStanRules\\Tests\\Fixtures\\Rules\\HiddenFieldRule\\ParameterShadowsProperty::rename() shadows property of the same name. Rename to avoid the name collision.',
+                    11,
+                ],
+            ],
+            'ignoreNames limits to listed names only; other shadowing parameters still fail',
+        );
+    }
 }
