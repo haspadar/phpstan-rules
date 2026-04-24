@@ -166,6 +166,11 @@ parameters:
             excludedClasses: []
         missingThrows:
             skipOverridden: true
+        hiddenField:
+            ignoreConstructorParameter: true
+            ignoreAbstractMethods: false
+            ignoreSetter: false
+            ignoreNames: []
     exceptions:
         check:
             missingCheckedExceptionInThrows: false
@@ -310,6 +315,12 @@ parametersSchema:
         ]),
         missingThrows: structure([
             skipOverridden: bool(),
+        ]),
+        hiddenField: structure([
+            ignoreConstructorParameter: bool(),
+            ignoreAbstractMethods: bool(),
+            ignoreSetter: bool(),
+            ignoreNames: listOf(string()),
         ]),
     ])
 
@@ -695,5 +706,19 @@ services:
         arguments:
             options:
                 skipOverridden: %haspadar.missingThrows.skipOverridden%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\HiddenFieldRule\LocalAssignmentCollector
+    -
+        class: Haspadar\PHPStanRules\Rules\HiddenFieldRule\ParamShadowDetector
+    -
+        class: Haspadar\PHPStanRules\Rules\HiddenFieldRule
+        arguments:
+            options:
+                ignoreConstructorParameter: %haspadar.hiddenField.ignoreConstructorParameter%
+                ignoreAbstractMethods: %haspadar.hiddenField.ignoreAbstractMethods%
+                ignoreSetter: %haspadar.hiddenField.ignoreSetter%
+                ignoreNames: %haspadar.hiddenField.ignoreNames%
         tags:
             - phpstan.rules.rule

@@ -20,6 +20,7 @@ parameters:
             identifier: haspadar.lackOfCohesion
             paths:
                 - src/Rules/CouplingBetweenObjectsRule.php
+                - src/Rules/HiddenFieldRule.php
                 - src/Rules/MethodLengthRule.php
         -
             identifier: haspadar.noActorSuffix
@@ -29,6 +30,8 @@ parameters:
                 - src/Rules/ConstantUsage/ExemptScalarCollector.php
                 - src/Rules/CouplingBetweenObjectsRule/MethodBodyTypeCollector.php
                 - src/Rules/CouplingBetweenObjectsRule/TypeNameExtractor.php
+                - src/Rules/HiddenFieldRule/LocalAssignmentCollector.php
+                - src/Rules/HiddenFieldRule/ParamShadowDetector.php
                 - src/Rules/Internal/BuiltinCallDetector.php
                 - src/Rules/LackOfCohesionRule/AdjacencyBuilder.php
                 - src/Rules/PhpDocDescriptionChecker.php
