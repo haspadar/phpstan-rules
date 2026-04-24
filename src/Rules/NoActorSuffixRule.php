@@ -119,7 +119,7 @@ final readonly class NoActorSuffixRule implements Rule
      */
     private function endsWithActorSuffix(string $className): bool
     {
-        return preg_match('/(er|or)$/', $className) === 1;
+        return preg_match('/(?:er|or)$/', $className) === 1;
     }
 
     /**
