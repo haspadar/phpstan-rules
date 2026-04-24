@@ -87,21 +87,18 @@ final readonly class BuiltinCallDetector
         }
 
         $methodName = $node->name->toString();
-        $foundAny = false;
 
         foreach ($scope->getType($node->var)->getObjectClassReflections() as $classReflection) {
             if (!$classReflection->hasMethod($methodName)) {
                 continue;
             }
 
-            $foundAny = true;
-
             if (!$classReflection->getMethod($methodName, $scope)->getDeclaringClass()->isBuiltin()) {
                 return false;
             }
         }
 
-        return !$foundAny;
+        return true;
     }
 
     /**
