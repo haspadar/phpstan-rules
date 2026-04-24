@@ -73,6 +73,7 @@ final class Rules
         Rules\InstabilityRule::class,
         Rules\NoActorSuffixRule::class,
         Rules\MissingThrowsRule::class,
+        Rules\HiddenFieldRule::class,
     ];
 
     /**
