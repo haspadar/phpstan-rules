@@ -36,16 +36,14 @@ final readonly class LocalAssignmentCollector
         }
 
         $finder = new NodeFinder();
+
+        /** @var list<Assign> $assignments */
         $assignments = $finder->find($node->stmts, static fn(Node $inner): bool => $inner instanceof Assign);
 
         $seen = [];
         $result = [];
 
         foreach ($assignments as $assign) {
-            if (!$assign instanceof Assign) {
-                continue;
-            }
-
             if (!$assign->var instanceof Variable || !is_string($assign->var->name)) {
                 continue;
             }
