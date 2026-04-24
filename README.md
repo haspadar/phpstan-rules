@@ -61,6 +61,7 @@
 | `ConstantUsageRule`           | Magic numbers and strings must be defined as named constants                  |
 | `StringLiteralsConcatenationRule` | String literal concatenation via `.` or `.=` is forbidden                |
 | `TodoCommentRule`             | TODO, FIXME, and XXX comments are forbidden in method bodies                  |
+| `MissingThrowsRule`           | Methods must declare `@throws` for every checked exception they throw (overridden methods inherit by default) |
 
 ### Naming
 
@@ -255,6 +256,8 @@ parameters:
                 - 'Laravel\'
             excludedClasses:
                 - App\Legacy\UserManager
+        missingThrows:
+            skipOverridden: true
         afferentCoupling:
             maxAfferent: 10
             ignoreInterfaces: true
@@ -286,6 +289,15 @@ When the rule reports a class like `UserDispatcher`, pick one of three fixes:
 Rule of thumb: if the suffix describes *what the class is*, extend `allowedWords`. If it describes *what the class does*, rename.
 
 `allowedWords` is matched **case-sensitively** against the last PascalCase segment of the class name. PHP class names follow PascalCase convention, so entries must be capitalized (`User`, not `user`).
+
+### MissingThrowsRule — @throws inheritance for overridden methods
+
+This rule replaces PHPStan's built-in `exceptions.check.missingCheckedExceptionInThrows` so that methods overriding a parent class or implementing an interface do not have to repeat `@throws` from the parent contract.
+
+Including `rules.neon` from this package automatically sets `exceptions.check.missingCheckedExceptionInThrows: false` — the built-in check is replaced by `haspadar.missingThrows`. Override this explicitly in your `phpstan.neon` if you need both.
+
+- `skipOverridden: true` (default) — overridden/interface-implementing methods inherit `@throws` from the parent and are not required to declare it themselves.
+- `skipOverridden: false` — every method must declare `@throws` for every checked exception it throws, including overrides.
 
 ---
 
