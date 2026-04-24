@@ -285,6 +285,8 @@ When the rule reports a class like `UserDispatcher`, pick one of three fixes:
 
 Rule of thumb: if the suffix describes *what the class is*, extend `allowedWords`. If it describes *what the class does*, rename.
 
+`allowedWords` is matched **case-sensitively** against the last PascalCase segment of the class name. PHP class names follow PascalCase convention, so entries must be capitalized (`User`, not `user`).
+
 ---
 
 ## Experimental rules
