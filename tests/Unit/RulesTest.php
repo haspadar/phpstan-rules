@@ -66,6 +66,7 @@ use Haspadar\PHPStanRules\Rules\InheritanceDepthRule;
 use Haspadar\PHPStanRules\Rules\InstabilityRule;
 use Haspadar\PHPStanRules\Rules\PhpDocParamOrderRule;
 use Haspadar\PHPStanRules\Rules\LackOfCohesionRule;
+use Haspadar\PHPStanRules\Rules\NoActorSuffixRule;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -137,6 +138,7 @@ final class RulesTest extends TestCase
                 InheritanceDepthRule::class,
                 LackOfCohesionRule::class,
                 InstabilityRule::class,
+                NoActorSuffixRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',
