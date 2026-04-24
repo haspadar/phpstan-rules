@@ -47,7 +47,8 @@ final readonly class NoActorSuffixRule implements Rule
      *     allowedWords?: list<string>,
      *     excludedParentNamespaces?: list<string>,
      *     excludedClasses?: list<string>
-     * } $options Whitelist of real noun-entities ending in -er/-or, framework namespace prefixes, and FQCN exclusions
+     * } $options Whitelist of real noun-entities ending in -er/-or (matched case-sensitively against the
+     *     last PascalCase segment), framework namespace prefixes, and FQCN exclusions
      */
     public function __construct(private ReflectionProvider $reflectionProvider, array $options = [])
     {
@@ -119,7 +120,7 @@ final readonly class NoActorSuffixRule implements Rule
      */
     private function endsWithActorSuffix(string $className): bool
     {
-        return preg_match('/(?:er|or)$/', $className) === 1;
+        return str_ends_with($className, 'er') || str_ends_with($className, 'or');
     }
 
     /**
