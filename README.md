@@ -62,7 +62,7 @@
 | `StringLiteralsConcatenationRule` | String literal concatenation via `.` or `.=` is forbidden                |
 | `TodoCommentRule`             | TODO, FIXME, and XXX comments are forbidden in method bodies                  |
 | `MissingThrowsRule`           | Methods must declare `@throws` for every checked exception they throw (overridden methods inherit by default) |
-| `HiddenFieldRule`             | Method parameter or local variable must not shadow a class property (promoted constructors excluded) |
+| `HiddenFieldRule`             | Method parameter or local variable must not shadow a class property (promoted constructors excluded, parameter takes precedence over local of the same name) |
 
 ### Naming
 
