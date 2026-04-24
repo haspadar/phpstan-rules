@@ -134,9 +134,12 @@ final class NoNullArgumentRuleTest extends RuleTestCase
     public function passesWhenCallIsInternal(): void
     {
         $this->analyse(
-            [__DIR__ . '/../../../Fixtures/Rules/NoNullArgumentRule/ClassWithNullArgumentInInternalCall.php'],
+            [
+                __DIR__ . '/../../../Fixtures/Rules/NoNullArgumentRule/ClassWithNullArgumentInInternalCall.php',
+                __DIR__ . '/../../../Fixtures/Rules/NoNullArgumentRule/ClassWithNullArgumentInInternalMethodCall.php',
+            ],
             [],
-            'Calls to PHP built-in functions must not be flagged',
+            'Calls to PHP built-in functions and methods must not be flagged',
         );
     }
 
