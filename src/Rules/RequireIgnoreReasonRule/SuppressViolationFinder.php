@@ -39,7 +39,7 @@ final readonly class SuppressViolationFinder
      * build the correct error message for the relevant tool.
      *
      * @param string $text Raw comment text to scan for suppress annotations
-     * @return list<array{identifier: string, offsetLine: int, kind: string}>
+     * @return list<array{identifier: string, offsetLine: int, kind: 'phpstan'|'psalm'}>
      */
     public function find(string $text): array
     {

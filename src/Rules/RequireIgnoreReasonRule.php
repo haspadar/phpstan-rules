@@ -109,23 +109,24 @@ final readonly class RequireIgnoreReasonRule implements Rule
     /**
      * Builds a PHPStan error message for a violation.
      *
-     * @param array{identifier: string, offsetLine: int, kind: string} $violation
+     * @param array{identifier: string, offsetLine: int, kind: 'phpstan'|'psalm'} $violation
      * @throws ShouldNotHappenException
      */
     private function buildError(array $violation, int $baseLine): IdentifierRuleError
     {
         $identifier = $violation['identifier'];
-        $message = $violation['kind'] === 'phpstan'
-            ? sprintf(
+        $message = match ($violation['kind']) {
+            'phpstan' => sprintf(
                 'Suppress "%s" must include a reason in parentheses: @phpstan-ignore %s (reason).',
                 $identifier,
                 $identifier,
-            )
-            : sprintf(
+            ),
+            'psalm' => sprintf(
                 'Suppress "%s" must include a reason after "--": @psalm-suppress %s -- reason.',
                 $identifier,
                 $identifier,
-            );
+            ),
+        };
 
         return RuleErrorBuilder::message($message)
             ->identifier('haspadar.requireIgnoreReason')

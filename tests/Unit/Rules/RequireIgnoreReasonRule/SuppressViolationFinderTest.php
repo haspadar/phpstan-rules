@@ -169,4 +169,17 @@ final class SuppressViolationFinderTest extends TestCase
             'The directive only counts when anchored at start-of-line or after whitespace not inside prose',
         );
     }
+
+    #[Test]
+    public function ignoresPhpstanIgnoreMentionedMidSentenceAfterLeader(): void
+    {
+        $finder = new SuppressViolationFinder(5, []);
+        $text = "/**\n * The word @phpstan-ignore can appear here.\n */";
+
+        self::assertSame(
+            [],
+            $finder->find($text),
+            'A directive inside prose on a leading "*" line must not be matched',
+        );
+    }
 }
