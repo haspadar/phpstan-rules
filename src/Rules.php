@@ -71,6 +71,7 @@ final class Rules
         Rules\InheritanceDepthRule::class,
         Rules\LackOfCohesionRule::class,
         Rules\InstabilityRule::class,
+        Rules\NoActorSuffixRule::class,
     ];
 
     /**

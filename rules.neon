@@ -127,6 +127,43 @@ parameters:
             minMethods: 7
             minProperties: 3
             excludedClasses: []
+        noActorSuffix:
+            allowedWords:
+                - User
+                - Order
+                - Number
+                - Member
+                - Owner
+                - Customer
+                - Folder
+                - Header
+                - Footer
+                - Buffer
+                - Layer
+                - Marker
+                - Parameter
+                - Character
+                - Identifier
+                - Integer
+                - Author
+                - Visitor
+                - Error
+                - Color
+                - Vendor
+                - Vector
+                - Factor
+                - Actor
+                - Director
+                - Ancestor
+                - Descriptor
+            excludedParentNamespaces:
+                - 'Symfony\'
+                - 'Illuminate\'
+                - 'Doctrine\'
+                - 'Laminas\'
+                - 'Yii\'
+                - 'Laravel\'
+            excludedClasses: []
 
 parametersSchema:
     haspadar: structure([
@@ -259,6 +296,11 @@ parametersSchema:
             maxLcom: int(),
             minMethods: int(),
             minProperties: int(),
+            excludedClasses: listOf(string()),
+        ]),
+        noActorSuffix: structure([
+            allowedWords: listOf(string()),
+            excludedParentNamespaces: listOf(string()),
             excludedClasses: listOf(string()),
         ]),
     ])
@@ -629,5 +671,14 @@ services:
                 minMethods: %haspadar.lackOfCohesion.minMethods%
                 minProperties: %haspadar.lackOfCohesion.minProperties%
                 excludedClasses: %haspadar.lackOfCohesion.excludedClasses%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\NoActorSuffixRule
+        arguments:
+            options:
+                allowedWords: %haspadar.noActorSuffix.allowedWords%
+                excludedParentNamespaces: %haspadar.noActorSuffix.excludedParentNamespaces%
+                excludedClasses: %haspadar.noActorSuffix.excludedClasses%
         tags:
             - phpstan.rules.rule

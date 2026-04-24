@@ -11,7 +11,10 @@
     "autoload-dev": {
         "psr-4": {
             "Haspadar\\PHPStanRules\\Tests\\": "tests/"
-        }
+        },
+        "classmap": [
+            "tests/Fixtures/Rules/NoActorSuffixRule/VendorStubs/"
+        ]
     },
     "authors": [
         {
