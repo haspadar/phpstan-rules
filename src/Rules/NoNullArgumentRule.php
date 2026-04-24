@@ -67,12 +67,9 @@ final readonly class NoNullArgumentRule implements Rule
 
         $label = $this->callLabel($node, $scope);
         $errors = [];
-        $index = 0;
 
-        foreach ($node->getArgs() as $arg) {
+        foreach (array_values($node->getArgs()) as $index => $arg) {
             if (!$this->isNullLiteral($arg)) {
-                $index++;
-
                 continue;
             }
 
@@ -86,8 +83,6 @@ final readonly class NoNullArgumentRule implements Rule
                 ->identifier('haspadar.noNullArgument')
                 ->line($arg->getStartLine())
                 ->build();
-
-            $index++;
         }
 
         return $errors;
