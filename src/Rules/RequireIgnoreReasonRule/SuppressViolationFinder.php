@@ -67,21 +67,36 @@ final readonly class SuppressViolationFinder
     /**
      * Matches PHPStan-ignore annotations with an optional parenthesised reason.
      *
+     * The directive must sit at the start of a docblock line (optional slash-star
+     * or star line leader), which prevents false positives when the string appears
+     * inside free-form prose. Identifiers follow the dotted camelCase convention
+     * from the PHPStan error catalogue; reasons are captured without nested parentheses.
+     *
      * @return list<array{0: string, 1: string, 2: int}>
      */
     private function matchPhpstanIgnore(string $text): array
     {
-        return $this->matchAll('/@phpstan-ignore(?:-next-line|-line)?\s+([\w.]+)(?:\s*\(([^)]*)\))?/', $text);
+        return $this->matchAll(
+            '~(?:^|\n)(?:[ \t/*]*)\K@phpstan-ignore(?:-next-line|-line)?[ \t]+([\w.]+)(?:[ \t]*\(([^)]*)\))?~',
+            $text,
+        );
     }
 
     /**
      * Matches Psalm-suppress annotations with an optional "-- reason" tail.
      *
+     * The directive must sit at the start of a docblock line (optional `//`, `/**`,
+     * or `*` line leader). Psalm identifiers are single-word camelCase so `\w+`
+     * is sufficient.
+     *
      * @return list<array{0: string, 1: string, 2: int}>
      */
     private function matchPsalmSuppress(string $text): array
     {
-        return $this->matchAll('/@psalm-suppress\s+(\w+)(?:\s*--\s*(.+?))?(?:\s*\*\/|\s*$)/m', $text);
+        return $this->matchAll(
+            '~(?:^|\n)(?:[ \t/*]*)\K@psalm-suppress[ \t]+(\w+)(?:[ \t]*--[ \t]*(.+?))?(?:[ \t]*\*/|\s*$)~m',
+            $text,
+        );
     }
 
     /**
