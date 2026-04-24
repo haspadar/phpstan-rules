@@ -71,6 +71,7 @@
 | `ParameterNameRule`               | `^(id\|[a-z]{3,})$` | Method parameter name must match the configured pattern           |
 | `CatchParameterNameRule`          | `^(e\|ex\|[a-z]{3,12})$` | Catch parameter name must match the configured pattern       |
 | `ForbiddenClassSuffixRule`        | 12 suffixes | Class name must not end with a generic suffix (Manager, Helper, Util, ...) |
+| `NoActorSuffixRule`               | 23 words, 6 ns prefixes | Class ending with -er/-or must match the allowedWords whitelist, or extend a class from a framework namespace |
 
 ### PHPDoc style
 
@@ -216,6 +217,40 @@ parameters:
             allowedSuffixes:
                 - EventHandler
                 - CommandHandler
+        noActorSuffix:
+            allowedWords:
+                - User
+                - Order
+                - Number
+                - Member
+                - Owner
+                - Customer
+                - Folder
+                - Header
+                - Footer
+                - Buffer
+                - Layer
+                - Marker
+                - Parameter
+                - Character
+                - Identifier
+                - Integer
+                - Error
+                - Color
+                - Vendor
+                - Vector
+                - Factor
+                - Ancestor
+                - Descriptor
+            excludedParentNamespaces:
+                - 'Symfony\'
+                - 'Illuminate\'
+                - 'Doctrine\'
+                - 'Laminas\'
+                - 'Yii\'
+                - 'Laravel\'
+            excludedClasses:
+                - App\Legacy\UserManager
         afferentCoupling:
             maxAfferent: 10
             ignoreInterfaces: true
@@ -235,6 +270,16 @@ parameters:
 ```
 
 Default values match the defaults described in the rules table above. Omitting a parameter keeps the default. Diagnostic identifier for `AtclauseOrderRule`: `haspadar.atclauseOrder` (for targeted ignores, e.g. `@phpstan-ignore haspadar.atclauseOrder`).
+
+### NoActorSuffixRule — allowedWords vs renaming
+
+When the rule reports a class like `UserDispatcher`, pick one of three fixes:
+
+1. **Rename the class to a domain noun (preferred).** `UserDispatcher` becomes `User`, `UserEvent`, `UserNotification` — whatever the class actually *is*, not what it does.
+2. **Extend `allowedWords` if the suffix is a real English noun describing an entity**, not an action. Good candidates: `Container`, `Director`, `Editor`, `Descriptor`. Bad candidates (these are actors, not entities): `Manager`, `Controller`, `Handler`, `Dispatcher`, `Coordinator`, `Orchestrator`, `Processor`.
+3. **Add a framework namespace to `excludedParentNamespaces` if the class is framework-managed** (extends a controller base, implements an event-subscriber interface, etc.). Do not put `Controller` or `Handler` into `allowedWords` for this — it defeats the rule.
+
+Rule of thumb: if the suffix describes *what the class is*, extend `allowedWords`. If it describes *what the class does*, rename.
 
 ---
 
