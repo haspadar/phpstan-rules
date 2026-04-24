@@ -104,7 +104,7 @@ final readonly class NoActorSuffixRule implements Rule
         return [
             RuleErrorBuilder::message(
                 sprintf(
-                    'Class %s must not end with actor suffix "%s". Classes are nouns, not procedures. Rename to a domain noun, or see README for when to extend allowedWords / excludedParentNamespaces.',
+                    "Class %s must not end with actor suffix '%s'. Classes are nouns, not procedures. Rename to a domain noun, or see README for when to extend allowedWords / excludedParentNamespaces.",
                     $className,
                     $lastWord,
                 ),
@@ -115,11 +115,11 @@ final readonly class NoActorSuffixRule implements Rule
     }
 
     /**
-     * Checks whether the class name ends with -er or -or (case-insensitive).
+     * Checks whether the class name ends with lowercase -er or -or, as produced by PascalCase naming.
      */
     private function endsWithActorSuffix(string $className): bool
     {
-        return preg_match('/(er|or)$/i', $className) === 1;
+        return preg_match('/(er|or)$/', $className) === 1;
     }
 
     /**
