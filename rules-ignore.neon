@@ -21,3 +21,5 @@ parameters:
             paths:
                 - src/Rules/CouplingBetweenObjectsRule.php
                 - src/Rules/MethodLengthRule.php
+        -
+            identifier: haspadar.noActorSuffix
