@@ -9,6 +9,7 @@ use PhpParser\Node;
 use PHPStan\Analyser\Scope;
 use PHPStan\Node\MethodReturnStatementsNode;
 use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\MissingMethodFromReflectionException;
 use PHPStan\Rules\Exceptions\MissingCheckedExceptionInThrowsCheck;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
@@ -53,6 +54,7 @@ final readonly class MissingThrowsRule implements Rule
      * Analyses the node and returns a list of errors.
      *
      * @psalm-param MethodReturnStatementsNode $node
+     * @throws MissingMethodFromReflectionException
      * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
@@ -93,6 +95,12 @@ final readonly class MissingThrowsRule implements Rule
 
     /**
      * Returns true if the method exists on any parent class or implemented interface.
+     *
+     * Private parent methods do not count as inherited because PHP treats them
+     * as independent declarations. Only non-private ancestor methods establish
+     * an override relationship from which @throws can be inherited.
+     *
+     * @throws MissingMethodFromReflectionException
      */
     private function isOverridden(MethodReflection $method): bool
     {
@@ -100,7 +108,7 @@ final readonly class MissingThrowsRule implements Rule
         $name = $method->getName();
         $parent = $declaringClass->getParentClass();
 
-        if ($parent !== null && $parent->hasMethod($name)) {
+        if ($parent !== null && $parent->hasMethod($name) && !$parent->getNativeMethod($name)->isPrivate()) {
             return true;
         }
 
