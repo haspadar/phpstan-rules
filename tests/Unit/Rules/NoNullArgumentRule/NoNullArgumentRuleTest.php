@@ -93,6 +93,18 @@ final class NoNullArgumentRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function reportsNullArgumentInAnonymousClassConstructor(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NoNullArgumentRule/ClassWithNullArgumentInAnonymousClassConstructor.php'],
+            [
+                ['Passing null as argument #1 to anonymous class constructor is prohibited. Model absence explicitly (Null Object, Optional).', 11],
+            ],
+            'Passing null to an anonymous-class constructor must be reported',
+        );
+    }
+
+    #[Test]
     public function reportsNamedNullArgument(): void
     {
         $this->analyse(

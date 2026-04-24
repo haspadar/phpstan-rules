@@ -17,6 +17,7 @@ use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
@@ -136,7 +137,23 @@ final readonly class NoNullArgumentRule implements Rule
             return sprintf('method %s::%s()', $scope->resolveName($node->class), $node->name->toString());
         }
 
-        if ($node instanceof New_ && $node->class instanceof Name) {
+        if ($node instanceof New_) {
+            return $this->constructorCallLabel($node, $scope);
+        }
+
+        return 'call';
+    }
+
+    /**
+     * Builds a label for `new Class(...)` or `new class {}` expressions.
+     */
+    private function constructorCallLabel(New_ $node, Scope $scope): string
+    {
+        if ($node->class instanceof Class_) {
+            return 'anonymous class constructor';
+        }
+
+        if ($node->class instanceof Name) {
             return sprintf('constructor %s', $scope->resolveName($node->class));
         }
 

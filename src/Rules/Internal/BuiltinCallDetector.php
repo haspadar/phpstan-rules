@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 
@@ -74,7 +75,10 @@ final readonly class BuiltinCallDetector
     }
 
     /**
-     * Resolves an instance or nullsafe method call and checks whether it targets a PHP built-in.
+     * Resolves an instance or nullsafe method call and checks whether every declaring class is a PHP built-in.
+     *
+     * For a union receiver where several classes declare the same method, any user-defined declaring
+     * class makes the call user-defined so that the rule still inspects its arguments.
      */
     private function isBuiltinMethod(MethodCall|NullsafeMethodCall $node, Scope $scope): bool
     {
@@ -82,17 +86,22 @@ final readonly class BuiltinCallDetector
             return true;
         }
 
+        $methodName = $node->name->toString();
+        $foundAny = false;
+
         foreach ($scope->getType($node->var)->getObjectClassReflections() as $classReflection) {
-            if (!$classReflection->hasMethod($node->name->toString())) {
+            if (!$classReflection->hasMethod($methodName)) {
                 continue;
             }
 
-            return $classReflection->getMethod($node->name->toString(), $scope)
-                ->getDeclaringClass()
-                ->isBuiltin();
+            $foundAny = true;
+
+            if (!$classReflection->getMethod($methodName, $scope)->getDeclaringClass()->isBuiltin()) {
+                return false;
+            }
         }
 
-        return true;
+        return !$foundAny;
     }
 
     /**
@@ -123,9 +132,16 @@ final readonly class BuiltinCallDetector
 
     /**
      * Resolves a constructor call and checks whether the instantiated class is a PHP built-in.
+     *
+     * Anonymous classes are always user-defined, so `new class(null) {}` is inspected by the rule.
+     * Dynamic `new` where the class is an arbitrary expression cannot be resolved and is treated as built-in.
      */
     private function isBuiltinConstructor(New_ $node, Scope $scope): bool
     {
+        if ($node->class instanceof Class_) {
+            return false;
+        }
+
         if (!$node->class instanceof Name) {
             return true;
         }
