@@ -292,9 +292,11 @@ Rule of thumb: if the suffix describes *what the class is*, extend `allowedWords
 
 ### MissingThrowsRule — @throws inheritance for overridden methods
 
-This rule replaces PHPStan's built-in `exceptions.check.missingCheckedExceptionInThrows` so that methods overriding a parent class or implementing an interface do not have to repeat `@throws` from the parent contract.
+This rule replaces PHPStan's built-in `exceptions.check.missingCheckedExceptionInThrows` for class methods so that overrides and interface implementations do not have to repeat `@throws` from the parent contract.
 
-Including `rules.neon` from this package automatically sets `exceptions.check.missingCheckedExceptionInThrows: false` — the built-in check is replaced by `haspadar.missingThrows`. Override this explicitly in your `phpstan.neon` if you need both.
+Including `rules.neon` from this package automatically sets `exceptions.check.missingCheckedExceptionInThrows: false` — the built-in check is turned off and replaced by `haspadar.missingThrows`. Do **not** re-enable the built-in flag in your own `phpstan.neon`: both rules will then fire on the same code and you will receive duplicate errors.
+
+Current scope: only class methods are covered. Standalone functions and PHP 8.4 property hooks are not yet checked by `haspadar.missingThrows`; if your codebase needs `@throws` enforcement there, keep those analyses through separate means until the corresponding rules are shipped.
 
 - `skipOverridden: true` (default) — overridden/interface-implementing methods inherit `@throws` from the parent and are not required to declare it themselves.
 - `skipOverridden: false` — every method must declare `@throws` for every checked exception it throws, including overrides.
