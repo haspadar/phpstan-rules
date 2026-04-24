@@ -23,3 +23,13 @@ parameters:
                 - src/Rules/MethodLengthRule.php
         -
             identifier: haspadar.noActorSuffix
+            paths:
+                - src/Collectors/ClassDependencyCollector.php
+                - src/PhpDoc/SummaryExtractor.php
+                - src/Rules/ConstantUsage/ExemptScalarCollector.php
+                - src/Rules/CouplingBetweenObjectsRule/MethodBodyTypeCollector.php
+                - src/Rules/CouplingBetweenObjectsRule/TypeNameExtractor.php
+                - src/Rules/Internal/BuiltinCallDetector.php
+                - src/Rules/LackOfCohesionRule/AdjacencyBuilder.php
+                - src/Rules/PhpDocDescriptionChecker.php
+                - src/Rules/VariableCollector.php
