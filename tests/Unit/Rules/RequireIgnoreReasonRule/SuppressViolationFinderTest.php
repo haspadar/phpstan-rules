@@ -145,4 +145,28 @@ final class SuppressViolationFinderTest extends TestCase
             'Raising minReasonLength must reject previously-acceptable reasons that are shorter',
         );
     }
+
+    #[Test]
+    public function acceptsPhpstanIgnoreLineWithReason(): void
+    {
+        $finder = new SuppressViolationFinder(5, []);
+
+        self::assertSame(
+            [],
+            $finder->find('// @phpstan-ignore-line foo.bar (reason kept concise)'),
+            'The -line variant honours the same reason rule as the other two forms',
+        );
+    }
+
+    #[Test]
+    public function ignoresPhpstanIgnoreMentionedInsideProse(): void
+    {
+        $finder = new SuppressViolationFinder(5, []);
+
+        self::assertSame(
+            [],
+            $finder->find('/** See @phpstan-ignore directive in the PHPStan docs */'),
+            'The directive only counts when anchored at start-of-line or after whitespace not inside prose',
+        );
+    }
 }
