@@ -67,6 +67,7 @@ use Haspadar\PHPStanRules\Rules\InstabilityRule;
 use Haspadar\PHPStanRules\Rules\PhpDocParamOrderRule;
 use Haspadar\PHPStanRules\Rules\LackOfCohesionRule;
 use Haspadar\PHPStanRules\Rules\NoActorSuffixRule;
+use Haspadar\PHPStanRules\Rules\MissingThrowsRule;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -139,6 +140,7 @@ final class RulesTest extends TestCase
                 LackOfCohesionRule::class,
                 InstabilityRule::class,
                 NoActorSuffixRule::class,
+                MissingThrowsRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',

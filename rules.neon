@@ -164,6 +164,11 @@ parameters:
                 - 'Yii\'
                 - 'Laravel\'
             excludedClasses: []
+        missingThrows:
+            skipOverridden: true
+    exceptions:
+        check:
+            missingCheckedExceptionInThrows: false
 
 parametersSchema:
     haspadar: structure([
@@ -302,6 +307,9 @@ parametersSchema:
             allowedWords: listOf(string()),
             excludedParentNamespaces: listOf(string()),
             excludedClasses: listOf(string()),
+        ]),
+        missingThrows: structure([
+            skipOverridden: bool(),
         ]),
     ])
 
@@ -680,5 +688,12 @@ services:
                 allowedWords: %haspadar.noActorSuffix.allowedWords%
                 excludedParentNamespaces: %haspadar.noActorSuffix.excludedParentNamespaces%
                 excludedClasses: %haspadar.noActorSuffix.excludedClasses%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\MissingThrowsRule
+        arguments:
+            options:
+                skipOverridden: %haspadar.missingThrows.skipOverridden%
         tags:
             - phpstan.rules.rule

@@ -72,6 +72,7 @@ final class Rules
         Rules\LackOfCohesionRule::class,
         Rules\InstabilityRule::class,
         Rules\NoActorSuffixRule::class,
+        Rules\MissingThrowsRule::class,
     ];
 
     /**

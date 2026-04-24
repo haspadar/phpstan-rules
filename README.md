@@ -61,6 +61,7 @@
 | `ConstantUsageRule`           | Magic numbers and strings must be defined as named constants                  |
 | `StringLiteralsConcatenationRule` | String literal concatenation via `.` or `.=` is forbidden                |
 | `TodoCommentRule`             | TODO, FIXME, and XXX comments are forbidden in method bodies                  |
+| `MissingThrowsRule`           | Methods must declare `@throws` for every checked exception they throw (overridden methods inherit by default) |
 
 ### Naming
 
@@ -255,6 +256,8 @@ parameters:
                 - 'Laravel\'
             excludedClasses:
                 - App\Legacy\UserManager
+        missingThrows:
+            skipOverridden: true
         afferentCoupling:
             maxAfferent: 10
             ignoreInterfaces: true
@@ -286,6 +289,17 @@ When the rule reports a class like `UserDispatcher`, pick one of three fixes:
 Rule of thumb: if the suffix describes *what the class is*, extend `allowedWords`. If it describes *what the class does*, rename.
 
 `allowedWords` is matched **case-sensitively** against the last PascalCase segment of the class name. PHP class names follow PascalCase convention, so entries must be capitalized (`User`, not `user`).
+
+### MissingThrowsRule — @throws inheritance for overridden methods
+
+This rule replaces PHPStan's built-in `exceptions.check.missingCheckedExceptionInThrows` for class methods so that overrides and interface implementations do not have to repeat `@throws` from the parent contract.
+
+Including `rules.neon` from this package automatically sets `exceptions.check.missingCheckedExceptionInThrows: false` — the built-in check is turned off and replaced by `haspadar.missingThrows`. Do **not** re-enable the built-in flag in your own `phpstan.neon`: both rules will then fire on the same code and you will receive duplicate errors.
+
+Current scope: only class methods are covered. Standalone functions and PHP 8.4 property hooks are not yet checked by `haspadar.missingThrows`; if your codebase needs `@throws` enforcement there, keep those analyses through separate means until the corresponding rules are shipped.
+
+- `skipOverridden: true` (default) — overridden/interface-implementing methods inherit `@throws` from the parent and are not required to declare it themselves.
+- `skipOverridden: false` — every method must declare `@throws` for every checked exception it throws, including overrides.
 
 ---
 
