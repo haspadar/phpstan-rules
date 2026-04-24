@@ -174,6 +174,6 @@ final readonly class NoNullArgumentRule implements Rule
             return sprintf('method %s()', $methodName);
         }
 
-        return sprintf('method %s::%s()', $classNames[0], $methodName);
+        return sprintf('method %s::%s()', implode('|', $classNames), $methodName);
     }
 }
