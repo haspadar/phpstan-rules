@@ -36,11 +36,15 @@ final class NoActorSuffixRuleTest extends RuleTestCase
                     'Character',
                     'Identifier',
                     'Integer',
+                    'Author',
+                    'Visitor',
                     'Error',
                     'Color',
                     'Vendor',
                     'Vector',
                     'Factor',
+                    'Actor',
+                    'Director',
                     'Ancestor',
                     'Descriptor',
                 ],
@@ -64,7 +68,7 @@ final class NoActorSuffixRuleTest extends RuleTestCase
             [__DIR__ . '/../../../Fixtures/Rules/NoActorSuffixRule/UserDispatcher.php'],
             [
                 [
-                    'Class UserDispatcher must not end with actor suffix "Dispatcher". Classes are nouns, not procedures. Rename to a domain noun, or see README for when to extend allowedWords / excludedParentNamespaces.',
+                    'Class UserDispatcher must not end with actor suffix \'Dispatcher\'. Classes are nouns, not procedures. Rename to a domain noun, or see README for when to extend allowedWords / excludedParentNamespaces.',
                     7,
                 ],
             ],
@@ -79,7 +83,7 @@ final class NoActorSuffixRuleTest extends RuleTestCase
             [__DIR__ . '/../../../Fixtures/Rules/NoActorSuffixRule/UserOrchestrator.php'],
             [
                 [
-                    'Class UserOrchestrator must not end with actor suffix "Orchestrator". Classes are nouns, not procedures. Rename to a domain noun, or see README for when to extend allowedWords / excludedParentNamespaces.',
+                    'Class UserOrchestrator must not end with actor suffix \'Orchestrator\'. Classes are nouns, not procedures. Rename to a domain noun, or see README for when to extend allowedWords / excludedParentNamespaces.',
                     7,
                 ],
             ],
@@ -94,7 +98,7 @@ final class NoActorSuffixRuleTest extends RuleTestCase
             [__DIR__ . '/../../../Fixtures/Rules/NoActorSuffixRule/PaymentCoordinator.php'],
             [
                 [
-                    'Class PaymentCoordinator must not end with actor suffix "Coordinator". Classes are nouns, not procedures. Rename to a domain noun, or see README for when to extend allowedWords / excludedParentNamespaces.',
+                    'Class PaymentCoordinator must not end with actor suffix \'Coordinator\'. Classes are nouns, not procedures. Rename to a domain noun, or see README for when to extend allowedWords / excludedParentNamespaces.',
                     7,
                 ],
             ],
@@ -109,7 +113,7 @@ final class NoActorSuffixRuleTest extends RuleTestCase
             [__DIR__ . '/../../../Fixtures/Rules/NoActorSuffixRule/StandaloneController.php'],
             [
                 [
-                    'Class StandaloneController must not end with actor suffix "Controller". Classes are nouns, not procedures. Rename to a domain noun, or see README for when to extend allowedWords / excludedParentNamespaces.',
+                    'Class StandaloneController must not end with actor suffix \'Controller\'. Classes are nouns, not procedures. Rename to a domain noun, or see README for when to extend allowedWords / excludedParentNamespaces.',
                     7,
                 ],
             ],
@@ -171,9 +175,29 @@ final class NoActorSuffixRuleTest extends RuleTestCase
     public function passesWhenSuppressed(): void
     {
         $this->analyse(
-            [__DIR__ . '/../../../Fixtures/Rules/NoActorSuffixRule/SuppressedActor.php'],
+            [__DIR__ . '/../../../Fixtures/Rules/NoActorSuffixRule/SuppressedManager.php'],
             [],
             'A @phpstan-ignore haspadar.noActorSuffix comment must silence the report',
+        );
+    }
+
+    #[Test]
+    public function passesForInterfacesEvenWithActorSuffix(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NoActorSuffixRule/PaymentHandler.php'],
+            [],
+            'Interfaces are not Class_ nodes and must never be reported',
+        );
+    }
+
+    #[Test]
+    public function passesForTraitsEvenWithActorSuffix(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NoActorSuffixRule/OrderCreationTrigger.php'],
+            [],
+            'Traits are not Class_ nodes and must never be reported',
         );
     }
 }

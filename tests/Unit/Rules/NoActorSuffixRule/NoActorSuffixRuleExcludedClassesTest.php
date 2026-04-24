@@ -45,7 +45,7 @@ final class NoActorSuffixRuleExcludedClassesTest extends RuleTestCase
             [__DIR__ . '/../../../Fixtures/Rules/NoActorSuffixRule/UserDispatcher.php'],
             [
                 [
-                    'Class UserDispatcher must not end with actor suffix "Dispatcher". Classes are nouns, not procedures. Rename to a domain noun, or see README for when to extend allowedWords / excludedParentNamespaces.',
+                    'Class UserDispatcher must not end with actor suffix \'Dispatcher\'. Classes are nouns, not procedures. Rename to a domain noun, or see README for when to extend allowedWords / excludedParentNamespaces.',
                     7,
                 ],
             ],

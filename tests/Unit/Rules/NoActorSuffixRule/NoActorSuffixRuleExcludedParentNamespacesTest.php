@@ -67,13 +67,26 @@ final class NoActorSuffixRuleExcludedParentNamespacesTest extends RuleTestCase
     }
 
     #[Test]
+    public function passesWhenUsedTraitLivesUnderExcludedNamespace(): void
+    {
+        $this->analyse(
+            [
+                __DIR__ . '/../../../Fixtures/Rules/NoActorSuffixRule/VendorStubs/CacheTrait.php',
+                __DIR__ . '/../../../Fixtures/Rules/NoActorSuffixRule/TraitUsingFrameworkController.php',
+            ],
+            [],
+            'A class using a trait under Symfony\\ must be skipped',
+        );
+    }
+
+    #[Test]
     public function reportsWhenNoAncestorMatchesExcludedNamespaces(): void
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/NoActorSuffixRule/UserDispatcher.php'],
             [
                 [
-                    'Class UserDispatcher must not end with actor suffix "Dispatcher". Classes are nouns, not procedures. Rename to a domain noun, or see README for when to extend allowedWords / excludedParentNamespaces.',
+                    'Class UserDispatcher must not end with actor suffix \'Dispatcher\'. Classes are nouns, not procedures. Rename to a domain noun, or see README for when to extend allowedWords / excludedParentNamespaces.',
                     7,
                 ],
             ],

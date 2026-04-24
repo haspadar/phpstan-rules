@@ -33,7 +33,7 @@ final class NoActorSuffixRuleAllowedWordsTest extends RuleTestCase
             [__DIR__ . '/../../../Fixtures/Rules/NoActorSuffixRule/OrderNumber.php'],
             [
                 [
-                    'Class OrderNumber must not end with actor suffix "Number". Classes are nouns, not procedures. Rename to a domain noun, or see README for when to extend allowedWords / excludedParentNamespaces.',
+                    'Class OrderNumber must not end with actor suffix \'Number\'. Classes are nouns, not procedures. Rename to a domain noun, or see README for when to extend allowedWords / excludedParentNamespaces.',
                     7,
                 ],
             ],
