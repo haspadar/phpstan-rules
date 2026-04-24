@@ -584,6 +584,12 @@ services:
         tags:
             - phpstan.rules.rule
     -
+        class: Haspadar\PHPStanRules\Rules\Internal\BuiltinCallDetector
+    -
+        class: Haspadar\PHPStanRules\Rules\NoNullArgumentRule
+        tags:
+            - phpstan.rules.rule
+    -
         class: Haspadar\PHPStanRules\Rules\NeverUsePublicConstantsRule
         tags:
             - phpstan.rules.rule
