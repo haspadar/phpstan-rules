@@ -98,6 +98,24 @@ final class RequireIgnoreReasonRuleTest extends TestCase
         );
     }
 
+    #[Test]
+    public function reportsErrorOnLineRelativeToDocblockStart(): void
+    {
+        $rule = new RequireIgnoreReasonRule();
+        $comment = "/**\n * @phpstan-ignore missingType.iterableValue\n */";
+        $expression = new Expression(
+            new String_(''),
+            ['comments' => [new Doc($comment, 100)]],
+        );
+        $errors = $rule->processNode(new FileNode([$expression]), $this->createStub(Scope::class));
+
+        self::assertSame(
+            101,
+            $errors[0]->getLine(),
+            'Reported line must equal docblock start line plus offset of the violation inside the docblock',
+        );
+    }
+
     /**
      * Runs the rule on a synthetic FileNode whose expression carries a single docblock.
      *
