@@ -70,7 +70,7 @@ final readonly class MissingThrowsRule implements Rule
         $errors = [];
         $throwPoints = $node->getStatementResult()->getThrowPoints();
 
-        /** @phpstan-ignore phpstanApi.method */
+        /** @phpstan-ignore phpstanApi.method (reuse PHPStan internal helper for checked-exception detection) */
         $missing = $this->check->check(
             $method->getThrowType(),
             $throwPoints,

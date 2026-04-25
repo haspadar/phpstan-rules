@@ -74,6 +74,7 @@ final class Rules
         Rules\NoActorSuffixRule::class,
         Rules\MissingThrowsRule::class,
         Rules\HiddenFieldRule::class,
+        Rules\RequireIgnoreReasonRule::class,
     ];
 
     /**

@@ -25,7 +25,7 @@ final class ChildNodes
 
         foreach ($node->getSubNodeNames() as $name) {
             /** @var mixed $child -- dynamic access is intentional: PhpParser sub-node API */
-            // @phpstan-ignore property.dynamicName
+            // @phpstan-ignore property.dynamicName (dynamic access is intentional: PhpParser sub-node API)
             $child = $node->$name;
 
             foreach (self::extractNodes($child) as $extracted) {
@@ -53,7 +53,7 @@ final class ChildNodes
 
         $nodes = [];
 
-        /** @psalm-suppress MixedAssignment */
+        /** @psalm-suppress MixedAssignment -- PhpParser attribute is `mixed` by design, instanceof check filters below */
         foreach ($value as $item) {
             if ($item instanceof Node) {
                 $nodes[] = $item;

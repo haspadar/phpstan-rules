@@ -171,6 +171,9 @@ parameters:
             ignoreAbstractMethods: false
             ignoreSetter: false
             ignoreNames: []
+        requireIgnoreReason:
+            minReasonLength: 5
+            allowedBareIdentifiers: []
     exceptions:
         check:
             missingCheckedExceptionInThrows: false
@@ -321,6 +324,10 @@ parametersSchema:
             ignoreAbstractMethods: bool(),
             ignoreSetter: bool(),
             ignoreNames: listOf(string()),
+        ]),
+        requireIgnoreReason: structure([
+            minReasonLength: int(),
+            allowedBareIdentifiers: listOf(string()),
         ]),
     ])
 
@@ -720,5 +727,13 @@ services:
                 ignoreAbstractMethods: %haspadar.hiddenField.ignoreAbstractMethods%
                 ignoreSetter: %haspadar.hiddenField.ignoreSetter%
                 ignoreNames: %haspadar.hiddenField.ignoreNames%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\RequireIgnoreReasonRule
+        arguments:
+            options:
+                minReasonLength: %haspadar.requireIgnoreReason.minReasonLength%
+                allowedBareIdentifiers: %haspadar.requireIgnoreReason.allowedBareIdentifiers%
         tags:
             - phpstan.rules.rule
