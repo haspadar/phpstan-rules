@@ -95,6 +95,15 @@ final class NestedIfDepthRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function passesAbstractMethodWithoutBody(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NestedIfDepthRule/AbstractMethod.php'],
+            [],
+        );
+    }
+
+    #[Test]
     public function passesSiblingNestedIfsBecauseDepthCounterResetsBetweenScopes(): void
     {
         $this->analyse(

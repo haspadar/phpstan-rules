@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Haspadar\PHPStanRules\Tests\Unit\Rules\NestedIfDepthRule;
 
 use Haspadar\PHPStanRules\Rules\NestedIfDepthRule;
+use InvalidArgumentException;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPUnit\Framework\Attributes\Test;
@@ -32,6 +33,15 @@ final class NestedIfDepthRuleHigherLimitTest extends RuleTestCase
         new NestedIfDepthRule(0);
 
         self::assertTrue(true, 'Constructing the rule with maxDepth=0 must not throw');
+    }
+
+    #[Test]
+    public function rejectsNegativeMaxDepth(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('maxDepth must be a non-negative integer, -1 given');
+
+        new NestedIfDepthRule(-1);
     }
 
     #[Test]
