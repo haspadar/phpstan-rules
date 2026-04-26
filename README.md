@@ -65,6 +65,7 @@
 | `HiddenFieldRule`             | Method parameter or local variable must not shadow a class property (promoted constructors excluded, parameter takes precedence over local of the same name) |
 | `RequireIgnoreReasonRule`     | Every `@phpstan-ignore` and `@psalm-suppress` must carry a justification (default: 5 chars, parens for PHPStan, `--` for Psalm) |
 | `MultipleVariableDeclarationsRule` | Chained assignments (`$a = $b = 1`) and multiple statements on one line are forbidden (default: chained `null` chains rejected) |
+| `NestedIfDepthRule`           | Nested `if` depth must not exceed the configured limit (default: 1; `elseif`/`else` and `Closure` reset depth) |
 
 ### Naming
 
@@ -271,6 +272,8 @@ parameters:
             allowedBareIdentifiers: []
         multipleVarDecl:
             allowChainedNull: false
+        nestedIfDepth:
+            maxDepth: 1
         afferentCoupling:
             maxAfferent: 10
             ignoreInterfaces: true
