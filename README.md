@@ -64,6 +64,7 @@
 | `MissingThrowsRule`           | Methods must declare `@throws` for every checked exception they throw (overridden methods inherit by default) |
 | `HiddenFieldRule`             | Method parameter or local variable must not shadow a class property (promoted constructors excluded, parameter takes precedence over local of the same name) |
 | `RequireIgnoreReasonRule`     | Every `@phpstan-ignore` and `@psalm-suppress` must carry a justification (default: 5 chars, parens for PHPStan, `--` for Psalm) |
+| `MultipleVariableDeclarationsRule` | Chained assignments (`$a = $b = 1`) and multiple statements on one line are forbidden (default: chained `null` chains rejected) |
 
 ### Naming
 
@@ -268,6 +269,8 @@ parameters:
         requireIgnoreReason:
             minReasonLength: 5
             allowedBareIdentifiers: []
+        multipleVarDecl:
+            allowChainedNull: false
         afferentCoupling:
             maxAfferent: 10
             ignoreInterfaces: true
