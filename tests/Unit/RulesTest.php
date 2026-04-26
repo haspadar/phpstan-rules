@@ -69,6 +69,7 @@ use Haspadar\PHPStanRules\Rules\LackOfCohesionRule;
 use Haspadar\PHPStanRules\Rules\NoActorSuffixRule;
 use Haspadar\PHPStanRules\Rules\MissingThrowsRule;
 use Haspadar\PHPStanRules\Rules\HiddenFieldRule;
+use Haspadar\PHPStanRules\Rules\MultipleVariableDeclarationsRule;
 use Haspadar\PHPStanRules\Rules\RequireIgnoreReasonRule;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -145,6 +146,7 @@ final class RulesTest extends TestCase
                 MissingThrowsRule::class,
                 HiddenFieldRule::class,
                 RequireIgnoreReasonRule::class,
+                MultipleVariableDeclarationsRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',

@@ -75,6 +75,7 @@ final class Rules
         Rules\MissingThrowsRule::class,
         Rules\HiddenFieldRule::class,
         Rules\RequireIgnoreReasonRule::class,
+        Rules\MultipleVariableDeclarationsRule::class,
     ];
 
     /**
