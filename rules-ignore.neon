@@ -35,5 +35,6 @@ parameters:
                 - src/Rules/Internal/BuiltinCallDetector.php
                 - src/Rules/RequireIgnoreReasonRule/SuppressViolationFinder.php
                 - src/Rules/LackOfCohesionRule/AdjacencyBuilder.php
+                - src/Rules/MultipleVariableDeclarationsRule/StatementListCollector.php
                 - src/Rules/PhpDocDescriptionChecker.php
                 - src/Rules/VariableCollector.php
