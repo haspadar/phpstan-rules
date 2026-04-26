@@ -17,6 +17,10 @@ parameters:
         -
             identifier: haspadar.noNullReturn
         -
+            identifier: haspadar.immutable
+            paths:
+                - src/Rules/NestedIfDepthRule/DepthVisitor.php
+        -
             identifier: haspadar.lackOfCohesion
             paths:
                 - src/Rules/CouplingBetweenObjectsRule.php
@@ -36,5 +40,6 @@ parameters:
                 - src/Rules/RequireIgnoreReasonRule/SuppressViolationFinder.php
                 - src/Rules/LackOfCohesionRule/AdjacencyBuilder.php
                 - src/Rules/MultipleVariableDeclarationsRule/StatementListCollector.php
+                - src/Rules/NestedIfDepthRule/DepthScanner.php
                 - src/Rules/PhpDocDescriptionChecker.php
                 - src/Rules/VariableCollector.php

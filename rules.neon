@@ -176,6 +176,8 @@ parameters:
             allowedBareIdentifiers: []
         multipleVarDecl:
             allowChainedNull: false
+        nestedIfDepth:
+            maxDepth: 1
     exceptions:
         check:
             missingCheckedExceptionInThrows: false
@@ -333,6 +335,9 @@ parametersSchema:
         ]),
         multipleVarDecl: structure([
             allowChainedNull: bool(),
+        ]),
+        nestedIfDepth: structure([
+            maxDepth: int(),
         ]),
     ])
 
@@ -747,5 +752,11 @@ services:
         arguments:
             options:
                 allowChainedNull: %haspadar.multipleVarDecl.allowChainedNull%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\NestedIfDepthRule
+        arguments:
+            maxDepth: %haspadar.nestedIfDepth.maxDepth%
         tags:
             - phpstan.rules.rule

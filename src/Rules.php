@@ -76,6 +76,7 @@ final class Rules
         Rules\HiddenFieldRule::class,
         Rules\RequireIgnoreReasonRule::class,
         Rules\MultipleVariableDeclarationsRule::class,
+        Rules\NestedIfDepthRule::class,
     ];
 
     /**
