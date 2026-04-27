@@ -20,8 +20,9 @@ use PHPStan\Rules\Rule;
  * `while`, and `do-while`: an outermost loop has depth 0, a loop directly
  * inside another loop body has depth 1, and so on. Conditional statements
  * (`if`, `else`, `match`, `switch`) between loops do not increase the
- * depth — they belong to other rules. Each `Closure` or arrow function
- * starts a new scope and the depth counter resets to 0.
+ * depth — they belong to other rules. Loops inside a `Closure` or arrow
+ * function are excluded from depth counting; the rule tracks nesting only
+ * at the surrounding method level.
  *
  * @implements Rule<ClassMethod>
  */

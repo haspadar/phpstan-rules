@@ -66,7 +66,7 @@
 | `RequireIgnoreReasonRule`     | Every `@phpstan-ignore` and `@psalm-suppress` must carry a justification (default: 5 chars, parens for PHPStan, `--` for Psalm) |
 | `MultipleVariableDeclarationsRule` | Chained assignments (`$a = $b = 1`) and multiple statements on one line are forbidden (default: chained `null` chains rejected) |
 | `NestedIfDepthRule`           | Nested `if` depth must not exceed the configured limit (default: 1; `elseif`/`else` and `Closure` reset depth) |
-| `NestedForDepthRule`          | Nested loop depth (`for`/`foreach`/`while`/`do-while`) must not exceed the configured limit (default: 1; `Closure` resets depth) |
+| `NestedForDepthRule`          | Nested loop depth (`for`/`foreach`/`while`/`do-while`) must not exceed the configured limit (default: 1; `Closure` and arrow functions reset depth) |
 
 ### Naming
 
