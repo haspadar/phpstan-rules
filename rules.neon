@@ -782,3 +782,7 @@ services:
             maxDepth: %haspadar.nestedTryDepth.maxDepth%
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\SwitchDefaultRule
+        tags:
+            - phpstan.rules.rule

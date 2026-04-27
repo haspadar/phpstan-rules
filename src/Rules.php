@@ -79,6 +79,7 @@ final class Rules
         Rules\NestedIfDepthRule::class,
         Rules\NestedForDepthRule::class,
         Rules\NestedTryDepthRule::class,
+        Rules\SwitchDefaultRule::class,
     ];
 
     /**
