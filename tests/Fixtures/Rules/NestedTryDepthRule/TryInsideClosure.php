@@ -12,11 +12,15 @@ final class TryInsideClosure
             return function (): void {
                 try {
                     try {
-                        $this->doRisky();
-                    } catch (\RuntimeException $e) {
-                        throw new \DomainException('inner', 0, $e);
+                        try {
+                            $this->doRisky();
+                        } catch (\RuntimeException $e) {
+                            throw new \DomainException('inner', 0, $e);
+                        }
+                    } catch (\DomainException $e) {
+                        throw new \LogicException('mid', 0, $e);
                     }
-                } catch (\DomainException $e) {
+                } catch (\LogicException $e) {
                     $this->log($e->getMessage());
                 }
             };
