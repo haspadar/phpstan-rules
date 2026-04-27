@@ -21,6 +21,7 @@ parameters:
             paths:
                 - src/Rules/NestedIfDepthRule/DepthVisitor.php
                 - src/Rules/NestedForDepthRule/DepthVisitor.php
+                - src/Rules/NestedTryDepthRule/DepthVisitor.php
         -
             identifier: haspadar.nestedForDepth
             paths:
@@ -48,5 +49,6 @@ parameters:
                 - src/Rules/MultipleVariableDeclarationsRule/StatementListCollector.php
                 - src/Rules/NestedForDepthRule/DepthScanner.php
                 - src/Rules/NestedIfDepthRule/DepthScanner.php
+                - src/Rules/NestedTryDepthRule/DepthScanner.php
                 - src/Rules/PhpDocDescriptionChecker.php
                 - src/Rules/VariableCollector.php
