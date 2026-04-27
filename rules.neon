@@ -180,6 +180,8 @@ parameters:
             maxDepth: 1
         nestedForDepth:
             maxDepth: 1
+        nestedTryDepth:
+            maxDepth: 1
     exceptions:
         check:
             missingCheckedExceptionInThrows: false
@@ -342,6 +344,9 @@ parametersSchema:
             maxDepth: int(),
         ]),
         nestedForDepth: structure([
+            maxDepth: int(),
+        ]),
+        nestedTryDepth: structure([
             maxDepth: int(),
         ]),
     ])
@@ -769,5 +774,11 @@ services:
         class: Haspadar\PHPStanRules\Rules\NestedForDepthRule
         arguments:
             maxDepth: %haspadar.nestedForDepth.maxDepth%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\NestedTryDepthRule
+        arguments:
+            maxDepth: %haspadar.nestedTryDepth.maxDepth%
         tags:
             - phpstan.rules.rule

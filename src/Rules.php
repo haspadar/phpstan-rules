@@ -78,6 +78,7 @@ final class Rules
         Rules\MultipleVariableDeclarationsRule::class,
         Rules\NestedIfDepthRule::class,
         Rules\NestedForDepthRule::class,
+        Rules\NestedTryDepthRule::class,
     ];
 
     /**
