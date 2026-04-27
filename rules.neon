@@ -178,6 +178,8 @@ parameters:
             allowChainedNull: false
         nestedIfDepth:
             maxDepth: 1
+        nestedForDepth:
+            maxDepth: 1
     exceptions:
         check:
             missingCheckedExceptionInThrows: false
@@ -337,6 +339,9 @@ parametersSchema:
             allowChainedNull: bool(),
         ]),
         nestedIfDepth: structure([
+            maxDepth: int(),
+        ]),
+        nestedForDepth: structure([
             maxDepth: int(),
         ]),
     ])
@@ -758,5 +763,11 @@ services:
         class: Haspadar\PHPStanRules\Rules\NestedIfDepthRule
         arguments:
             maxDepth: %haspadar.nestedIfDepth.maxDepth%
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\NestedForDepthRule
+        arguments:
+            maxDepth: %haspadar.nestedForDepth.maxDepth%
         tags:
             - phpstan.rules.rule
