@@ -74,6 +74,7 @@ use Haspadar\PHPStanRules\Rules\NestedForDepthRule;
 use Haspadar\PHPStanRules\Rules\NestedIfDepthRule;
 use Haspadar\PHPStanRules\Rules\NestedTryDepthRule;
 use Haspadar\PHPStanRules\Rules\RequireIgnoreReasonRule;
+use Haspadar\PHPStanRules\Rules\SwitchDefaultRule;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -153,6 +154,7 @@ final class RulesTest extends TestCase
                 NestedIfDepthRule::class,
                 NestedForDepthRule::class,
                 NestedTryDepthRule::class,
+                SwitchDefaultRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',
