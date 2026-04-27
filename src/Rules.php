@@ -77,6 +77,7 @@ final class Rules
         Rules\RequireIgnoreReasonRule::class,
         Rules\MultipleVariableDeclarationsRule::class,
         Rules\NestedIfDepthRule::class,
+        Rules\NestedForDepthRule::class,
     ];
 
     /**
