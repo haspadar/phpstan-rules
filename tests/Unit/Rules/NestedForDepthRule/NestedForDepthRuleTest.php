@@ -95,6 +95,24 @@ final class NestedForDepthRuleTest extends RuleTestCase
     }
 
     #[Test]
+    public function passesMatchBetweenLoopsBecauseMatchIsNotLoop(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NestedForDepthRule/MatchBetweenLoops.php'],
+            [],
+        );
+    }
+
+    #[Test]
+    public function passesSwitchBetweenLoopsBecauseSwitchIsNotLoop(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/NestedForDepthRule/SwitchBetweenLoops.php'],
+            [],
+        );
+    }
+
+    #[Test]
     public function passesLoopInsideClosureBecauseClosureResetsDepth(): void
     {
         $this->analyse(
