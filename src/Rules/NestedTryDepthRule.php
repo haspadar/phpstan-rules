@@ -53,7 +53,7 @@ final readonly class NestedTryDepthRule implements Rule
     /**
      * Analyses the method and returns errors for every `try` past the depth limit.
      *
-     * @psalm-param ClassMethod $node
+     * @param ClassMethod $node
      * @return list<IdentifierRuleError>
      */
     #[Override]

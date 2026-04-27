@@ -67,7 +67,7 @@
 | `MultipleVariableDeclarationsRule` | Chained assignments (`$a = $b = 1`) and multiple statements on one line are forbidden (default: chained `null` chains rejected) |
 | `NestedIfDepthRule`           | Nested `if` depth must not exceed the configured limit (default: 1; `elseif`/`else` and `Closure` reset depth) |
 | `NestedForDepthRule`          | Nested loop depth (`for`/`foreach`/`while`/`do-while`) must not exceed the configured limit (default: 1; `Closure` and arrow functions reset depth) |
-| `NestedTryDepthRule`          | Nested `try` depth must not exceed the configured limit (default: 1; `catch`/`finally` and `Closure` and arrow functions reset depth) |
+| `NestedTryDepthRule`          | Nested `try` depth must not exceed the configured limit (default: 1; `catch`/`finally`, `Closure`, and arrow functions reset depth) |
 
 ### Naming
 

@@ -30,9 +30,9 @@ final class NestedForDepthRuleHigherLimitTest extends RuleTestCase
     #[Test]
     public function acceptsZeroAsValidLimit(): void
     {
-        new NestedForDepthRule(0);
+        $this->expectNotToPerformAssertions();
 
-        self::assertTrue(true, 'Constructing the rule with maxDepth=0 must not throw');
+        new NestedForDepthRule(0);
     }
 
     #[Test]
