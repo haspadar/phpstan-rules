@@ -20,6 +20,12 @@ parameters:
             identifier: haspadar.immutable
             paths:
                 - src/Rules/NestedIfDepthRule/DepthVisitor.php
+                - src/Rules/NestedForDepthRule/DepthVisitor.php
+        -
+            identifier: haspadar.nestedForDepth
+            paths:
+                - src/Rules/AfferentCouplingRule.php
+                - src/Rules/InstabilityRule/DependencyGraph.php
         -
             identifier: haspadar.lackOfCohesion
             paths:
@@ -40,6 +46,7 @@ parameters:
                 - src/Rules/RequireIgnoreReasonRule/SuppressViolationFinder.php
                 - src/Rules/LackOfCohesionRule/AdjacencyBuilder.php
                 - src/Rules/MultipleVariableDeclarationsRule/StatementListCollector.php
+                - src/Rules/NestedForDepthRule/DepthScanner.php
                 - src/Rules/NestedIfDepthRule/DepthScanner.php
                 - src/Rules/PhpDocDescriptionChecker.php
                 - src/Rules/VariableCollector.php
