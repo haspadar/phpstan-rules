@@ -82,6 +82,7 @@ final class Rules
         Rules\SwitchDefaultRule::class,
         Rules\SimplifyBooleanExpressionRule::class,
         Rules\ExplicitInitializationRule::class,
+        Rules\ThrowsCountRule::class,
     ];
 
     /**

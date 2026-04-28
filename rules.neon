@@ -182,6 +182,8 @@ parameters:
             maxDepth: 1
         nestedTryDepth:
             maxDepth: 1
+        throwsCount:
+            maxThrows: 1
     exceptions:
         check:
             missingCheckedExceptionInThrows: false
@@ -348,6 +350,9 @@ parametersSchema:
         ]),
         nestedTryDepth: structure([
             maxDepth: int(),
+        ]),
+        throwsCount: structure([
+            maxThrows: int(),
         ]),
     ])
 
@@ -792,5 +797,11 @@ services:
             - phpstan.rules.rule
     -
         class: Haspadar\PHPStanRules\Rules\ExplicitInitializationRule
+        tags:
+            - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\ThrowsCountRule
+        arguments:
+            maxThrows: %haspadar.throwsCount.maxThrows%
         tags:
             - phpstan.rules.rule
