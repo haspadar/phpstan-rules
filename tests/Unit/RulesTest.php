@@ -76,6 +76,7 @@ use Haspadar\PHPStanRules\Rules\NestedTryDepthRule;
 use Haspadar\PHPStanRules\Rules\RequireIgnoreReasonRule;
 use Haspadar\PHPStanRules\Rules\SwitchDefaultRule;
 use Haspadar\PHPStanRules\Rules\SimplifyBooleanExpressionRule;
+use Haspadar\PHPStanRules\Rules\ExplicitInitializationRule;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -157,6 +158,7 @@ final class RulesTest extends TestCase
                 NestedTryDepthRule::class,
                 SwitchDefaultRule::class,
                 SimplifyBooleanExpressionRule::class,
+                ExplicitInitializationRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',
