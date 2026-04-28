@@ -16,15 +16,19 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 
 /**
- * Reports typed class properties explicitly initialized to their PHP default value.
+ * Reports nullable typed properties explicitly initialized to null.
  *
- * PHP already assigns default values to typed properties when no explicit default
- * is given: nullable types default to null. Repeating `= null`, `= 0`, `= false`,
- * `= 0.0`, or `= ''` is redundant — it adds noise without conveying intent.
+ * A nullable property (`?Foo`, `Foo|null`) without an explicit default is still
+ * nullable — PHP allows it to remain uninitialized until the constructor runs.
+ * Repeating `= null` on a nullable property is therefore redundant: it does not
+ * change observable behavior but adds visual noise.
  *
- * Checks every typed property declaration (`Property` node with a non-null type).
- * Untyped properties are skipped because an explicit initializer there carries
- * documentary value. Abstract and anonymous classes are skipped.
+ * Only nullable types are flagged: non-nullable typed properties (`int`, `string`,
+ * etc.) without a default are uninitialized, so any explicit default value there
+ * carries real semantic meaning and must not be reported.
+ *
+ * Both `?T` (NullableType) and `T|null` / `null|T` (UnionType) syntaxes are
+ * recognized. Anonymous classes are skipped; abstract classes are analyzed.
  *
  * @implements Rule<Class_>
  */
@@ -45,7 +49,7 @@ final readonly class ExplicitInitializationRule implements Rule
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
-        if ($node->isAbstract() || $node->isAnonymous()) {
+        if ($node->isAnonymous()) {
             return [];
         }
 
@@ -61,7 +65,7 @@ final readonly class ExplicitInitializationRule implements Rule
     }
 
     /**
-     * Returns errors for each property variable with a redundant default value.
+     * Returns errors for each nullable property initialized to null.
      *
      * @return list<IdentifierRuleError>
      */
@@ -71,7 +75,10 @@ final readonly class ExplicitInitializationRule implements Rule
             return [];
         }
 
-        $type = $property->type;
+        if (!$this->isNullableType($property->type)) {
+            return [];
+        }
+
         $errors = [];
 
         foreach ($property->props as $prop) {
@@ -79,7 +86,7 @@ final readonly class ExplicitInitializationRule implements Rule
                 continue;
             }
 
-            if (!$this->isRedundantDefault($type, $prop->default)) {
+            if (!$this->isNullLiteral($prop->default)) {
                 continue;
             }
 
@@ -95,27 +102,23 @@ final readonly class ExplicitInitializationRule implements Rule
     }
 
     /**
-     * Returns true if the given default value is the implicit PHP default for the type.
+     * Returns true if the type is nullable: either `?T` or a union containing `null`.
      */
-    private function isRedundantDefault(
-        Node\ComplexType|Node\Identifier|Node\Name $type,
-        Node\Expr $default,
-    ): bool {
+    private function isNullableType(Node\ComplexType|Node\Identifier|Node\Name $type): bool
+    {
         if ($type instanceof NullableType) {
-            return $this->isNullLiteral($default);
+            return true;
         }
 
-        $typeName = $type instanceof Node\Identifier
-            ? strtolower($type->toString())
-            : null;
+        if ($type instanceof Node\UnionType) {
+            foreach ($type->types as $unionedType) {
+                if ($unionedType instanceof Node\Identifier && $unionedType->toLowerString() === 'null') {
+                    return true;
+                }
+            }
+        }
 
-        return match ($typeName) {
-            'int' => $this->isIntZero($default),
-            'float' => $this->isFloatZero($default),
-            'bool' => $this->isFalseLiteral($default),
-            'string' => $this->isEmptyString($default),
-            default => false,
-        };
+        return false;
     }
 
     /**
@@ -124,37 +127,5 @@ final readonly class ExplicitInitializationRule implements Rule
     private function isNullLiteral(Node\Expr $expr): bool
     {
         return $expr instanceof ConstFetch && strtolower($expr->name->toString()) === 'null';
-    }
-
-    /**
-     * Returns true if the expression is the integer literal 0.
-     */
-    private function isIntZero(Node\Expr $expr): bool
-    {
-        return $expr instanceof Node\Scalar\Int_ && $expr->value === 0;
-    }
-
-    /**
-     * Returns true if the expression is a float literal with value zero (0.0, 0.).
-     */
-    private function isFloatZero(Node\Expr $expr): bool
-    {
-        return $expr instanceof Node\Scalar\Float_ && $expr->value === (float) 0;
-    }
-
-    /**
-     * Returns true if the expression is the false literal.
-     */
-    private function isFalseLiteral(Node\Expr $expr): bool
-    {
-        return $expr instanceof ConstFetch && strtolower($expr->name->toString()) === 'false';
-    }
-
-    /**
-     * Returns true if the expression is an empty string literal.
-     */
-    private function isEmptyString(Node\Expr $expr): bool
-    {
-        return $expr instanceof Node\Scalar\String_ && $expr->value === '';
     }
 }
