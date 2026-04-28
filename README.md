@@ -1,9 +1,22 @@
-# Opinionated PHPStan Rules
+# Iron PHPStan Rules
 
 [![CI](https://github.com/haspadar/phpstan-rules/actions/workflows/piqule.yml/badge.svg)](https://github.com/haspadar/phpstan-rules/actions/workflows/piqule.yml)
 [![Coverage](https://codecov.io/gh/haspadar/phpstan-rules/branch/main/graph/badge.svg)](https://codecov.io/gh/haspadar/phpstan-rules)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fhaspadar%2Fphpstan-rules%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/haspadar/phpstan-rules/main)
 [![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/haspadar/phpstan-rules?labelColor=171717&color=FF570A&label=CodeRabbit+Reviews)](https://coderabbit.ai)
+
+## Installation
+
+```bash
+composer require --dev haspadar/phpstan-rules
+```
+
+Then include the rules in your `phpstan.neon`:
+
+```neon
+includes:
+    - vendor/haspadar/phpstan-rules/rules.neon
+```
 
 ---
 
@@ -70,8 +83,8 @@
 | `NestedTryDepthRule`          | Nested `try` depth must not exceed the configured limit (default: 1; `catch`/`finally`, `Closure`, and arrow functions reset depth) |
 | `SwitchDefaultRule`           | Every `switch` must have a `default` case and it must be last |
 | `SimplifyBooleanExpressionRule` | Comparisons with `true`/`false` literals are unnecessary and must be removed |
-| `ExplicitInitializationRule`  | Typed properties must not be initialized to their implicit PHP default (`= null`, `= 0`, `= false`, `= 0.0`, `= ''`) |
-| `ThrowsCountRule`             | `maxThrows=1` | Methods must not declare more `@throws` types than the configured maximum |
+| `ExplicitInitializationRule`  | Nullable typed properties (`?T`, `T\|null`) must not be initialized to `= null` |
+| `ThrowsCountRule`             | 1             | Methods must not declare more `@throws` types than the configured maximum |
 
 ### Naming
 
@@ -284,6 +297,8 @@ parameters:
             maxDepth: 1
         nestedTryDepth:
             maxDepth: 1
+        throwsCount:
+            maxThrows: 1
         afferentCoupling:
             maxAfferent: 10
             ignoreInterfaces: true
@@ -340,6 +355,32 @@ Current scope: only class methods are covered. Standalone functions and PHP 8.4 
 
 ---
 
+## Suppressing violations
+
+Suppress a single occurrence inline using `@phpstan-ignore` with the rule's identifier and a mandatory reason (enforced by `RequireIgnoreReasonRule`):
+
+```php
+/** @phpstan-ignore haspadar.methodLength (legacy method, extraction tracked in #123) */
+public function process(): void { ... }
+```
+
+Suppress globally for specific paths in your `phpstan.neon` — useful for generated code or third-party adapters:
+
+```neon
+parameters:
+    ignoreErrors:
+        -
+            identifier: haspadar.finalClass
+            paths:
+                - src/Generated/
+        -
+            identifier: haspadar.methodLength
+```
+
+Every identifier follows the pattern `haspadar.<camelCaseRuleName>` — for example `haspadar.tooManyMethods`, `haspadar.nestedIfDepth`, `haspadar.throwsCount`.
+
+---
+
 ## Experimental rules
 
 Some rules are not registered by default because their usefulness depends strongly on project topology. They live behind an opt-in include so adopting projects do not fail on legitimate code (for example, entry-point classes that naturally have instability `I = 1`).
@@ -368,14 +409,6 @@ parameters:
             ignoreAbstract: true
             excludedClasses:
                 - App\Controller\HomeController
-```
-
----
-
-## Installation
-
-```bash
-composer require --dev haspadar/phpstan-rules
 ```
 
 ---
