@@ -805,3 +805,7 @@ services:
             maxThrows: %haspadar.throwsCount.maxThrows%
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\IfThenThrowElseRule
+        tags:
+            - phpstan.rules.rule

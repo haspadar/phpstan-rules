@@ -78,6 +78,7 @@ use Haspadar\PHPStanRules\Rules\SwitchDefaultRule;
 use Haspadar\PHPStanRules\Rules\SimplifyBooleanExpressionRule;
 use Haspadar\PHPStanRules\Rules\ExplicitInitializationRule;
 use Haspadar\PHPStanRules\Rules\ThrowsCountRule;
+use Haspadar\PHPStanRules\Rules\IfThenThrowElseRule;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -161,6 +162,7 @@ final class RulesTest extends TestCase
                 SimplifyBooleanExpressionRule::class,
                 ExplicitInitializationRule::class,
                 ThrowsCountRule::class,
+                IfThenThrowElseRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',
