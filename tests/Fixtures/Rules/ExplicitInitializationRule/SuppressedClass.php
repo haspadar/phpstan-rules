@@ -10,5 +10,5 @@ final class SuppressedClass
     private ?string $name = null;
 
     /** @phpstan-ignore haspadar.explicitInit */
-    private int $count = 0;
+    private ?int $count = null;
 }

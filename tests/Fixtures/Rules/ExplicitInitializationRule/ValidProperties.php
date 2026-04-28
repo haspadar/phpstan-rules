@@ -16,6 +16,14 @@ final class ValidProperties
 
     private float $ratio = 1.5;
 
+    private int $count = 0;
+
+    private float $zero = 0.0;
+
+    private bool $active = false;
+
+    private string $empty = '';
+
     /** @var string[] */
     private array $items = [];
 }

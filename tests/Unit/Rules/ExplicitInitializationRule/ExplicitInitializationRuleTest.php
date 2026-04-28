@@ -40,28 +40,33 @@ final class ExplicitInitializationRuleTest extends RuleTestCase
     }
 
     #[Test]
-    public function reportsPrimitivePropertiesWithZeroDefaults(): void
+    public function reportsUnionNullablePropertiesWithNullDefault(): void
     {
         $this->analyse(
-            [__DIR__ . '/../../../Fixtures/Rules/ExplicitInitializationRule/PrimitiveProperties.php'],
+            [__DIR__ . '/../../../Fixtures/Rules/ExplicitInitializationRule/UnionNullableProperties.php'],
             [
                 [
-                    'Property $count is explicitly initialized to its default value.',
+                    'Property $name is explicitly initialized to its default value.',
                     9,
                 ],
                 [
-                    'Property $ratio is explicitly initialized to its default value.',
+                    'Property $obj is explicitly initialized to its default value.',
                     11,
                 ],
                 [
-                    'Property $active is explicitly initialized to its default value.',
+                    'Property $count is explicitly initialized to its default value.',
                     13,
                 ],
-                [
-                    'Property $name is explicitly initialized to its default value.',
-                    15,
-                ],
             ],
+        );
+    }
+
+    #[Test]
+    public function passesForPrimitivePropertiesWithZeroDefaults(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/ExplicitInitializationRule/PrimitiveProperties.php'],
+            [],
         );
     }
 
