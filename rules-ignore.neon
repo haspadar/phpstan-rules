@@ -22,6 +22,7 @@ parameters:
                 - src/Rules/NestedIfDepthRule/DepthVisitor.php
                 - src/Rules/NestedForDepthRule/DepthVisitor.php
                 - src/Rules/NestedTryDepthRule/DepthVisitor.php
+                - src/Rules/NestedSwitchRule/NestedSwitchVisitor.php
         -
             identifier: haspadar.nestedForDepth
             paths:
