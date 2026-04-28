@@ -68,6 +68,7 @@
 | `NestedIfDepthRule`           | Nested `if` depth must not exceed the configured limit (default: 1; `elseif`/`else` and `Closure` reset depth) |
 | `NestedForDepthRule`          | Nested loop depth (`for`/`foreach`/`while`/`do-while`) must not exceed the configured limit (default: 1; `Closure` and arrow functions reset depth) |
 | `NestedTryDepthRule`          | Nested `try` depth must not exceed the configured limit (default: 1; `catch`/`finally`, `Closure`, and arrow functions reset depth) |
+| `SwitchDefaultRule`           | Every `switch` must have a `default` case and it must be last |
 
 ### Naming
 
