@@ -79,6 +79,7 @@ use Haspadar\PHPStanRules\Rules\SimplifyBooleanExpressionRule;
 use Haspadar\PHPStanRules\Rules\ExplicitInitializationRule;
 use Haspadar\PHPStanRules\Rules\ThrowsCountRule;
 use Haspadar\PHPStanRules\Rules\IfThenThrowElseRule;
+use Haspadar\PHPStanRules\Rules\NestedSwitchRule;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -163,6 +164,7 @@ final class RulesTest extends TestCase
                 ExplicitInitializationRule::class,
                 ThrowsCountRule::class,
                 IfThenThrowElseRule::class,
+                NestedSwitchRule::class,
             ],
             (new Rules())->all(),
             'Rules::all() must list every registered rule class',
