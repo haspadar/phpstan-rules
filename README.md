@@ -71,6 +71,7 @@
 | `SwitchDefaultRule`           | Every `switch` must have a `default` case and it must be last |
 | `SimplifyBooleanExpressionRule` | Comparisons with `true`/`false` literals are unnecessary and must be removed |
 | `ExplicitInitializationRule`  | Typed properties must not be initialized to their implicit PHP default (`= null`, `= 0`, `= false`, `= 0.0`, `= ''`) |
+| `ThrowsCountRule`             | `maxThrows=1` | Methods must not declare more `@throws` types than the configured maximum |
 
 ### Naming
 

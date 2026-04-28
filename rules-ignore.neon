@@ -34,6 +34,12 @@ parameters:
                 - src/Rules/HiddenFieldRule.php
                 - src/Rules/MethodLengthRule.php
         -
+            identifier: haspadar.throwsCount
+            paths:
+                - src/Rules/IllegalThrowsRule.php
+                - src/Rules/MissingThrowsRule.php
+                - src/Rules/ThrowsCountRule.php
+        -
             identifier: haspadar.simplifyBoolean
         -
             identifier: haspadar.noActorSuffix
