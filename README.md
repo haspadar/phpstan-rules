@@ -70,6 +70,7 @@
 | `NestedTryDepthRule`          | Nested `try` depth must not exceed the configured limit (default: 1; `catch`/`finally`, `Closure`, and arrow functions reset depth) |
 | `SwitchDefaultRule`           | Every `switch` must have a `default` case and it must be last |
 | `SimplifyBooleanExpressionRule` | Comparisons with `true`/`false` literals are unnecessary and must be removed |
+| `ExplicitInitializationRule`  | Typed properties must not be initialized to their implicit PHP default (`= null`, `= 0`, `= false`, `= 0.0`, `= ''`) |
 
 ### Naming
 

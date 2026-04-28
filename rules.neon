@@ -790,3 +790,7 @@ services:
         class: Haspadar\PHPStanRules\Rules\SimplifyBooleanExpressionRule
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\ExplicitInitializationRule
+        tags:
+            - phpstan.rules.rule
