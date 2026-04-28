@@ -83,6 +83,7 @@ final class Rules
         Rules\SimplifyBooleanExpressionRule::class,
         Rules\ExplicitInitializationRule::class,
         Rules\ThrowsCountRule::class,
+        Rules\IfThenThrowElseRule::class,
     ];
 
     /**

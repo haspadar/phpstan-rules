@@ -85,6 +85,7 @@ includes:
 | `SimplifyBooleanExpressionRule` | Comparisons with `true`/`false` literals are unnecessary and must be removed |
 | `ExplicitInitializationRule`  | Nullable typed properties (`?T`, `T\|null`, `null\|T`) must not be initialized to `= null` |
 | `ThrowsCountRule`             | Methods must not declare more `@throws` types than the configured maximum (default: 1) |
+| `IfThenThrowElseRule`         | `else`/`elseif` after an `if` block that ends with `throw` is forbidden |
 
 ### Naming
 
