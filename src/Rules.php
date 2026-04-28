@@ -80,6 +80,7 @@ final class Rules
         Rules\NestedForDepthRule::class,
         Rules\NestedTryDepthRule::class,
         Rules\SwitchDefaultRule::class,
+        Rules\SimplifyBooleanExpressionRule::class,
     ];
 
     /**

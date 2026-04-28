@@ -34,6 +34,8 @@ parameters:
                 - src/Rules/HiddenFieldRule.php
                 - src/Rules/MethodLengthRule.php
         -
+            identifier: haspadar.simplifyBoolean
+        -
             identifier: haspadar.noActorSuffix
             paths:
                 - src/Collectors/ClassDependencyCollector.php
