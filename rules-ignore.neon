@@ -34,6 +34,12 @@ parameters:
                 - src/Rules/HiddenFieldRule.php
                 - src/Rules/MethodLengthRule.php
         -
+            identifier: haspadar.explicitInit
+            paths:
+                - src/Rules/NestedIfDepthRule/DepthVisitor.php
+                - src/Rules/NestedForDepthRule/DepthVisitor.php
+                - src/Rules/NestedTryDepthRule/DepthVisitor.php
+        -
             identifier: haspadar.simplifyBoolean
         -
             identifier: haspadar.noActorSuffix
