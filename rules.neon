@@ -809,3 +809,7 @@ services:
         class: Haspadar\PHPStanRules\Rules\IfThenThrowElseRule
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\NestedSwitchRule
+        tags:
+            - phpstan.rules.rule

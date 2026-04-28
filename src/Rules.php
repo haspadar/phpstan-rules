@@ -84,6 +84,7 @@ final class Rules
         Rules\ExplicitInitializationRule::class,
         Rules\ThrowsCountRule::class,
         Rules\IfThenThrowElseRule::class,
+        Rules\NestedSwitchRule::class,
     ];
 
     /**
