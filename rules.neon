@@ -786,3 +786,7 @@ services:
         class: Haspadar\PHPStanRules\Rules\SwitchDefaultRule
         tags:
             - phpstan.rules.rule
+    -
+        class: Haspadar\PHPStanRules\Rules\SimplifyBooleanExpressionRule
+        tags:
+            - phpstan.rules.rule
