@@ -83,8 +83,8 @@ includes:
 | `NestedTryDepthRule`          | Nested `try` depth must not exceed the configured limit (default: 1; `catch`/`finally`, `Closure`, and arrow functions reset depth) |
 | `SwitchDefaultRule`           | Every `switch` must have a `default` case and it must be last |
 | `SimplifyBooleanExpressionRule` | Comparisons with `true`/`false` literals are unnecessary and must be removed |
-| `ExplicitInitializationRule`  | Nullable typed properties (`?T`, `T\|null`) must not be initialized to `= null` |
-| `ThrowsCountRule`             | 1             | Methods must not declare more `@throws` types than the configured maximum |
+| `ExplicitInitializationRule`  | Nullable typed properties (`?T`, `T\|null`, `null\|T`) must not be initialized to `= null` |
+| `ThrowsCountRule`             | Methods must not declare more `@throws` types than the configured maximum (default: 1) |
 
 ### Naming
 
