@@ -30,7 +30,6 @@ final class ProhibitStaticMethodsRuleOnlyPublicTest extends RuleTestCase
                     9,
                 ],
             ],
-            'Public static methods must still be reported when onlyPublic=true',
         );
     }
 
@@ -40,7 +39,6 @@ final class ProhibitStaticMethodsRuleOnlyPublicTest extends RuleTestCase
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/ProhibitStaticMethodsRule/ClassWithPrivateStaticMethod.php'],
             [],
-            'Private static methods must be allowed when onlyPublic=true',
         );
     }
 
@@ -50,7 +48,6 @@ final class ProhibitStaticMethodsRuleOnlyPublicTest extends RuleTestCase
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/ProhibitStaticMethodsRule/ClassWithProtectedStaticMethod.php'],
             [],
-            'Protected static methods must be allowed when onlyPublic=true',
         );
     }
 }

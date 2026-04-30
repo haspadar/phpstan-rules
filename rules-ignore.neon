@@ -23,7 +23,6 @@ parameters:
                 - src/Rules/NestedForDepthRule/DepthVisitor.php
                 - src/Rules/NestedTryDepthRule/DepthVisitor.php
                 - src/Rules/NestedSwitchRule/NestedSwitchVisitor.php
-                - src/Rules/ProhibitStaticMethodsRule.php
         -
             identifier: haspadar.nestedForDepth
             paths:

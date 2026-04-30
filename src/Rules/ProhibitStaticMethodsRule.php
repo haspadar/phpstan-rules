@@ -24,7 +24,7 @@ use PHPStan\ShouldNotHappenException;
  *
  * @implements Rule<ClassMethod>
  */
-final class ProhibitStaticMethodsRule implements Rule
+final readonly class ProhibitStaticMethodsRule implements Rule
 {
     private bool $onlyPublic;
 
