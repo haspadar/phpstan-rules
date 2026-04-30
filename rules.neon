@@ -184,6 +184,8 @@ parameters:
             maxDepth: 1
         throwsCount:
             maxThrows: 1
+        prohibitStaticMethods:
+            onlyPublic: false
     exceptions:
         check:
             missingCheckedExceptionInThrows: false
@@ -354,6 +356,9 @@ parametersSchema:
         throwsCount: structure([
             maxThrows: int(),
         ]),
+        prohibitStaticMethods: structure([
+            onlyPublic: bool(),
+        ]),
     ])
 
 services:
@@ -452,6 +457,9 @@ services:
             - phpstan.rules.rule
     -
         class: Haspadar\PHPStanRules\Rules\ProhibitStaticMethodsRule
+        arguments:
+            options:
+                onlyPublic: %haspadar.prohibitStaticMethods.onlyPublic%
         tags:
             - phpstan.rules.rule
     -

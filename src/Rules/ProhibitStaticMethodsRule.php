@@ -14,15 +14,30 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
 
 /**
- * Detects static method declarations and reports an error for each one regardless of visibility.
+ * Detects static method declarations and reports an error for each one.
  * Static methods are not polymorphic, cannot work with object state, and create hard dependencies
  * that make code difficult to test. Private and protected static helpers are treated the same as
  * public ones because they still encode procedural logic that bypasses the object lifecycle.
+ *
+ * When `onlyPublic` option is true, only public static methods are reported — mirroring Qulice's
+ * `ProhibitPublicStaticMethods` behaviour and allowing private/protected static helpers.
  *
  * @implements Rule<ClassMethod>
  */
 final readonly class ProhibitStaticMethodsRule implements Rule
 {
+    private bool $onlyPublic;
+
+    /**
+     * Constructs the rule with the given options.
+     *
+     * @param array{onlyPublic?: bool} $options When onlyPublic is true, only public static methods are reported
+     */
+    public function __construct(array $options = [])
+    {
+        $this->onlyPublic = $options['onlyPublic'] ?? false;
+    }
+
     #[Override]
     public function getNodeType(): string
     {
@@ -40,6 +55,10 @@ final readonly class ProhibitStaticMethodsRule implements Rule
     {
         /** @var ClassMethod $node */
         if (!$node->isStatic()) {
+            return [];
+        }
+
+        if ($this->onlyPublic && !$node->isPublic()) {
             return [];
         }
 
