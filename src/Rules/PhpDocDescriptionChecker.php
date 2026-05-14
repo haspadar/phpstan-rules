@@ -14,10 +14,10 @@ use PHPStan\PhpDocParser\ParserConfig;
 use PHPStan\ShouldNotHappenException;
 
 /**
- * Parses PHPDoc blocks and checks whether tag descriptions start with a capital letter.
- * Shared by ReturnDescriptionCapitalRule and ParamDescriptionCapitalRule.
- * Uses PHPStan PhpDocParser to correctly handle generic types with spaces
- * (e.g. array<int, string>).
+ * Parses PHPDoc blocks into AST nodes and provides tag inspection helpers.
+ * Shared by ReturnDescriptionCapitalRule, ParamDescriptionCapitalRule, PhpDocMissingParamRule,
+ * PhpDocParamOrderRule, PhpDocParamDescriptionRule, and ProhibitLongTypeAliasRule.
+ * Uses PHPStan PhpDocParser to correctly handle generic types with spaces (e.g. array<int, string>).
  */
 final readonly class PhpDocDescriptionChecker
 {

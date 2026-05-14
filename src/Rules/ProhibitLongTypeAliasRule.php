@@ -7,6 +7,7 @@ namespace Haspadar\PHPStanRules\Rules;
 use Override;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
@@ -21,11 +22,12 @@ use PHPStan\ShouldNotHappenException;
 /**
  * Checks that PHPDoc tags do not use long built-in type aliases.
  * Disallows `integer`, `boolean`, `double`, and `real` in favour of their canonical short forms
- * (`int`, `bool`, `float`). Aliases listed in `allowedAliases` are excluded from the check,
- * which allows projects that define user classes named `Integer` or `Boolean` to opt out
- * for those specific names. Types nested inside union and intersection types are checked recursively.
+ * (`int`, `bool`, `float`). Covers @param, @return, @throws in methods and @var on properties.
+ * Aliases listed in `allowedAliases` are excluded from the check, which allows projects that
+ * define user classes named `Integer` or `Boolean` to opt out for those specific names.
+ * Types nested inside union and intersection types are checked recursively.
  *
- * @implements Rule<ClassMethod>
+ * @implements Rule<Node>
  */
 final readonly class ProhibitLongTypeAliasRule implements Rule
 {
@@ -52,19 +54,22 @@ final readonly class ProhibitLongTypeAliasRule implements Rule
     #[Override]
     public function getNodeType(): string
     {
-        return ClassMethod::class;
+        return Node::class;
     }
 
     /**
-     * Analyses the method PHPDoc for long type aliases and returns one error per occurrence.
+     * Analyses the PHPDoc of a class method or property for long type aliases.
      *
-     * @psalm-param ClassMethod $node
      * @throws ShouldNotHappenException
      * @return list<IdentifierRuleError>
      */
     #[Override]
     public function processNode(Node $node, Scope $scope): array
     {
+        if (!$node instanceof ClassMethod && !$node instanceof Property) {
+            return [];
+        }
+
         $docComment = $node->getDocComment();
 
         if ($scope->getClassReflection() === null || $docComment === null) {
