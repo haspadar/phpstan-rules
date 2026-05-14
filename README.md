@@ -51,6 +51,7 @@ includes:
 | `ProtectedMethodInFinalClassRule` | Final classes must not have `protected` methods                                    |
 | `ProhibitStaticMethodsRule`       | Classes must not declare `static` methods, all visibility by default               |
 | `ProhibitStaticPropertiesRule`    | Classes must not declare `static` properties of any visibility                     |
+| `ProhibitLongTypeAliasRule`       | PHPDoc must not use long type aliases: `integer`, `boolean`, `double`, `real`      |
 | `ConstructorInitializationRule`   | Constructor must only assign `$this->property` or call `parent::__construct()`     |
 | `BeImmutableRule`                | All non-static properties must be `readonly`                                       |
 | `KeepInterfacesShortRule`        | Interfaces must not declare too many methods (default: 10)                         |
@@ -139,6 +140,9 @@ parameters:
             onlyPublic: true
         prohibitStaticMethods:
             onlyPublic: true
+        prohibitLongTypeAlias:
+            allowedAliases:
+                - Integer  # user-defined class that conflicts with the built-in alias
         parameterNumber:
             maxParameters: 5
             ignoreOverridden: false
