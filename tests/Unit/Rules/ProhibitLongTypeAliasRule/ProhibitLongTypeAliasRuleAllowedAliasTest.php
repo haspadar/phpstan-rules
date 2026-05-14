@@ -16,28 +16,28 @@ final class ProhibitLongTypeAliasRuleAllowedAliasTest extends RuleTestCase
     #[Override]
     protected function getRule(): Rule
     {
-        return new ProhibitLongTypeAliasRule(['Integer']);
+        return new ProhibitLongTypeAliasRule();
     }
 
     #[Test]
-    public function passesWhenAliasIsAllowed(): void
+    public function passesWhenPascalCaseClassUsed(): void
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/ProhibitLongTypeAliasRule/ClassWithAllowedAlias.php'],
             [],
-            '"Integer" listed in allowedAliases must not produce an error',
+            '"Integer" in PascalCase must be treated as a user-defined class and allowed',
         );
     }
 
     #[Test]
-    public function stillReportsOtherAliasesWhenOneIsAllowed(): void
+    public function reportsErrorWhenUppercaseAliasUsed(): void
     {
         $this->analyse(
-            [__DIR__ . '/../../../Fixtures/Rules/ProhibitLongTypeAliasRule/ClassWithLongTypeInReturn.php'],
+            [__DIR__ . '/../../../Fixtures/Rules/ProhibitLongTypeAliasRule/ClassWithUppercaseAlias.php'],
             [
-                ['PHPDoc contains long type alias "boolean", use "bool" instead.', 14],
+                ['PHPDoc contains long type alias "INTEGER", use "int" instead.', 15],
             ],
-            'Allowing "Integer" must not suppress errors for "boolean"',
+            '"INTEGER" must be reported as a long alias despite uppercase spelling',
         );
     }
 }
