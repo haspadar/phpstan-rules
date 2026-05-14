@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Haspadar\PHPStanRules\Rules;
 
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
@@ -13,10 +14,10 @@ use PHPStan\PhpDocParser\ParserConfig;
 use PHPStan\ShouldNotHappenException;
 
 /**
- * Parses PHPDoc blocks and checks whether tag descriptions start with a capital letter.
- * Shared by ReturnDescriptionCapitalRule and ParamDescriptionCapitalRule.
- * Uses PHPStan PhpDocParser to correctly handle generic types with spaces
- * (e.g. array<int, string>).
+ * Parses PHPDoc blocks into AST nodes and provides tag inspection helpers.
+ * Shared by ReturnDescriptionCapitalRule, ParamDescriptionCapitalRule, PhpDocMissingParamRule,
+ * PhpDocParamOrderRule, PhpDocParamDescriptionRule, and ProhibitLongTypeAliasRule.
+ * Uses PHPStan PhpDocParser to correctly handle generic types with spaces (e.g. array<int, string>).
  */
 final readonly class PhpDocDescriptionChecker
 {
@@ -36,6 +37,19 @@ final readonly class PhpDocDescriptionChecker
         $typeParser = new TypeParser($config, $constExprParser);
         $this->lexer = new Lexer($config);
         $this->phpDocParser = new PhpDocParser($config, $typeParser, $constExprParser);
+    }
+
+    /**
+     * Parses a raw PHPDoc block text and returns the AST node.
+     *
+     * @param string $docText Raw PHPDoc block text with the opening and closing delimiters.
+     * @throws ShouldNotHappenException
+     */
+    public function parse(string $docText): PhpDocNode
+    {
+        $tokens = new TokenIterator($this->lexer->tokenize($docText));
+
+        return $this->phpDocParser->parse($tokens);
     }
 
     /**
