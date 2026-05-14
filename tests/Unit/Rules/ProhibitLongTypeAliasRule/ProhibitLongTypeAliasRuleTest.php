@@ -20,7 +20,7 @@ final class ProhibitLongTypeAliasRuleTest extends RuleTestCase
     }
 
     #[Test]
-    public function reportsIntegerAlias(): void
+    public function reportsErrorWhenIntegerUsedInParam(): void
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/ProhibitLongTypeAliasRule/ClassWithLongTypeInParam.php'],
@@ -32,7 +32,7 @@ final class ProhibitLongTypeAliasRuleTest extends RuleTestCase
     }
 
     #[Test]
-    public function reportsBooleanAlias(): void
+    public function reportsErrorWhenBooleanUsedInReturn(): void
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/ProhibitLongTypeAliasRule/ClassWithLongTypeInReturn.php'],
@@ -44,7 +44,7 @@ final class ProhibitLongTypeAliasRuleTest extends RuleTestCase
     }
 
     #[Test]
-    public function reportsDoubleAndRealAliases(): void
+    public function reportsErrorWhenDoubleAndRealUsed(): void
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/ProhibitLongTypeAliasRule/ClassWithDoubleAndReal.php'],
@@ -57,7 +57,7 @@ final class ProhibitLongTypeAliasRuleTest extends RuleTestCase
     }
 
     #[Test]
-    public function reportsAliasInsideUnionType(): void
+    public function reportsErrorWhenAliasInsideUnionType(): void
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/ProhibitLongTypeAliasRule/ClassWithUnionLongType.php'],
@@ -65,6 +65,30 @@ final class ProhibitLongTypeAliasRuleTest extends RuleTestCase
                 ['PHPDoc contains long type alias "integer", use "int" instead.', 15],
             ],
             '"integer" nested in a union type must produce an error',
+        );
+    }
+
+    #[Test]
+    public function reportsErrorWhenIntegerUsedInThrows(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/ProhibitLongTypeAliasRule/ClassWithLongTypeInThrows.php'],
+            [
+                ['PHPDoc contains long type alias "integer", use "int" instead.', 17],
+            ],
+            '"integer" in @throws must produce an error',
+        );
+    }
+
+    #[Test]
+    public function reportsErrorWhenIntegerUsedInVar(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/ProhibitLongTypeAliasRule/ClassWithLongTypeInVar.php'],
+            [
+                ['PHPDoc contains long type alias "integer", use "int" instead.', 10],
+            ],
+            '"integer" in @var on a property must produce an error',
         );
     }
 
@@ -99,10 +123,10 @@ final class ProhibitLongTypeAliasRuleTest extends RuleTestCase
     }
 
     #[Test]
-    public function reportsMultipleAliasesInSameMethod(): void
+    public function reportsErrorWhenMultipleAliasesInSameMethod(): void
     {
         $this->analyse(
-            [__DIR__ . '/../../../Fixtures/Rules/ProhibitLongTypeAliasRule/ClassWithIntersectionLongType.php'],
+            [__DIR__ . '/../../../Fixtures/Rules/ProhibitLongTypeAliasRule/ClassWithMultipleLongTypeParams.php'],
             [
                 ['PHPDoc contains long type alias "integer", use "int" instead.', 16],
                 ['PHPDoc contains long type alias "integer", use "int" instead.', 16],
@@ -112,7 +136,7 @@ final class ProhibitLongTypeAliasRuleTest extends RuleTestCase
     }
 
     #[Test]
-    public function reportsUppercaseAlias(): void
+    public function reportsErrorWhenUppercaseAliasUsed(): void
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/ProhibitLongTypeAliasRule/ClassWithUppercaseAlias.php'],
