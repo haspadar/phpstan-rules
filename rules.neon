@@ -186,8 +186,6 @@ parameters:
             maxThrows: 1
         prohibitStaticMethods:
             onlyPublic: false
-        prohibitLongTypeAlias:
-            allowedAliases: []
     exceptions:
         check:
             missingCheckedExceptionInThrows: false
@@ -361,9 +359,6 @@ parametersSchema:
         prohibitStaticMethods: structure([
             onlyPublic: bool(),
         ]),
-        prohibitLongTypeAlias: structure([
-            allowedAliases: listOf(string()),
-        ]),
     ])
 
 services:
@@ -473,8 +468,6 @@ services:
             - phpstan.rules.rule
     -
         class: Haspadar\PHPStanRules\Rules\ProhibitLongTypeAliasRule
-        arguments:
-            allowedAliases: %haspadar.prohibitLongTypeAlias.allowedAliases%
         tags:
             - phpstan.rules.rule
     -

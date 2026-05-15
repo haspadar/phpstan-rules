@@ -21,10 +21,10 @@ use PHPStan\ShouldNotHappenException;
 
 /**
  * Checks that PHPDoc tags do not use long built-in type aliases.
- * Disallows `integer`, `boolean`, `double`, and `real` in favour of their canonical short forms
- * (`int`, `bool`, `float`). Covers @param, @return, @throws in methods and @var on properties.
- * Aliases listed in `allowedAliases` are excluded from the check, which allows projects that
- * define user classes named `Integer` or `Boolean` to opt out for those specific names.
+ * Disallows `integer`, `boolean`, `double`, and `real` (and any non-PascalCase variant such as
+ * `INTEGER`) in favour of their canonical short forms (`int`, `bool`, `float`).
+ * PascalCase names like `Integer` or `Boolean` are treated as user-defined classes and allowed.
+ * Covers @param, @return, @throws in methods and @var on properties.
  * Types nested inside union and intersection types are checked recursively.
  *
  * @implements Rule<Node>
@@ -41,12 +41,11 @@ final readonly class ProhibitLongTypeAliasRule implements Rule
     private PhpDocDescriptionChecker $checker;
 
     /**
-     * Constructs the rule with an optional list of allowed alias names.
+     * Constructs the rule and initialises the shared PHPDoc parser.
      *
-     * @param list<string> $allowedAliases Type names to exclude from the check (e.g. ['Integer']).
      * @throws ShouldNotHappenException
      */
-    public function __construct(private array $allowedAliases = [])
+    public function __construct()
     {
         $this->checker = new PhpDocDescriptionChecker();
     }
@@ -126,7 +125,7 @@ final readonly class ProhibitLongTypeAliasRule implements Rule
         if ($type instanceof IdentifierTypeNode) {
             $lower = strtolower($type->name);
 
-            if (array_key_exists($lower, self::ALIAS_MAP) && !in_array($type->name, $this->allowedAliases, true)) {
+            if (array_key_exists($lower, self::ALIAS_MAP) && $type->name !== ucfirst($lower)) {
                 return [$type->name];
             }
 

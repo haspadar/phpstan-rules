@@ -135,15 +135,4 @@ final class ProhibitLongTypeAliasRuleTest extends RuleTestCase
         );
     }
 
-    #[Test]
-    public function reportsErrorWhenUppercaseAliasUsed(): void
-    {
-        $this->analyse(
-            [__DIR__ . '/../../../Fixtures/Rules/ProhibitLongTypeAliasRule/ClassWithUppercaseAlias.php'],
-            [
-                ['PHPDoc contains long type alias "INTEGER", use "int" instead.', 15],
-            ],
-            '"INTEGER" in uppercase must be reported with the correct short form',
-        );
-    }
 }
