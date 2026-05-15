@@ -23,7 +23,7 @@ use PHPStan\ShouldNotHappenException;
  * Checks that PHPDoc tags do not use long built-in type aliases or miscase built-in pseudo-types.
  * Disallows `integer`, `boolean`, `double`, and `real` in favour of their canonical short forms
  * (`int`, `bool`, `float`). Also disallows non-lowercase `scalar`, `mixed`, and `resource`
- * (and any non-PascalCase variant such as `INTEGER` or `SCALAR`) since these are built-in
+ * (and any non-lowercase, non-PascalCase variant such as `INTEGER` or `SCALAR`) since these are built-in
  * pseudo-types with no shorter alias.
  * PascalCase names like `Integer`, `Scalar`, or `Mixed` are treated as user-defined classes and allowed.
  * Covers @param, @return, @throws in methods and @var on properties.
@@ -38,9 +38,12 @@ final readonly class ProhibitLongTypeAliasRule implements Rule
         'boolean' => 'bool',
         'double' => 'float',
         'real' => 'float',
-        'scalar' => 'scalar',
-        'mixed' => 'mixed',
-        'resource' => 'resource',
+    ];
+
+    private const array PSEUDO_TYPES = [
+        'scalar',
+        'mixed',
+        'resource',
     ];
 
     private PhpDocDescriptionChecker $checker;
@@ -91,11 +94,13 @@ final readonly class ProhibitLongTypeAliasRule implements Rule
             }
 
             foreach ($this->collectAliases($type) as $alias) {
+                $lower = strtolower($alias);
+                $canonical = self::ALIAS_MAP[$lower] ?? $lower;
                 $errors[] = RuleErrorBuilder::message(
                     sprintf(
                         'PHPDoc contains long type alias "%s", use "%s" instead.',
                         $alias,
-                        self::ALIAS_MAP[strtolower($alias)],
+                        $canonical,
                     ),
                 )
                     ->identifier('haspadar.prohibitLongTypeAlias')
@@ -131,6 +136,10 @@ final readonly class ProhibitLongTypeAliasRule implements Rule
             $lower = strtolower($type->name);
 
             if (array_key_exists($lower, self::ALIAS_MAP) && $type->name !== ucfirst($lower)) {
+                return [$type->name];
+            }
+
+            if (in_array($lower, self::PSEUDO_TYPES, true) && $type->name !== $lower && $type->name !== ucfirst($lower)) {
                 return [$type->name];
             }
 

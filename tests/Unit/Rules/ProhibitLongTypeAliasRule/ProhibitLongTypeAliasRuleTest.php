@@ -136,7 +136,7 @@ final class ProhibitLongTypeAliasRuleTest extends RuleTestCase
     }
 
     #[Test]
-    public function reportsErrorWhenScalarMixedResourceUsedInWrongCase(): void
+    public function reportsErrorWhenAllCapsPseudoTypesUsedInParam(): void
     {
         $this->analyse(
             [__DIR__ . '/../../../Fixtures/Rules/ProhibitLongTypeAliasRule/ClassWithMiscasedPseudoTypes.php'],
@@ -145,7 +145,17 @@ final class ProhibitLongTypeAliasRuleTest extends RuleTestCase
                 ['PHPDoc contains long type alias "RESOURCE", use "resource" instead.', 17],
                 ['PHPDoc contains long type alias "SCALAR", use "scalar" instead.', 17],
             ],
-            '"SCALAR", "MIXED", "RESOURCE" in all-caps must be reported',
+            '"SCALAR", "MIXED", "RESOURCE" in all-caps in @param must each produce an error with lowercase suggestion',
+        );
+    }
+
+    #[Test]
+    public function passesWhenLowercasePseudoTypesUsed(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/ProhibitLongTypeAliasRule/ClassWithShortTypes.php'],
+            [],
+            'Lowercase scalar/mixed/resource in @param must not produce any errors',
         );
     }
 

@@ -16,4 +16,16 @@ final class ClassWithShortTypes
     {
         return $n > 0;
     }
+
+    /**
+     * Processes a value.
+     *
+     * @param scalar $a Scalar value.
+     * @param mixed $b Mixed value.
+     * @param resource $c Resource handle.
+     * @return void
+     */
+    public function process(mixed $a, mixed $b, mixed $c): void
+    {
+    }
 }
