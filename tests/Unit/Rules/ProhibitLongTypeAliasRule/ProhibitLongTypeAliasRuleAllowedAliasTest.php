@@ -30,6 +30,16 @@ final class ProhibitLongTypeAliasRuleAllowedAliasTest extends RuleTestCase
     }
 
     #[Test]
+    public function passesWhenPascalCasePseudoTypeUsed(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/ProhibitLongTypeAliasRule/ClassWithAllowedPseudoTypes.php'],
+            [],
+            '"Scalar", "Mixed", "Resource" in PascalCase must be treated as user-defined classes and allowed',
+        );
+    }
+
+    #[Test]
     public function reportsErrorWhenUppercaseAliasUsed(): void
     {
         $this->analyse(

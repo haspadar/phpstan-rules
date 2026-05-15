@@ -20,10 +20,12 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\ShouldNotHappenException;
 
 /**
- * Checks that PHPDoc tags do not use long built-in type aliases.
- * Disallows `integer`, `boolean`, `double`, and `real` (and any non-PascalCase variant such as
- * `INTEGER`) in favour of their canonical short forms (`int`, `bool`, `float`).
- * PascalCase names like `Integer` or `Boolean` are treated as user-defined classes and allowed.
+ * Checks that PHPDoc tags do not use long built-in type aliases or miscase built-in pseudo-types.
+ * Disallows `integer`, `boolean`, `double`, and `real` in favour of their canonical short forms
+ * (`int`, `bool`, `float`). Also disallows non-lowercase `scalar`, `mixed`, and `resource`
+ * (and any non-PascalCase variant such as `INTEGER` or `SCALAR`) since these are built-in
+ * pseudo-types with no shorter alias.
+ * PascalCase names like `Integer`, `Scalar`, or `Mixed` are treated as user-defined classes and allowed.
  * Covers @param, @return, @throws in methods and @var on properties.
  * Types nested inside union and intersection types are checked recursively.
  *
@@ -36,6 +38,9 @@ final readonly class ProhibitLongTypeAliasRule implements Rule
         'boolean' => 'bool',
         'double' => 'float',
         'real' => 'float',
+        'scalar' => 'scalar',
+        'mixed' => 'mixed',
+        'resource' => 'resource',
     ];
 
     private PhpDocDescriptionChecker $checker;

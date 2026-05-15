@@ -135,4 +135,18 @@ final class ProhibitLongTypeAliasRuleTest extends RuleTestCase
         );
     }
 
+    #[Test]
+    public function reportsErrorWhenScalarMixedResourceUsedInWrongCase(): void
+    {
+        $this->analyse(
+            [__DIR__ . '/../../../Fixtures/Rules/ProhibitLongTypeAliasRule/ClassWithMiscasedPseudoTypes.php'],
+            [
+                ['PHPDoc contains long type alias "MIXED", use "mixed" instead.', 17],
+                ['PHPDoc contains long type alias "RESOURCE", use "resource" instead.', 17],
+                ['PHPDoc contains long type alias "SCALAR", use "scalar" instead.', 17],
+            ],
+            '"SCALAR", "MIXED", "RESOURCE" in all-caps must be reported',
+        );
+    }
+
 }
