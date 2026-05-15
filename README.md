@@ -49,7 +49,7 @@ includes:
 | `MutableExceptionRule`            | Exception classes must not have non-readonly properties                            |
 | `ReturnCountRule`                 | Method must not have more than 1 `return` statement (default: 1)                   |
 | `ProtectedMethodInFinalClassRule` | Final classes must not have `protected` methods                                    |
-| `ProhibitStaticMethodsRule`       | Classes must not declare `static` methods, all visibility by default               |
+| `ProhibitStaticMethodsRule`       | Classes must not declare `static` methods, all visibility by default; opt-in `allowNamedConstructors` permits `static fromX(): self { return new self(...); }` |
 | `ProhibitStaticPropertiesRule`    | Classes must not declare `static` properties of any visibility                     |
 | `ConstructorInitializationRule`   | Constructor must only assign `$this->property` or call `parent::__construct()`     |
 | `BeImmutableRule`                | All non-static properties must be `readonly`                                       |
@@ -139,6 +139,7 @@ parameters:
             onlyPublic: true
         prohibitStaticMethods:
             onlyPublic: true
+            allowNamedConstructors: true
         parameterNumber:
             maxParameters: 5
             ignoreOverridden: false
