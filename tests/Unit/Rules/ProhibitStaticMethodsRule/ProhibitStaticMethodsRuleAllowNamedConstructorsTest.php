@@ -128,4 +128,30 @@ final class ProhibitStaticMethodsRuleAllowNamedConstructorsTest extends RuleTest
             'Fully-qualified self-referencing class name is not recognised as `new self` and must be reported',
         );
     }
+
+    #[Test]
+    public function tagsEveryInvalidNamedConstructorWithDedicatedIdentifier(): void
+    {
+        $errors = $this->gatherAnalyserErrors([
+            __DIR__ . '/../../../Fixtures/Rules/ProhibitStaticMethodsRule/NamedConstructorWithLogic.php',
+            __DIR__ . '/../../../Fixtures/Rules/ProhibitStaticMethodsRule/StaticReturningSelfButNotNew.php',
+            __DIR__ . '/../../../Fixtures/Rules/ProhibitStaticMethodsRule/NamedConstructorNullableSelf.php',
+            __DIR__ . '/../../../Fixtures/Rules/ProhibitStaticMethodsRule/NamedConstructorWithIfElse.php',
+            __DIR__ . '/../../../Fixtures/Rules/ProhibitStaticMethodsRule/NamedConstructorWithFqnSelf.php',
+        ]);
+
+        $identifiers = array_map(static fn ($error): ?string => $error->getIdentifier(), $errors);
+
+        self::assertSame(
+            [
+                'haspadar.namedConstructorBody',
+                'haspadar.namedConstructorBody',
+                'haspadar.namedConstructorBody',
+                'haspadar.namedConstructorBody',
+                'haspadar.namedConstructorBody',
+            ],
+            $identifiers,
+            'Every invalid named-constructor case must be tagged with the dedicated haspadar.namedConstructorBody identifier',
+        );
+    }
 }
