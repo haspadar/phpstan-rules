@@ -467,10 +467,6 @@ services:
         tags:
             - phpstan.rules.rule
     -
-        class: Haspadar\PHPStanRules\Rules\ProhibitLongTypeAliasRule
-        tags:
-            - phpstan.rules.rule
-    -
         class: Haspadar\PHPStanRules\Rules\ConstructorInitializationRule
         tags:
             - phpstan.rules.rule
