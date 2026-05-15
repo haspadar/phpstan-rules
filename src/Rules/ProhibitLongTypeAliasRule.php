@@ -126,6 +126,27 @@ final readonly class ProhibitLongTypeAliasRule implements Rule
     }
 
     /**
+     * Checks a single identifier type node against alias and pseudo-type lists.
+     *
+     * @return list<string>
+     */
+    private function checkIdentifier(IdentifierTypeNode $type): array
+    {
+        $lower = strtolower($type->name);
+        $pascal = ucfirst($lower);
+
+        if (array_key_exists($lower, self::ALIAS_MAP) && $type->name !== $pascal) {
+            return [$type->name];
+        }
+
+        if (in_array($lower, self::PSEUDO_TYPES, true) && $type->name !== $lower && $type->name !== $pascal) {
+            return [$type->name];
+        }
+
+        return [];
+    }
+
+    /**
      * Recursively collects long alias names found anywhere inside the type tree.
      *
      * @return list<string>
@@ -133,17 +154,7 @@ final readonly class ProhibitLongTypeAliasRule implements Rule
     private function collectAliases(TypeNode $type): array
     {
         if ($type instanceof IdentifierTypeNode) {
-            $lower = strtolower($type->name);
-
-            if (array_key_exists($lower, self::ALIAS_MAP) && $type->name !== ucfirst($lower)) {
-                return [$type->name];
-            }
-
-            if (in_array($lower, self::PSEUDO_TYPES, true) && $type->name !== $lower && $type->name !== ucfirst($lower)) {
-                return [$type->name];
-            }
-
-            return [];
+            return $this->checkIdentifier($type);
         }
 
         if ($type instanceof UnionTypeNode || $type instanceof IntersectionTypeNode) {
