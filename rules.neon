@@ -186,6 +186,7 @@ parameters:
             maxThrows: 1
         prohibitStaticMethods:
             onlyPublic: false
+            allowNamedConstructors: false
     exceptions:
         check:
             missingCheckedExceptionInThrows: false
@@ -358,6 +359,7 @@ parametersSchema:
         ]),
         prohibitStaticMethods: structure([
             onlyPublic: bool(),
+            allowNamedConstructors: bool(),
         ]),
     ])
 
@@ -460,6 +462,7 @@ services:
         arguments:
             options:
                 onlyPublic: %haspadar.prohibitStaticMethods.onlyPublic%
+                allowNamedConstructors: %haspadar.prohibitStaticMethods.allowNamedConstructors%
         tags:
             - phpstan.rules.rule
     -
