@@ -8,6 +8,7 @@ use Override;
 use PhpParser\Node;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
@@ -112,14 +113,18 @@ final readonly class ProhibitStaticMethodsRule implements Rule
     }
 
     /**
-     * Checks whether the method's return type is declared as `self` or `static`.
+     * Checks whether the method's return type is declared as `self`, `static`, `?self`, or `?static`.
      *
      * @param ClassMethod $node Analysed method
-     * @return bool True when the return type is `self` or `static`
+     * @return bool True when the return type (possibly nullable) is `self` or `static`
      */
     private function returnsSelfOrStatic(ClassMethod $node): bool
     {
         $returnType = $node->returnType;
+
+        if ($returnType instanceof NullableType) {
+            $returnType = $returnType->type;
+        }
 
         if (!$returnType instanceof Name) {
             return false;
